@@ -8,13 +8,14 @@ App::uses('AppController', 'Controller');
  * @property SessionComponent $Session
  */
 class ConnectionsController extends AppController {
-
+     
 /**
  * Components
  *
  * @var array
  */
 	public $components = array('Paginator', 'Session');
+    public $uses = array('Connection','User');
 
 /**
  * index method
@@ -22,7 +23,7 @@ class ConnectionsController extends AppController {
  * @return void
  */
 	public function index() {
-		$this->Connection->recursive = 0;
+		$this->Connection->recursive = 1;
 		$this->set('connections', $this->Paginator->paginate());
 	}
 
@@ -47,17 +48,22 @@ class ConnectionsController extends AppController {
  * @return void
  */
 	public function add() {
+        $loggedInUser = $this->Session->read('Auth.User');
+        $user_id = $loggedInUser['id'];
 		if ($this->request->is('post')) {
+            $this->request->data['Connection']['user_id'] = $user_id;
+            error_log("CONNECTION REQUEST :". print_r( $this->request, 1));
 			$this->Connection->create();
+            $this->request->data['Connection']['verified'] = 0;
 			if ($this->Connection->save($this->request->data)) {
-				$this->Session->setFlash(__('The connection has been saved.'));
+				$this->Session->setFlash(__('Your connection has been saved but must be verified.'));
 				return $this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The connection could not be saved. Please, try again.'));
 			}
 		}
-		$users = $this->Connection->User->find('list');
-		$this->set(compact('users'));
+		$connections = $this->User->find('list');
+		$this->set(compact('connections'));
 	}
 
 /**
@@ -82,7 +88,7 @@ class ConnectionsController extends AppController {
 			$options = array('conditions' => array('Connection.' . $this->Connection->primaryKey => $id));
 			$this->request->data = $this->Connection->find('first', $options);
 		}
-		$users = $this->Connection->User->find('list');
+		$users = $this->Connection->find('list');
 		$this->set(compact('users'));
 	}
 
@@ -105,6 +111,49 @@ class ConnectionsController extends AppController {
 			$this->Session->setFlash(__('The connection could not be deleted. Please, try again.'));
 		}
 		return $this->redirect(array('action' => 'index'));
+	}
+
+/**
+ * verify method
+ *
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+	public function verify($id = null) {
+        $loggedInUser = $this->Session->read('Auth.User');
+        $user_id = $loggedInUser['id'];
+
+		if (!$this->Connection->exists($id)) {
+			throw new NotFoundException(__('Invalid connection'));
+		}
+
+        //Get the connection
+        // AND Verfify that it is address to this user
+        $connection = $this->Connection->find('first', array('conditions' => array('Connection.id' => $id, 'Connection.connection_id' => $user_id)));
+        if ( $connection ) {
+            
+            // If this connection exists then Save settings.
+		    if ($this->request->is(array('post', 'put'))) {
+
+                $this->request->data['Connection']['id']            = $connection['Connection']['id'];
+                $this->request->data['Connection']['user_id']       = $connection['Connection']['user_id'];
+                $this->request->data['Connection']['connection_id'] = $connection['Connection']['connection_id'];
+                $this->request->data['Connection']['message']       = $connection['Connection']['message'];
+                
+			    if ($this->Connection->save($this->request->data)) {
+				    $this->Session->setFlash(__('The connection has been verified.'));
+    				return $this->redirect(array('action' => 'index'));
+    			} else {
+    				$this->Session->setFlash(__('The connection could not be saved. Please, try again.'));
+    			}
+		    }
+        } else {
+    	    $this->Session->setFlash(__('Connection could not be verified.'));
+        }
+		$connections = $this->Connection->find('list');
+		$this->set(compact('connections'));
+    	#return $this->redirect(array('action' => 'index'));
 	}
 
 /**
