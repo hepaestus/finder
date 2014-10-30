@@ -118,5 +118,18 @@ class User extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
+		'Connection' => array(
+			'className' => 'Connection',
+			'foreignKey' => 'user_id',
+			'dependent' => true,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
 	);
 }

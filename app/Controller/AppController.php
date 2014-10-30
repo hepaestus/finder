@@ -41,12 +41,12 @@ class AppController extends Controller {
             ),
             'logoutRedirect' => array(
                 'controller' => 'pages',
-                'action' => 'display', 'home'
+                'action' => 'display', 'finder'
             ),
         ),
     );
 
     public function beforeFilter() {
-        $this->Auth->allow('index','view');
+        $this->Auth->allow('index','view','login','logout','display');
     }
 }

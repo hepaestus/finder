@@ -7,6 +7,8 @@
 			<th><?php echo $this->Paginator->sort('user_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('connection_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('connection_type'); ?></th>
+			<th><?php echo $this->Paginator->sort('verified'); ?></th>
+			<th><?php echo $this->Paginator->sort('message'); ?></th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th><?php echo $this->Paginator->sort('modified'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
@@ -16,11 +18,11 @@
 	<?php foreach ($connections as $connection): ?>
 	<tr>
 		<td><?php echo h($connection['Connection']['id']); ?>&nbsp;</td>
-		<td>
-			<?php echo $this->Html->link($connection['User']['id'], array('controller' => 'users', 'action' => 'view', $connection['User']['id'])); ?>
-		</td>
+		<td><?php echo h($connection['Connection']['user_id']); ?>&nbsp;</td>
 		<td><?php echo h($connection['Connection']['connection_id']); ?>&nbsp;</td>
 		<td><?php echo h($connection['Connection']['connection_type']); ?>&nbsp;</td>
+		<td><?php echo h($connection['Connection']['verified']); ?>&nbsp;</td>
+		<td><?php echo h($connection['Connection']['message']); ?>&nbsp;</td>
 		<td><?php echo h($connection['Connection']['created']); ?>&nbsp;</td>
 		<td><?php echo h($connection['Connection']['modified']); ?>&nbsp;</td>
 		<td class="actions">
@@ -50,7 +52,5 @@
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('New Connection'), array('action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New User'), array('controller' => 'users', 'action' => 'add')); ?> </li>
 	</ul>
 </div>

@@ -3,10 +3,9 @@
 	<fieldset>
 		<legend><?php echo __('Edit Connection'); ?></legend>
 	<?php
-		echo $this->Form->input('id');
-		echo $this->Form->input('user_id');
-		echo $this->Form->input('connection_id');
 		echo $this->Form->input('connection_type');
+		echo $this->Form->input('verified');
+		echo $this->Form->input('message');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
@@ -17,7 +16,5 @@
 
 		<li><?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $this->Form->value('Connection.id')), array(), __('Are you sure you want to delete # %s?', $this->Form->value('Connection.id'))); ?></li>
 		<li><?php echo $this->Html->link(__('List Connections'), array('action' => 'index')); ?></li>
-		<li><?php echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New User'), array('controller' => 'users', 'action' => 'add')); ?> </li>
 	</ul>
 </div>

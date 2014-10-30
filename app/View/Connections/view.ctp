@@ -6,9 +6,9 @@
 			<?php echo h($connection['Connection']['id']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('User'); ?></dt>
+		<dt><?php echo __('User Id'); ?></dt>
 		<dd>
-			<?php echo $this->Html->link($connection['User']['id'], array('controller' => 'users', 'action' => 'view', $connection['User']['id'])); ?>
+			<?php echo h($connection['Connection']['user_id']); ?>
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Connection Id'); ?></dt>
@@ -19,6 +19,16 @@
 		<dt><?php echo __('Connection Type'); ?></dt>
 		<dd>
 			<?php echo h($connection['Connection']['connection_type']); ?>
+			&nbsp;
+		</dd>
+		<dt><?php echo __('Verified'); ?></dt>
+		<dd>
+			<?php echo h($connection['Connection']['verified']); ?>
+			&nbsp;
+		</dd>
+		<dt><?php echo __('Message'); ?></dt>
+		<dd>
+			<?php echo h($connection['Connection']['message']); ?>
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Created'); ?></dt>
@@ -40,7 +50,5 @@
 		<li><?php echo $this->Form->postLink(__('Delete Connection'), array('action' => 'delete', $connection['Connection']['id']), array(), __('Are you sure you want to delete # %s?', $connection['Connection']['id'])); ?> </li>
 		<li><?php echo $this->Html->link(__('List Connections'), array('action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Connection'), array('action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New User'), array('controller' => 'users', 'action' => 'add')); ?> </li>
 	</ul>
 </div>

@@ -78,6 +78,8 @@
 		<li><?php echo $this->Html->link(__('New Interest'), array('controller' => 'interests', 'action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('List Reputations'), array('controller' => 'reputations', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Reputation'), array('controller' => 'reputations', 'action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('List Connections'), array('controller' => 'connections', 'action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Connection'), array('controller' => 'connections', 'action' => 'add')); ?> </li>
 	</ul>
 </div>
 	<div class="related">
@@ -263,6 +265,47 @@
 	<div class="actions">
 		<ul>
 			<li><?php echo $this->Html->link(__('New Reputation'), array('controller' => 'reputations', 'action' => 'add')); ?> </li>
+		</ul>
+	</div>
+</div>
+<div class="related">
+	<h3><?php echo __('Related Connections'); ?></h3>
+	<?php if (!empty($user['Connection'])): ?>
+	<table cellpadding = "0" cellspacing = "0">
+	<tr>
+		<th><?php echo __('Id'); ?></th>
+		<th><?php echo __('User Id'); ?></th>
+		<th><?php echo __('Connection Id'); ?></th>
+		<th><?php echo __('Connection Type'); ?></th>
+		<th><?php echo __('Verified'); ?></th>
+		<th><?php echo __('Message'); ?></th>
+		<th><?php echo __('Created'); ?></th>
+		<th><?php echo __('Modified'); ?></th>
+		<th class="actions"><?php echo __('Actions'); ?></th>
+	</tr>
+	<?php foreach ($user['Connection'] as $connection): ?>
+		<tr>
+			<td><?php echo $connection['id']; ?></td>
+			<td><?php echo $connection['user_id']; ?></td>
+			<td><?php echo $connection['connection_id']; ?></td>
+			<td><?php echo $connection['connection_type']; ?></td>
+			<td><?php echo $connection['verified']; ?></td>
+			<td><?php echo $connection['message']; ?></td>
+			<td><?php echo $connection['created']; ?></td>
+			<td><?php echo $connection['modified']; ?></td>
+			<td class="actions">
+				<?php echo $this->Html->link(__('View'), array('controller' => 'connections', 'action' => 'view', $connection['id'])); ?>
+				<?php echo $this->Html->link(__('Edit'), array('controller' => 'connections', 'action' => 'edit', $connection['id'])); ?>
+				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'connections', 'action' => 'delete', $connection['id']), array(), __('Are you sure you want to delete # %s?', $connection['id'])); ?>
+			</td>
+		</tr>
+	<?php endforeach; ?>
+	</table>
+<?php endif; ?>
+
+	<div class="actions">
+		<ul>
+			<li><?php echo $this->Html->link(__('New Connection'), array('controller' => 'connections', 'action' => 'add')); ?> </li>
 		</ul>
 	</div>
 </div>

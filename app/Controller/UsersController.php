@@ -15,6 +15,8 @@ class UsersController extends AppController {
  * @var array
  */
 	public $components = array('Paginator', 'Session');
+    public $uses = array('User','Activity','Profile','ExtendedProfile','Connection','Reputation');
+    public $findMethods = array('available' => true);
 
 
     public function beforeFilter() {
@@ -36,7 +38,9 @@ class UsersController extends AppController {
     }
 
     public function logout() {
-        $this->User->id = $this->Auth->user('id');
+        $loggedInUser = $this->Session->read('Auth.User');
+        $this->User->id = $loggedInUser['id'];
+        //$this->User->id = $this->Auth->user('id');
         $this->User->saveField('loggedin', 0);
         return $this->redirect($this->Auth->logout('/pages/finder'));
     }
@@ -86,19 +90,25 @@ class UsersController extends AppController {
 	#	$this->set('user', $this->User->find('first', $options));
 	#}
 
+    /* TODO - You should not be able to view other users profiles unless you have a connection with them. */
+    /* TODO - Users in freindships or relationships should be able to view another users profile/ext profile/friends etc.*/
     public function view($id = null) {
         $loggedInUser = $this->Session->read('Auth.User');
-        if ( $loggedInUser['id'] === $id ) { // Use admin view instead for this // or $loggedInUser['role'] === 'admin') {
-            if (!$this->User->exists($id)) {
-                throw new NotFoundException(__('Invalid user'));
-            }
-            $options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
-            $this->User->recursive = 2;
-            $this->set('user', $this->User->find('first', $options));
-        } else { /* TODO - Users in freindships or relationships should be able to view another users profile/ext profile/friends etc.*/
-            $this->Session->setFlash(__('You cannot view that user.'));
-            return $this->redirect('view/'.$loggedInUser['id']);
+        $user_id = $loggedInUser['id'];
+        if (!$this->User->exists($id)) {
+            throw new NotFoundException(__('Invalid user'));
         }
+        $options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
+        $this->User->recursive = 2;
+        $this->set('user', $this->User->find('first', $options));
+        
+        #$connectionsOutgoing = $this->Connection->find('all', array( 'conditions' => array('Connection.user_id' => $user_id)));
+        $connectionsOutgoing = $this->Connection->findAllByUserId($user_id);
+        $this->set('connectionsOutgoing', $connectionsOutgoing);
+
+        #$connectionsIncoming = $this->Connection->find('all', array( 'conditions' => array('Connection.connection_id' => $user_id)));
+        $connectionsIncoming = $this->Connection->findAllByConnectionId($user_id);
+        $this->set('connectionsIncoming', $connectionsIncoming);
     }
 
 /**
@@ -123,19 +133,14 @@ class UsersController extends AppController {
     
     public function add() {
         $loggedInUser = $this->Session->read('Auth.User');
+        $user_id = $loggedInUser['id'];
         if ($this->request->is('post') ) {
-            if ( ! $loggedInUser['loggedin'] === 1) {
-                $this->User->create();
-                if ($this->User->save($this->request->data)) {
-                    $this->Session->setFlash(__('The user has been saved.'));
-                    /* TODO - Should user go to the INDEX of users after a user is saved? */
-                    return $this->redirect(array('action' => 'index'));
-                } else {
-                    $this->Session->setFlash(__('The user could not be saved. Please, try again.'));
-                }
+            $this->User->create();
+            if ($this->User->save($this->request->data)) {
+                $this->Session->setFlash(__('The user has been saved.'));
+                return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
             } else {
-                $this->Session->setFlash(__('You could not do that.'));
-                return $this->redirect(array('controller' => 'pages', 'action' => 'display', 'finder'));
+                $this->Session->setFlash(__('The user could not be saved. Please, try again.'));
             }
          } else {
              $this->Session->setFlash(__('You could not do that.'));

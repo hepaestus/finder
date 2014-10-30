@@ -170,6 +170,8 @@ CREATE TABLE `connections` (
   `user_id` int(10) unsigned DEFAULT NULL,
   `connection_id` int(10) unsigned DEFAULT NULL,
   `connection_type` varchar(50) DEFAULT NULL,
+  `verified` tinyint(1) DEFAULT '0',
+  `message` varchar(250) DEFAULT NULL,
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)

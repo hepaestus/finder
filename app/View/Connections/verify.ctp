@@ -3,9 +3,8 @@
 	<fieldset>
 		<legend><?php echo __('Edit Connection'); ?></legend>
 	<?php
-		echo $this->Form->input('connection_type');
+		echo $this->Form->input('connection_type', array('options' => array('unknown' => 'Unknown', 'aquaintance' => 'Aquaintance', 'friend' => 'Friend', 'relationship' => 'Relationship' )));
 		echo $this->Form->input('verified');
-		echo $this->Form->input('message');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
