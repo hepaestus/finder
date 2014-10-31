@@ -295,7 +295,7 @@
 			<td><?php echo $connection['Connection']['modified']; ?></td>
 			<td class="actions">
 				<?php echo $this->Html->link(__('View'), array('controller' => 'connections', 'action' => 'view', $connection['Connection']['id'])); ?>
-				<?php echo $this->Html->link(__('Edit'), array('controller' => 'connections', 'action' => 'edit', $connection['Connection']['id'])); ?>
+				<?php //echo $this->Html->link(__('Edit'), array('controller' => 'connections', 'action' => 'edit', $connection['Connection']['id'])); ?>
 				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'connections', 'action' => 'delete', $connection['Connection']['id']), array(), __('Are you sure you want to delete # %s?', $connection['Connection']['id'])); ?>
 			</td>
 		</tr>
@@ -328,7 +328,6 @@
 			<td><?php echo $connection['Connection']['modified']; ?></td>
 			<td class="actions">
 				<?php echo $this->Html->link(__('Verify'), array('controller' => 'connections', 'action' => 'verify', $connection['Connection']['id'])); ?>
-				<?php echo $this->Html->link(__('View'), array('controller' => 'connections', 'action' => 'view', $connection['Connection']['id'])); ?>
 				<?php echo $this->Html->link(__('Edit'), array('controller' => 'connections', 'action' => 'edit', $connection['Connection']['id'])); ?>
 				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'connections', 'action' => 'delete', $connection['Connection']['id']), array(), __('Are you sure you want to delete # %s?', $connection['Connection']['id'])); ?>
 			</td>

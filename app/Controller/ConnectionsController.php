@@ -35,11 +35,19 @@ class ConnectionsController extends AppController {
  * @return void
  */
 	public function view($id = null) {
+        $loggedInUser = $this->Session->read('Auth.User');
+        $user_id = $loggedInUser['id'];
 		if (!$this->Connection->exists($id)) {
 			throw new NotFoundException(__('Invalid connection'));
 		}
 		$options = array('conditions' => array('Connection.' . $this->Connection->primaryKey => $id));
-		$this->set('connection', $this->Connection->find('first', $options));
+		$connection = $this->Connection->find('first', $options);
+        if ( $connection['Connection']['user_id'] == $user_id ) {
+            $this->set(compact('connection')); 
+        } else {
+			$this->Session->setFlash(__('You Can\'t View That.'));
+			return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
+        }
 	}
 
 /**
@@ -74,19 +82,39 @@ class ConnectionsController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
+        $loggedInUser = $this->Session->read('Auth.User');
+        $user_id = $loggedInUser['id'];
+
 		if (!$this->Connection->exists($id)) {
 			throw new NotFoundException(__('Invalid connection'));
 		}
+
+        // If you are the one being connected to you should be able to edit this connection
+        $connection = $this->Connection->find('first', array('conditions' => array('Connection.id' => $id, 'Connection.connection_id' => $user_id)));
+
 		if ($this->request->is(array('post', 'put'))) {
-			if ($this->Connection->save($this->request->data)) {
-				$this->Session->setFlash(__('The connection has been saved.'));
-				return $this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The connection could not be saved. Please, try again.'));
-			}
+            if ( $connection ) {
+                $this->request->data['Connection']['id']            = $connection['Connection']['id'];
+                $this->request->data['Connection']['user_id']       = $connection['Connection']['user_id'];
+                $this->request->data['Connection']['connection_id'] = $connection['Connection']['connection_id'];
+			    if ($this->Connection->save($this->request->data)) {
+				    $this->Session->setFlash(__('The connection has been saved.'));
+				    return $this->redirect(array('action' => 'index'));
+			    } else {
+				    $this->Session->setFlash(__('The connection could not be saved. Please, try again.'));
+			    }
+            } else {
+	            $this->Session->setFlash(__('You cannot edit this connection.'));
+				return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
+            } 
 		} else {
-			$options = array('conditions' => array('Connection.' . $this->Connection->primaryKey => $id));
-			$this->request->data = $this->Connection->find('first', $options);
+            if ( $connection ) {
+			    $options = array('conditions' => array('Connection.' . $this->Connection->primaryKey => $id));
+			    $this->request->data = $this->Connection->find('first', $options);
+            } else {
+	            $this->Session->setFlash(__('You cannot edit this connection.'));
+				return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
+            }
 		}
 		$users = $this->Connection->find('list');
 		$this->set(compact('users'));
@@ -154,6 +182,42 @@ class ConnectionsController extends AppController {
 		$connections = $this->Connection->find('list');
 		$this->set(compact('connections'));
     	#return $this->redirect(array('action' => 'index'));
+	}
+
+/**
+ * isOwner method
+ *
+ * @return connection 
+ */
+	public function isOwner($connection_id) {
+        $loggedInUser = $this->Session->read('Auth.User');
+        $user_id = $loggedInUser['id'];
+        $return = false;
+		if (!$this->Connection->exists($id)) {
+             $connection = $this->Connection->find('first', array('conditions' => array('Connection.id' => $id, 'Connection.user_id' => $user_id)));
+             if ( $connection ) {
+                 $return = $connection;
+             }
+		}
+        return $return;
+	}
+
+/**
+ * isSubject method
+ *
+ * @return connection
+ */
+	public function isSubject($connection_id) {
+        $loggedInUser = $this->Session->read('Auth.User');
+        $user_id = $loggedInUser['id'];
+        $return = false;
+		if (!$this->Connection->exists($id)) {
+             $connection = $this->Connection->find('first', array('conditions' => array('Connection.id' => $id, 'Connection.connection_id' => $user_id)));
+             if ( $connection ) {
+                 $return = $connection;
+             }
+		}
+        return $return;
 	}
 
 /**
