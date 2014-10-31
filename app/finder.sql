@@ -151,6 +151,7 @@ CREATE TABLE `reputations` (
   `user_id` int(10) unsigned DEFAULT NULL,
   `reviewer_id` int(10) unsigned DEFAULT NULL,
   `comment` varchar(250) DEFAULT NULL,
+  `rating` int(2) DEFAULT '0',
   `endoresments_id` int(10) unsigned DEFAULT NULL,
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL,

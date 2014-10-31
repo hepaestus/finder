@@ -14,7 +14,7 @@ class UsersController extends AppController {
  *
  * @var array
  */
-	public $components = array('Paginator', 'Session');
+	public $components = array('Paginator', 'Session','Solr');
     public $uses = array('User','Activity','Profile','ExtendedProfile','Connection','Reputation');
     public $findMethods = array('available' => true);
 
@@ -72,7 +72,7 @@ class UsersController extends AppController {
  */
 	public function index() {
         /* Regular Users should not see the index of all users. Only admins should see this */
-        return $this->redirect(array('controller' => 'user', 'action' => 'view', $this->Auth->user('id')));
+        return $this->redirect(array('controller' => 'users', 'action' => 'view', $this->Auth->user('id')));
 	}
 
 /**
@@ -156,12 +156,19 @@ class UsersController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
+        $loggedInUser = $this->Session->read('Auth.User');
+        $user_id = $loggedInUser['id'];
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
 		}
 		if ($this->request->is(array('post', 'put'))) {
 			if ($this->User->save($this->request->data)) {
-				$this->Session->setFlash(__('The user has been saved.'));
+                $solr_result = $this->Solr->pushUserToSolr($user_id);
+                if ( ! $solr_result ) {
+				    $this->Session->setFlash(__('The user has been saved. But no propegated to the Search'));
+                } else {
+				    $this->Session->setFlash(__('The user has been saved.'));
+                }
                 /* TODO - User should NOT go to the INDEX of users after a user is saved? */
 				return $this->redirect(array('action' => 'index'));
 			} else {
