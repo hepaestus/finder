@@ -81,7 +81,7 @@ class ReputationsController extends AppController {
         if (!$this->Reputation->exists($id)) {
             throw new NotFoundException(__('Invalid reputation'));
         }
-        if ( isReviewer($id) ) {
+        if ( ReputationsController::isReviewer($id) ) {
             if ($this->request->is(array('post', 'put'))) {
                 if ($this->Reputation->save($this->request->data)) {
                     $this->Session->setFlash(__('The reputation has been saved.'));
@@ -116,7 +116,7 @@ class ReputationsController extends AppController {
            if (!$this->Reputation->exists()) {
             throw new NotFoundException(__('Invalid reputation'));
         }
-        if ( isReviewer($id) ) {
+        if ( ReputationsController::isReviewer($id) ) {
             $this->request->allowMethod('post', 'delete');
             if ($this->Reputation->delete()) {
                 $this->Session->setFlash(__('The reputation has been deleted.'));
@@ -138,8 +138,8 @@ class ReputationsController extends AppController {
         $loggedInUser = $this->Session->read('Auth.User');
         $user_id = $loggedInUser['id'];
         $return = false;
-        if (!$this->Reputation->exists($id)) {
-             $reputation= $this->Reputation->find('first', array('conditions' => array('Reputation.id' => $id, 'Reputation.reviewer_id' => $user_id)));
+        if (!$this->Reputation->exists($reputation_id)) {
+             $reputation= $this->Reputation->find('first', array('conditions' => array('Reputation.id' => $reputation_id, 'Reputation.reviewer_id' => $user_id)));
              if ( $reputation) {
                  $return = $reputation;
              }

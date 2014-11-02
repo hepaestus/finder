@@ -134,7 +134,7 @@ class ConnectionsController extends AppController {
         if (!$this->Connection->exists()) {
             throw new NotFoundException(__('Invalid connection'));
         }
-        if ( isOwner($id) || isSubject($id) ) {
+        if ( ConnectionsController::isOwner($id) || ConnectionsControler::isSubject($id) ) {
             $this->request->allowMethod('post', 'delete');
             if ($this->Connection->delete()) {
                 $this->Session->setFlash(__('The connection has been deleted.'));
