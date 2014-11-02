@@ -95,20 +95,22 @@ class UsersController extends AppController {
     public function view($id = null) {
         $loggedInUser = $this->Session->read('Auth.User');
         $user_id = $loggedInUser['id'];
+        
         if (!$this->User->exists($id)) {
             throw new NotFoundException(__('Invalid user'));
         }
-        $options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
+
+        $options = array('conditions' => array('User.' . $this->User->primaryKey => $user_id));
         $this->User->recursive = 2;
         $this->set('user', $this->User->find('first', $options));
         
-        $reputationsOutgoing = $this->Reputation->findAllByUserId($user_id);
-        pr($reputationsOutgoing);
+        $reputationsOutgoing = $this->Reputation->findAllByReviewerId($user_id);
+        //pr($reputationsOutgoing);
         $this->set('reputationsOutgoing', $reputationsOutgoing);
         $connectionsOutgoing = $this->Connection->findAllByUserId($user_id);
         $this->set('connectionsOutgoing', $connectionsOutgoing);
 
-        $reputationsIncoming = $this->Reputation->findAllByReviewerId($user_id);
+        $reputationsIncoming = $this->Reputation->findAllByUserId($user_id);
         $this->set('reputationsIncoming', $reputationsIncoming);
         $connectionsIncoming = $this->Connection->findAllByConnectionId($user_id);
         $this->set('connectionsIncoming', $connectionsIncoming);

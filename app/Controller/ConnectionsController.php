@@ -23,8 +23,12 @@ class ConnectionsController extends AppController {
  * @return void
  */
     public function index() {
+        $loggedInUser = $this->Session->read('Auth.User');
+        $user_id = $loggedInUser['id'];
         $this->Connection->recursive = 1;
-        $this->set('connections', $this->Paginator->paginate());
+        $connections = $this->Connection->findByUserId($user_id);
+        pr($connections);
+        $this->set('connections', $connections);
     }
 
 /**
@@ -70,7 +74,9 @@ class ConnectionsController extends AppController {
                 $this->Session->setFlash(__('The connection could not be saved. Please, try again.'));
             }
         }
-        $connections = $this->User->find('list');
+        $connections = $this->User->find('list', array('fields' => array('User.id', 'User.username'), 'recursive' => 0));
+        $this->Session->setFlash(__('Listing User ids.'));
+        pr($connections);
         $this->set(compact('connections'));
     }
 
@@ -264,7 +270,7 @@ class ConnectionsController extends AppController {
                 $this->Session->setFlash(__('The connection could not be saved. Please, try again.'));
             }
         }
-        $users = $this->Connection->User->find('list');
+        $users = $this->Connection->User->find('list', array( 'fields' => array('username')));
         $this->set(compact('users'));
     }
 

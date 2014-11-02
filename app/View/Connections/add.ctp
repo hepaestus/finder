@@ -3,7 +3,7 @@
 	<fieldset>
 		<legend><?php echo __('Add Connection'); ?></legend>
 	<?php
-		echo $this->Form->input('connection_id');
+		echo $this->Form->select('connection_id', $connections);
 		echo $this->Form->input('message');
 	?>
 	</fieldset>

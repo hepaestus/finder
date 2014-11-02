@@ -38,13 +38,13 @@ class ProfilesController extends AppController {
         $loggedInUser = $this->Session->read('Auth.User');
         $user_id = $loggedInUser['id'];
 
-		if (!$this->Profile->exists($id)) {
-			throw new NotFoundException(__('Invalid profile'));
-		} else { 
-		    $options = array('conditions' => array('Profile.' . $this->Profile->primaryKey => $id));
-		    $this->set('profile', $this->Profile->find('first', $options));
-        }
-        //return $this->redirect($this->Auth->redirect(array('controller' => 'users', 'action' => 'view', $this->Auth->user('id'))));
+		//if (!$this->Profile->exists($id)) {
+		//	throw new NotFoundException(__('Invalid profile'));
+		//} else { 
+		//    $options = array('conditions' => array('Profile.' . $this->Profile->primaryKey => $id));
+		//    $this->set('profile', $this->Profile->find('first', $options));
+        //}
+        return $this->redirect($this->Auth->redirect(array('controller' => 'users', 'action' => 'view', $this->Auth->user('id'))));
 	}
 
 /**
