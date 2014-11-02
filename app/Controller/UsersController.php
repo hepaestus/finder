@@ -102,11 +102,14 @@ class UsersController extends AppController {
         $this->User->recursive = 2;
         $this->set('user', $this->User->find('first', $options));
         
-        #$connectionsOutgoing = $this->Connection->find('all', array( 'conditions' => array('Connection.user_id' => $user_id)));
+        $reputationsOutgoing = $this->Reputation->findAllByUserId($user_id);
+        pr($reputationsOutgoing);
+        $this->set('reputationsOutgoing', $reputationsOutgoing);
         $connectionsOutgoing = $this->Connection->findAllByUserId($user_id);
         $this->set('connectionsOutgoing', $connectionsOutgoing);
 
-        #$connectionsIncoming = $this->Connection->find('all', array( 'conditions' => array('Connection.connection_id' => $user_id)));
+        $reputationsIncoming = $this->Reputation->findAllByReviewerId($user_id);
+        $this->set('reputationsIncoming', $reputationsIncoming);
         $connectionsIncoming = $this->Connection->findAllByConnectionId($user_id);
         $this->set('connectionsIncoming', $connectionsIncoming);
     }
