@@ -28,15 +28,17 @@ class SolrComponent extends Component {
         //pr($user);
 
         $activity_array = array();
-        foreach ( $user['Interest'] as $interest ) {
-            if ( $interest['giving'] == 1 ) {
-                array_push($activity_array, $interest['Activity']['name'] . "_G");
-            }
-            if ( $interest['recieving'] == 1 ) {
-                array_push($activity_array, $interest['Activity']['name'] . "_R");
-            }
-            if ( $interest['recieving'] == 0 && $interest['giving'] == 0 ) {
-                array_push($activity_array, $interest['Activity']['name']);
+        if ( array_key_exists('Interest', $user)) {
+            foreach ( $user['Interest'] as $interest ) {
+                if ( $interest['giving'] == 1 ) {
+                    array_push($activity_array, $interest['Activity']['name'] . "_G");
+                }
+                if ( $interest['recieving'] == 1 ) {
+                    array_push($activity_array, $interest['Activity']['name'] . "_R");
+                }
+                if ( $interest['recieving'] == 0 && $interest['giving'] == 0 ) {
+                    array_push($activity_array, $interest['Activity']['name']);
+                }
             }
         }
         $likes_array = array();
