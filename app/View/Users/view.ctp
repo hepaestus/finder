@@ -142,10 +142,6 @@
 		<dd>
 	<?php echo $user['ExtendedProfile']['postal_code']; ?>
 &nbsp;</dd>
-		<dt><?php echo __('Birth Date'); ?></dt>
-		<dd>
-	<?php echo $user['ExtendedProfile']['birth_date']; ?>
-&nbsp;</dd>
 		<dt><?php echo __('Gender Identity'); ?></dt>
 		<dd>
 	<?php echo $user['ExtendedProfile']['gender_identity']; ?>
@@ -230,32 +226,64 @@
 	</div>
 </div>
 <div class="related">
-	<h3><?php echo __('Related Reputations'); ?></h3>
-	<?php if (!empty($user['Reputation'])): ?>
+	<h3><?php echo __('Outgoing Reputations'); ?></h3>
+	<?php if (!empty($reputationsOutgoing)): ?>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
 		<th><?php echo __('Id'); ?></th>
 		<th><?php echo __('User Id'); ?></th>
 		<th><?php echo __('Reviewer Id'); ?></th>
 		<th><?php echo __('Comment'); ?></th>
-		<th><?php echo __('Endoresments Id'); ?></th>
+		<!-- th><?php //echo __('Endoresments Id'); ?></th -->
 		<th><?php echo __('Created'); ?></th>
 		<th><?php echo __('Modified'); ?></th>
 		<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
-	<?php foreach ($user['Reputation'] as $reputation): ?>
+	<?php foreach ($reputationsOutgoing as $reputation): ?>
 		<tr>
-			<td><?php echo $reputation['id']; ?></td>
-			<td><?php echo $reputation['user_id']; ?></td>
-			<td><?php echo $reputation['reviewer_id']; ?></td>
-			<td><?php echo $reputation['comment']; ?></td>
-			<td><?php echo $reputation['endoresments_id']; ?></td>
-			<td><?php echo $reputation['created']; ?></td>
-			<td><?php echo $reputation['modified']; ?></td>
+			<td><?php echo $reputation['Reputation']['id']; ?></td>
+			<td><?php echo $reputation['User']['username']; ?></td>
+			<td><?php echo $reputation['Reviewer']['username']; ?></td>
+			<td><?php echo $reputation['Reputation']['comment']; ?></td>
+			<!-- td><?php //echo $reputation['Reputation']['endoresments_id']; ?></td -->
+			<td><?php echo $reputation['Reputation']['created']; ?></td>
+			<td><?php echo $reputation['Reputation']['modified']; ?></td>
 			<td class="actions">
-				<?php echo $this->Html->link(__('View'), array('controller' => 'reputations', 'action' => 'view', $reputation['id'])); ?>
-				<?php echo $this->Html->link(__('Edit'), array('controller' => 'reputations', 'action' => 'edit', $reputation['id'])); ?>
-				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'reputations', 'action' => 'delete', $reputation['id']), array(), __('Are you sure you want to delete # %s?', $reputation['id'])); ?>
+				<?php echo $this->Html->link(__('View'), array('controller' => 'reputations', 'action' => 'view', $reputation['Reputation']['id'])); ?>
+				<?php echo $this->Html->link(__('Edit'), array('controller' => 'reputations', 'action' => 'edit', $reputation['Reputation']['id'])); ?>
+				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'reputations', 'action' => 'delete', $reputation['Reputation']['id']), array(), __('Are you sure you want to delete # %s?', $reputation['Reputation']['comment'])); ?>
+			</td>
+		</tr>
+	<?php endforeach; ?>
+	</table>
+<?php endif; ?>
+
+	<h3><?php echo __('Incoming Reputations'); ?></h3>
+	<?php if (!empty($reputationsIncoming)): ?>
+	<table cellpadding = "0" cellspacing = "0">
+	<tr>
+		<th><?php echo __('Id'); ?></th>
+		<th><?php echo __('User Id'); ?></th>
+		<th><?php echo __('Reviewer Id'); ?></th>
+		<th><?php echo __('Comment'); ?></th>
+		<!-- th><?php //echo __('Endoresments Id'); ?></th -->
+		<th><?php echo __('Created'); ?></th>
+		<th><?php echo __('Modified'); ?></th>
+		<th class="actions"><?php echo __('Actions'); ?></th>
+	</tr>
+	<?php foreach ($reputationsIncoming as $reputation): ?>
+		<tr>
+			<td><?php echo $reputation['Reputation']['id']; ?></td>
+			<td><?php echo $reputation['User']['username']; ?></td>
+			<td><?php echo $reputation['Reviewer']['username']; ?></td>
+			<td><?php echo $reputation['Reputation']['comment']; ?></td>
+			<!-- td><?php //echo $reputation['Reputation']['endoresments_id']; ?></td -->
+			<td><?php echo $reputation['Reputation']['created']; ?></td>
+			<td><?php echo $reputation['Reputation']['modified']; ?></td>
+			<td class="actions">
+				<?php echo $this->Html->link(__('View'), array('controller' => 'reputations', 'action' => 'view', $reputation['Reputation']['id'])); ?>
+				<?php echo $this->Html->link(__('Edit'), array('controller' => 'reputations', 'action' => 'edit', $reputation['Reputation']['id'])); ?>
+				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'reputations', 'action' => 'delete', $reputation['Reputation']['id']), array(), __('Are you sure you want to delete # %s?', $reputation['Reputation']['id'])); ?>
 			</td>
 		</tr>
 	<?php endforeach; ?>

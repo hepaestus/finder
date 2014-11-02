@@ -26,11 +26,6 @@
 			<?php echo h($extendedProfile['ExtendedProfile']['postal_code']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Birth Date'); ?></dt>
-		<dd>
-			<?php echo h($extendedProfile['ExtendedProfile']['birth_date']); ?>
-			&nbsp;
-		</dd>
 		<dt><?php echo __('Gender Identity'); ?></dt>
 		<dd>
 			<?php echo h($extendedProfile['ExtendedProfile']['gender_identity']); ?>

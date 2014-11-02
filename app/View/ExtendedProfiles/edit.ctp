@@ -8,7 +8,6 @@
 		echo $this->Form->input('first_name');
 		echo $this->Form->input('last_name');
 		echo $this->Form->input('postal_code');
-		echo $this->Form->input('birth_date');
 		echo $this->Form->input('gender_identity');
 		echo $this->Form->input('relationship_status');
 		echo $this->Form->input('image');

@@ -8,7 +8,6 @@
 			<th><?php echo $this->Paginator->sort('first_name'); ?></th>
 			<th><?php echo $this->Paginator->sort('last_name'); ?></th>
 			<th><?php echo $this->Paginator->sort('postal_code'); ?></th>
-			<th><?php echo $this->Paginator->sort('birth_date'); ?></th>
 			<th><?php echo $this->Paginator->sort('gender_identity'); ?></th>
 			<th><?php echo $this->Paginator->sort('relationship_status'); ?></th>
 			<th><?php echo $this->Paginator->sort('image'); ?></th>
@@ -30,7 +29,6 @@
 		<td><?php echo h($extendedProfile['ExtendedProfile']['first_name']); ?>&nbsp;</td>
 		<td><?php echo h($extendedProfile['ExtendedProfile']['last_name']); ?>&nbsp;</td>
 		<td><?php echo h($extendedProfile['ExtendedProfile']['postal_code']); ?>&nbsp;</td>
-		<td><?php echo h($extendedProfile['ExtendedProfile']['birth_date']); ?>&nbsp;</td>
 		<td><?php echo h($extendedProfile['ExtendedProfile']['gender_identity']); ?>&nbsp;</td>
 		<td><?php echo h($extendedProfile['ExtendedProfile']['relationship_status']); ?>&nbsp;</td>
 		<td><?php echo h($extendedProfile['ExtendedProfile']['image']); ?>&nbsp;</td>
