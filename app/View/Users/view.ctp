@@ -67,6 +67,7 @@
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('Edit User'), array('action' => 'edit', $user['User']['id'])); ?> </li>
+		<li><?php echo $this->Html->link(__('Show Matches'), array('controller' => 'searches', 'action' => 'matches')); ?> </li>
 		<li><?php echo $this->Form->postLink(__('Delete User'), array('action' => 'delete', $user['User']['id']), array(), __('Are you sure you want to delete # %s?', $user['User']['id'])); ?> </li>
 		<li><?php echo $this->Html->link(__('List Users'), array('action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New User'), array('action' => 'add')); ?> </li>
@@ -182,6 +183,12 @@
 			</ul>
 		</div>
 	</div>
+    
+	<div class="related">
+	<h3><?php echo __('Matches'); ?></h3>
+    <?php pr($matches); ?>
+    </div>
+
 	<div class="related">
 	<h3><?php echo __('Related Interests'); ?></h3>
 	<?php if (!empty($user['Interest'])): ?>
