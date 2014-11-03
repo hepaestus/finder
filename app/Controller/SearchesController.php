@@ -30,10 +30,10 @@ class SearchesController extends AppController {
         foreach( $user['Interest'] as $interest) {
 
             if ( array_key_exists('giving', $interest) && $interest['giving'] ) {
-                array_push($activities_array, $interest['Activity']['name'] . "_G");
+                array_push($activities_array, $interest['Activity']['name'] . "_R"); // REPLACE WITH THE OPPOSITE TO MATCH WITH THE CORRESPONDING USER
             }
             if ( array_key_exists('receiving', $interest) && $interest['receiving'] ) {
-                array_push($activities_array, $interest['Activity']['name'] . "_R");
+                array_push($activities_array, $interest['Activity']['name'] . "_G"); // REPLACE WITH THE OPPOSITE TO MATCH WITH THE CORRESPONDING USER
             }
             if ( ( array_key_exists('receiving', $interest) && ! $interest['receiving'] ) && (  array_key_exists('giving', $interest) && ! $interest['giving'] ) ) {
                 array_push($activities_array, $interest['Activity']['name'] );
@@ -48,7 +48,19 @@ class SearchesController extends AppController {
             }
         }
 
-        $query = "q=$activities&fl=score,id,name&wt=json&indent=true&";
+        $location = "";
+        if ( $user['ExtendedProfile']['latitude'] ) {
+            if ( $user['ExtendedProfile']['longitude'] ) {
+                $location = $user['ExtendedProfile']['latitude'] . "," . $user['ExtendedProfile']['longitude'];
+            }            
+        }
+
+        $geo_query = "";
+        if ( $location ) {
+           $geo_query = "fq={!geofilt%20pt=$location%20sfield=location%20d=6000}&";
+        }
+
+        $query = "q=NOT%20id:$user_id%20$activities&fl=score,id,name,activity,location&" . $geo_query. "wt=json&indent=true&";
 
         $solr_result = $this->Solr->querySolr($query);
         //pr($solr_result);        
