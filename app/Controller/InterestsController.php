@@ -82,7 +82,7 @@ class InterestsController extends AppController {
         $user_id = $loggedInUser['id'];
         if ($this->request->is('post')) {
             $save_count = 0;
-            #error_log("REQUEST : " . print_r( $this->request->data() , 1));
+            #pr( $this->request->data());
             foreach( $this->request->data['Interest'] as $each_interest) {
                 #error_log("EACH INTEREST : " . print_r( $each_interest, 1));
                 if ( array_key_exists('activity_id', $each_interest) ) {
@@ -90,7 +90,7 @@ class InterestsController extends AppController {
                             'user_id' => $this->Session->read('Auth.User.id'),
                             'activity_id' => $each_interest['activity_id'],
                             'giving' => $each_interest['giving'],
-                            'recieving' => $each_interest['recieving'],
+                            'receiving' => $each_interest['receiving'],
                             'importance' => $each_interest['importance'],
                             'experience' => $each_interest['experience'],
                         )

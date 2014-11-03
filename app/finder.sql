@@ -94,7 +94,7 @@ CREATE TABLE `interests` (
   `user_id` int(10) unsigned DEFAULT NULL,
   `activity_id` int(10) unsigned DEFAULT NULL,
   `giving` tinyint(1) DEFAULT '0',
-  `recieving` tinyint(1) DEFAULT '0',
+  `receiving` tinyint(1) DEFAULT '0',
   `importance` int(2) unsigned DEFAULT NULL,
   `experience` int(2) unsigned DEFAULT NULL,
   `created` datetime DEFAULT NULL,

@@ -168,10 +168,40 @@ class UsersController extends AppController {
 	public function edit($id = null) {
         $loggedInUser = $this->Session->read('Auth.User');
         $user_id = $loggedInUser['id'];
+        pr("LOGGED IN USER");
+        pr($loggedInUser);
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
 		}
 		if ($this->request->is(array('post', 'put'))) {
+
+            if ( $this->request->data['User']['password_new'] && $this->request->data['User']['password_repeat'] ) {
+                if ( $this->request->data['User']['password_new'] == $this->request->data['User']['password_repeat'] ) {
+
+                    $this->request->data['User']['password'] = $this->request->data['User']['password_new'];                    
+
+                } else {
+				    $this->Session->setFlash(__('Passwords Did Not Match. Please Retry.'));
+                    $this->redirect(array('controller' => 'users', 'action' => 'edit', $user_id));
+                }
+            //} else {
+            //    $this->request->data['User']['password'] = $loggedInUser['password'];
+            }
+            
+            unset($this->request->data['User']['password_new']);
+            unset($this->request->data['User']['password_repeat']);
+
+            $this->request->data['User']['id'] = $loggedInUser['id'];
+            $this->request->data['User']['profile_id'] = $loggedInUser['profile_id'];
+            $this->request->data['User']['extended_profile_id'] = $loggedInUser['extended_profile_id']; 
+            $this->request->data['User']['recovery_hash'] = $loggedInUser['recovery_hash']; 
+            $this->request->data['User']['role'] = $loggedInUser['role']; 
+            $this->request->data['User']['loggedin'] = $loggedInUser['loggedin']; 
+            $this->request->data['User']['lastlogin'] = $loggedInUser['lastlogin']; 
+            $this->request->data['User']['created'] = $loggedInUser['created']; 
+
+            pr($this->request->data);
+
 			if ($this->User->save($this->request->data)) {
                 $solr_result = $this->Solr->pushUserToSolr($user_id);
                 if ( ! $solr_result ) {
@@ -179,8 +209,7 @@ class UsersController extends AppController {
                 } else {
 				    $this->Session->setFlash(__('The user has been saved.'));
                 }
-                /* TODO - User should NOT go to the INDEX of users after a user is saved? */
-				return $this->redirect(array('action' => 'index'));
+				return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
 			} else {
 				$this->Session->setFlash(__('The user could not be saved. Please, try again.'));
 			}
@@ -188,9 +217,9 @@ class UsersController extends AppController {
 			$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
 			$this->request->data = $this->User->find('first', $options);
 		}
-		$profiles = $this->User->Profile->find('list');
-		$extendedProfiles = $this->User->ExtendedProfile->find('list');
-		$this->set(compact('profiles', 'extendedProfiles'));
+		//$profiles = $this->User->Profile->find('list');
+		//$extendedProfiles = $this->User->ExtendedProfile->find('list');
+		//$this->set(compact('profiles', 'extendedProfiles'));
 	}
 
 /**
