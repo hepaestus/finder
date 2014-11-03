@@ -14,7 +14,7 @@ class InterestsController extends AppController {
  *
  * @var array
  */
-	public $components = array('Paginator', 'Session');
+	public $components = array('Paginator', 'Session','Solr');
     public $uses = array('Interest','Activity','User');
 
      public function beforeFilter() {
@@ -105,7 +105,13 @@ class InterestsController extends AppController {
                     }
                 }
             }
-            $this->Session->setFlash(__($save_count . ' interests saved.'));
+            $solr_result = $this->Solr->pushUserToSolr($user_id);
+            if ( ! $solr_result ) {
+                $this->Session->setFlash(__($save_count . 'Interests saved. But Not Propagated To Search'));
+            } else {
+                $this->Session->setFlash(__($save_count . 'Interests saved.'));
+            }
+
             //$this->Interest->recursive = 1;
             //$users = $this->Interest->User->find('list');
             //$this->set(compact('users'));
@@ -127,6 +133,9 @@ class InterestsController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
+        $loggedInUser = $this->Session->read('Auth.User');
+        $user_id = $loggedInUser['id'];
+
 		if (!$this->Interest->exists($id)) {
 			throw new NotFoundException(__('Invalid interest'));
 		}
@@ -141,10 +150,10 @@ class InterestsController extends AppController {
 			$options = array('conditions' => array('Interest.' . $this->Interest->primaryKey => $id));
 			$this->request->data = $this->Interest->find('first', $options);
 		}
-		$users = $this->Interest->User->find('list');
+		//$users = $this->Interest->User->find('list');
+		//$activities = $this->Interest->Activity->find('list');
 		$activities = $this->Interest->Activity->find('list');
-		$activities = $this->Interest->Activity->find('list');
-		$this->set(compact('users', 'activities', 'activities'));
+		$this->set(compact('activities'));
 	}
 
 /**
@@ -155,6 +164,8 @@ class InterestsController extends AppController {
  * @return void
  */
 	public function delete($id = null) {
+        $loggedInUser = $this->Session->read('Auth.User');
+        $user_id = $loggedInUser['id'];
 		$this->Interest->id = $id;
 		if (!$this->Interest->exists()) {
 			throw new NotFoundException(__('Invalid interest'));
@@ -165,6 +176,7 @@ class InterestsController extends AppController {
 		} else {
 			$this->Session->setFlash(__('The interest could not be deleted. Please, try again.'));
 		}
+        $solr_result = $this->Solr->pushUserToSolr($user_id);
 		return $this->redirect(array('action' => 'index'));
 	}
 
