@@ -168,8 +168,7 @@ class UsersController extends AppController {
 	public function edit($id = null) {
         $loggedInUser = $this->Session->read('Auth.User');
         $user_id = $loggedInUser['id'];
-        pr("LOGGED IN USER");
-        pr($loggedInUser);
+        //pr($loggedInUser);
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
 		}
@@ -184,7 +183,7 @@ class UsersController extends AppController {
 				    $this->Session->setFlash(__('Passwords Did Not Match. Please Retry.'));
                     $this->redirect(array('controller' => 'users', 'action' => 'edit', $user_id));
                 }
-            //} else {
+            //} else { // THERE IS NO NEED FOR THIS FOR SOME REASON.
             //    $this->request->data['User']['password'] = $loggedInUser['password'];
             }
             
@@ -196,11 +195,11 @@ class UsersController extends AppController {
             $this->request->data['User']['extended_profile_id'] = $loggedInUser['extended_profile_id']; 
             $this->request->data['User']['recovery_hash'] = $loggedInUser['recovery_hash']; 
             $this->request->data['User']['role'] = $loggedInUser['role']; 
-            $this->request->data['User']['loggedin'] = $loggedInUser['loggedin']; 
+            $this->request->data['User']['loggedin'] = 1; 
             $this->request->data['User']['lastlogin'] = $loggedInUser['lastlogin']; 
             $this->request->data['User']['created'] = $loggedInUser['created']; 
 
-            pr($this->request->data);
+            //pr($this->request->data);
 
 			if ($this->User->save($this->request->data)) {
                 $solr_result = $this->Solr->pushUserToSolr($user_id);
