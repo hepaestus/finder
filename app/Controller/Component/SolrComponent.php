@@ -8,19 +8,36 @@ class SolrComponent extends Component {
 
     public $uses = array('User');
 
+    public $solr_protocol = "http";
+    public $solr_host = "localhost";
+    public $solr_port = 8983;
+    public $solr_path = "solr";
+    public $solr_collection = "collection1";
+    public $solr_username = "";
+    public $solr_password = "";
+
     public function initialize(Controller $controller) {
         $this->Controller = $controller;
     }
 
-    public function pushUserToSolr($user_id) {
+    public function querySolr($query) {
 
-        $solr_protocol = "http";
-        $solr_host = "localhost";
-        $solr_port = 8983;
-        $solr_path = "solr";
-        $solr_collection = "collection1";
-        $solr_username = "";
-        $solr_password = "";
+        $url = "http://" . $this->solr_host . ":" . $this->solr_port . "/" . $this->solr_path . "/" .  $this->solr_collection . "/select/?" . $query;
+
+        error_log("Solr Query URL : $url");
+        $result = SolrComponent::solrConnect($url);
+        error_log("Solr Query Component Result : " . $result);
+        #if ( preg_match("/\"responseHeader\".*\"status\":0,\"QTime\"/", $result) ) {
+            error_log("Solr Query SUCCESS : " . $result);
+            return $result;
+        #} else {
+        #    error_log("Solr Query FAIL : " . $result);
+        #    return false;
+        #}
+    }
+
+
+    public function pushUserToSolr($user_id) {
 
         $options = array( 'conditions' => array ('User.id' => $user_id ), 'recursive' => 2);
         $user = $this->Controller->User->find('first', $options);
@@ -33,10 +50,10 @@ class SolrComponent extends Component {
                 if ( $interest['giving'] == 1 ) {
                     array_push($activity_array, $interest['Activity']['name'] . "_G");
                 }
-                if ( $interest['recieving'] == 1 ) {
+                if ( $interest['receiving'] == 1 ) {
                     array_push($activity_array, $interest['Activity']['name'] . "_R");
                 }
-                if ( $interest['recieving'] == 0 && $interest['giving'] == 0 ) {
+                if ( $interest['receiving'] == 0 && $interest['giving'] == 0 ) {
                     array_push($activity_array, $interest['Activity']['name']);
                 }
             }
@@ -72,7 +89,7 @@ class SolrComponent extends Component {
         );
         //pr($data);
 
-        $url = "http://" . $solr_host . ":" . $solr_port . "/" . $solr_path . "/" .  $solr_collection . "/update/json?commit=true";
+        $url = "http://" . $this->solr_host . ":" . $this->solr_port . "/" . $this->solr_path . "/" .  $this->solr_collection . "/update/json?commit=true";
         error_log("Solr URL : $url");
         $data_string = json_encode($data);
         error_log("Solr json data : $data_string");
@@ -90,9 +107,9 @@ class SolrComponent extends Component {
 
     /* TODO - Make this a generic item so it can be reused */
     public function pushDataToSolr($data) {
-        global $solr_protocal, $solr_host, $solr_port, $solr_path, $solr_collection;
 
-        $url = "http://" . $solr_host . ":" . $solr_port . "/" . $solr_path . "/" .  $solr_collection . "/update/json?commit=true";
+        $url = "http://" . $this->solr_host . ":" . $this->solr_port . "/" . $this->solr_path . "/" .  $this->solr_collection . "/update/json?commit=true";
+
         error_log("Solr URL : $url");
         $data_string = json_encode($data);
         error_log("Solr json data : $data_string");
@@ -112,16 +129,18 @@ class SolrComponent extends Component {
     public function solrConnect($url, $json_data_string = null) {
         $return = 0;
         $ch = curl_init();
-        $header = array('Content-type:application/json');
         curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+//      curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-//        curl_setopt($ch, CURLOPT_USERPWD ,"$username:$password");
+//      curl_setopt($ch, CURLOPT_USERPWD ,"$username:$password");
         if ( $json_data_string ) { 
+            $header = array('Content-type:application/json');
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+            curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data_string);
+        } else {
+            error_log("Solr URL Only No Data Stream");
         }
         curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
         curl_setopt($ch, CURLINFO_HEADER_OUT, 1);
