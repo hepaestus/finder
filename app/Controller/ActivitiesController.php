@@ -23,6 +23,7 @@ class ActivitiesController extends AppController {
  */
 	public function index() {
 		$this->Activity->recursive = 0;
+        $this->Paginator->settings = array('group' => 'category');
 		$this->set('activities', $this->Paginator->paginate());
 	}
 
