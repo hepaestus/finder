@@ -28,7 +28,10 @@ class InterestsController extends AppController {
  * @return void
  */
 	public function index() {
+        $loggedInUser = $this->Session->read('Auth.User');
+        $user_id = $loggedInUser['id'];
 		$this->Interest->recursive = 1;
+		$this->Paginator->settings = array('conditions' => array('Interest.user_id' => $user_id));
 		$this->set('interests', $this->Paginator->paginate());
 	}
 
@@ -75,6 +78,8 @@ class InterestsController extends AppController {
 	#	$this->set(compact('users', 'activities', 'activities'));
     #}
     public function add() {
+        $loggedInUser = $this->Session->read('Auth.User');
+        $user_id = $loggedInUser['id'];
         if ($this->request->is('post')) {
             $save_count = 0;
             #error_log("REQUEST : " . print_r( $this->request->data() , 1));
@@ -101,11 +106,13 @@ class InterestsController extends AppController {
                 }
             }
             $this->Session->setFlash(__($save_count . ' interests saved.'));
-            $this->Interest->recursive = 1;
-            $users = $this->Interest->User->find('list');
-            $this->set(compact('users'));
-            $this->set('activities', $this->Activity->find('all'));
-            return $this->redirect('view/' . $this->Session->read('Auth.User.id'));
+            //$this->Interest->recursive = 1;
+            //$users = $this->Interest->User->find('list');
+            //$this->set(compact('users'));
+            //$this->set('activities', $this->Activity->find('all'));
+            //return $this->redirect('view/' . $this->Session->read('Auth.User.id'));
+			//return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
+			return $this->redirect(array('controller' => 'interests', 'action' => 'index'));
         } else {
             $this->set('activities', $this->Activity->find('all'));
             $this->set('interests', $this->Interest->find('all'));

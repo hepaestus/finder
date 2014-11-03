@@ -187,8 +187,8 @@
 	<?php if (!empty($user['Interest'])): ?>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
-		<th><?php echo __('Id'); ?></th>
-		<th><?php echo __('User Id'); ?></th>
+		<!-- th><?php //echo __('Id'); ?></th -->
+		<!-- th><?php //echo __('User Id'); ?></th -->
 		<th><?php echo __('Activity Id'); ?></th>
 		<th><?php echo __('Giving'); ?></th>
 		<th><?php echo __('Recieving'); ?></th>
@@ -200,9 +200,11 @@
 	</tr>
 	<?php foreach ($user['Interest'] as $interest): ?>
 		<tr>
-			<td><?php echo $interest['id']; ?></td>
-			<td><?php echo $interest['user_id']; ?></td>
-			<td><?php echo $interest['activity_id']; ?></td>
+			<!-- td><?php //echo $interest['id']; ?></td -->
+			<!-- td><?php //echo $interest['user_id']; ?></td -->
+			<!-- td><?php // echo $interest['activity_id']; ?></td -->
+			<!-- td><?php //echo $interest['Activity']['name']; ?></td -->
+			<td><?php echo $this->Html->link($interest['Activity']['name'], array('controller' => 'activities', 'action' => 'view', $interest['activity_id'])); ?>
 			<td><?php echo $interest['giving']; ?></td>
 			<td><?php echo $interest['recieving']; ?></td>
 			<td><?php echo $interest['importance']; ?></td>

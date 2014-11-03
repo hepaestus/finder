@@ -103,6 +103,7 @@ class UsersController extends AppController {
         $options = array('conditions' => array('User.' . $this->User->primaryKey => $user_id));
         $this->User->recursive = 2;
         $this->set('user', $this->User->find('first', $options));
+        //pr($this->User->find('first', $options));
         
         $reputationsOutgoing = $this->Reputation->findAllByReviewerId($user_id);
         //pr($reputationsOutgoing);
