@@ -198,7 +198,7 @@
 		<!-- th><?php //echo __('User Id'); ?></th -->
 		<th><?php echo __('Activity Id'); ?></th>
 		<th><?php echo __('Giving'); ?></th>
-		<th><?php echo __('Recieving'); ?></th>
+		<th><?php echo __('Receiving'); ?></th>
 		<th><?php echo __('Importance'); ?></th>
 		<th><?php echo __('Experience'); ?></th>
 		<th><?php echo __('Created'); ?></th>
@@ -213,7 +213,7 @@
 			<!-- td><?php //echo $interest['Activity']['name']; ?></td -->
 			<td><?php echo $this->Html->link($interest['Activity']['name'], array('controller' => 'activities', 'action' => 'view', $interest['activity_id'])); ?>
 			<td><?php echo $interest['giving']; ?></td>
-			<td><?php echo $interest['recieving']; ?></td>
+			<td><?php echo $interest['receiving']; ?></td>
 			<td><?php echo $interest['importance']; ?></td>
 			<td><?php echo $interest['experience']; ?></td>
 			<td><?php echo $interest['created']; ?></td>

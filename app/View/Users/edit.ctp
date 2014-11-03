@@ -3,16 +3,17 @@
 	<fieldset>
 		<legend><?php echo __('Edit User'); ?></legend>
 	<?php
-		echo $this->Form->input('id');
-		echo $this->Form->input('profile_id');
-		echo $this->Form->input('extended_profile_id');
+		//echo $this->Form->input('id');
+		// echo $this->Form->input('profile_id');
+		// echo $this->Form->input('extended_profile_id');
 		echo $this->Form->input('username');
-		echo $this->Form->input('password');
-		echo $this->Form->input('recovery_hash');
-		echo $this->Form->input('role');
+		echo $this->Form->input('password_new');
+		echo $this->Form->input('password_repeat');
+		//echo $this->Form->input('recovery_hash');
+		//echo $this->Form->input('role', array('attributes' => array('disabled' => true)));
 		echo $this->Form->input('email');
-		echo $this->Form->input('loggedin');
-		echo $this->Form->input('lastlogin');
+		//echo $this->Form->input('loggedin');
+		//echo $this->Form->input('lastlogin');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

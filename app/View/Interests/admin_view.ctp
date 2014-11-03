@@ -21,9 +21,9 @@
 			<?php echo h($interest['Interest']['giving']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Recieving'); ?></dt>
+		<dt><?php echo __('Receiving'); ?></dt>
 		<dd>
-			<?php echo h($interest['Interest']['recieving']); ?>
+			<?php echo h($interest['Interest']['receiving']); ?>
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Importance'); ?></dt>

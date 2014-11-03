@@ -6,7 +6,7 @@
 		echo $this->Form->input('user_id');
 		echo $this->Form->input('activity_id');
 		echo $this->Form->input('giving');
-		echo $this->Form->input('recieving');
+		echo $this->Form->input('receiving');
 		echo $this->Form->input('importance');
 		echo $this->Form->input('experience');
 		echo $this->Form->input('Activity');

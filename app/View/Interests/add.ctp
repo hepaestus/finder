@@ -13,7 +13,7 @@
                 <th>Name</th>
                 <th>Interested</th>
                 <th>Giving</th>
-                <th>Recieving</th>
+                <th>Receiving</th>
                 <th>Importance</th>
                 <th>Experience</th>
             </tr>
@@ -29,7 +29,7 @@ foreach ($activities as $activity ) {
     echo $this->Form->label('Yes Please');
     echo "</td>\n";
     echo "<td>" . $this->Form->checkbox('Interest.' . $activity_count . '.giving') . "</td>\n";
-    echo "<td>" . $this->Form->checkbox('Interest.' . $activity_count . '.recieving') . "</td>\n";
+    echo "<td>" . $this->Form->checkbox('Interest.' . $activity_count . '.receiving') . "</td>\n";
     echo "<td>" . $this->Form->input('Interest.' . $activity_count . '.importance', array('options' => array(1,2,3,4,5), 'empty' => '')) . "</td>\n";
     echo "<td>" . $this->Form->input('Interest.' . $activity_count . '.experience', array('options' => array(0,1,2,3,4,5,6,7,8,9,10), 'empty' => '')) . "</td>\n";
     echo "</tr>\n";

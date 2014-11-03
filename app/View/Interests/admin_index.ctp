@@ -7,7 +7,7 @@
 			<th><?php echo $this->Paginator->sort('user_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('activity_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('giving'); ?></th>
-			<th><?php echo $this->Paginator->sort('recieving'); ?></th>
+			<th><?php echo $this->Paginator->sort('receiving'); ?></th>
 			<th><?php echo $this->Paginator->sort('importance'); ?></th>
 			<th><?php echo $this->Paginator->sort('experience'); ?></th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
@@ -26,7 +26,7 @@
 			<?php echo $this->Html->link($interest['Activity']['name'], array('controller' => 'activities', 'action' => 'view', $interest['Activity']['id'])); ?>
 		</td>
 		<td><?php echo h($interest['Interest']['giving']); ?>&nbsp;</td>
-		<td><?php echo h($interest['Interest']['recieving']); ?>&nbsp;</td>
+		<td><?php echo h($interest['Interest']['receiving']); ?>&nbsp;</td>
 		<td><?php echo h($interest['Interest']['importance']); ?>&nbsp;</td>
 		<td><?php echo h($interest['Interest']['experience']); ?>&nbsp;</td>
 		<td><?php echo h($interest['Interest']['created']); ?>&nbsp;</td>
