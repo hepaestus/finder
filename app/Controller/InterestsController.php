@@ -86,13 +86,17 @@ class InterestsController extends AppController {
             foreach( $this->request->data['Interest'] as $each_interest) {
                 #error_log("EACH INTEREST : " . print_r( $each_interest, 1));
                 if ( array_key_exists('activity_id', $each_interest) ) {
+                    if ( ! array_key_exists('giving', $each_interest) && ! array_key_exists('receiving', $each_interest) ) {
+                       $each_interest['giving'] = null; 
+                       $each_interest['receiving'] = null; 
+                    } 
                     $new_interest = array( 'Interest' => array(
-                            'user_id' => $this->Session->read('Auth.User.id'),
+                            'user_id'     => $this->Session->read('Auth.User.id'),
                             'activity_id' => $each_interest['activity_id'],
-                            'giving' => $each_interest['giving'],
-                            'receiving' => $each_interest['receiving'],
-                            'importance' => $each_interest['importance'],
-                            'experience' => $each_interest['experience'],
+                            'importance'  => $each_interest['importance'],
+                            'experience'  => $each_interest['experience'],
+                            'giving'      => $each_interest['giving'],
+                            'receiving'   => $each_interest['receiving'],
                         )
                     );
                     error_log("NEW INTEREST : " . print_r($new_interest,1));
@@ -122,6 +126,13 @@ class InterestsController extends AppController {
         } else {
             $this->set('activities', $this->Activity->find('all'));
             $this->set('interests', $this->Interest->find('all'));
+            $my_interests_all = $this->Interest->find('all', array('recursive' => -1, 'conditions' => array('Interest.user_id' => $user_id)));
+            $my_interests = array();
+            foreach( $my_interests_all as $mine ) {
+                array_push($my_interests, $mine['Interest']['activity_id']);
+            }
+            pr($my_interests);
+            $this->set('my_interests', $my_interests);
         }
     }
 
