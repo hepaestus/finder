@@ -32,6 +32,9 @@ App::uses('Controller', 'Controller');
  */
 class AppController extends Controller {
 
+    //public $viewClass = 'Theme';
+    //public $theme = 'Jqm';
+
     public $components = array(
         'Session',
         'Auth' => array(
