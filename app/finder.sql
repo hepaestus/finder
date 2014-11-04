@@ -116,6 +116,7 @@ CREATE TABLE `activities` (
   `category` int(10) unsigned DEFAULT NULL,
   `sub_category_of` int(10) unsigned DEFAULT NULL,
   `description_url` varchar(250) DEFAULT NULL,
+  `reciprocal` tinyint(1) DEFAULT NULL,
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
