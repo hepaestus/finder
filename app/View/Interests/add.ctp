@@ -1,9 +1,9 @@
 <div class="interests form">
     <!-- pre>
-    <?php //echo print_r($activities,1); ?>
+    <?php //echo pr($activities); ?>
     </pre -->
     <!-- pre>
-    <?php //echo print_r($interests,1); ?>
+    <?php //echo pr($interests); ?>
     </pre -->
     <?php echo $this->Form->create('Interest'); ?>
     <fieldset>
@@ -28,8 +28,14 @@ foreach ($activities as $activity ) {
     echo $this->Form->checkbox('Interest.' . $activity_count . '.activity_id', array('value' => $activity['Activity']['id'],'hiddenField' => false));
     echo $this->Form->label('Yes Please');
     echo "</td>\n";
+    
+    if ( $activity['Activity']['reciprocal'] ) {
     echo "<td>" . $this->Form->checkbox('Interest.' . $activity_count . '.giving') . "</td>\n";
     echo "<td>" . $this->Form->checkbox('Interest.' . $activity_count . '.receiving') . "</td>\n";
+    } else {
+        echo "<td></td>";
+        echo "<td></td>";
+    }
     echo "<td>" . $this->Form->input('Interest.' . $activity_count . '.importance', array('options' => array(1,2,3,4,5), 'empty' => '')) . "</td>\n";
     echo "<td>" . $this->Form->input('Interest.' . $activity_count . '.experience', array('options' => array(0,1,2,3,4,5,6,7,8,9,10), 'empty' => '')) . "</td>\n";
     echo "</tr>\n";

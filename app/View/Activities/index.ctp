@@ -7,6 +7,7 @@
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
 			<th><?php echo $this->Paginator->sort('category'); ?></th>
 			<th><?php echo $this->Paginator->sort('sub_category_of'); ?></th>
+			<th><?php echo $this->Paginator->sort('reciprocal'); ?></th>
 			<th><?php echo $this->Paginator->sort('description_url'); ?></th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th><?php echo $this->Paginator->sort('modified'); ?></th>
@@ -20,6 +21,7 @@
 		<td><?php echo h($activity['Activity']['name']); ?>&nbsp;</td>
 		<td><?php echo h($activity['Activity']['category']); ?>&nbsp;</td>
 		<td><?php echo h($activity['Activity']['sub_category_of']); ?>&nbsp;</td>
+		<td><?php echo h($activity['Activity']['reciprocal']); ?>&nbsp;</td>
 		<td><?php echo h($activity['Activity']['description_url']); ?>&nbsp;</td>
 		<td><?php echo h($activity['Activity']['created']); ?>&nbsp;</td>
 		<td><?php echo h($activity['Activity']['modified']); ?>&nbsp;</td>

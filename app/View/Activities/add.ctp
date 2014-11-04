@@ -6,6 +6,7 @@
 		echo $this->Form->input('name');
 		echo $this->Form->input('category');
 		echo $this->Form->input('sub_category_of');
+		echo $this->Form->input('reciprocal');
 		echo $this->Form->input('description_url');
 	?>
 	</fieldset>
