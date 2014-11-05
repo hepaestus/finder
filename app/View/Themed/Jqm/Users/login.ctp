@@ -7,5 +7,5 @@
         echo $this->Form->input('password');
         ?>
     </fieldset>
-<?php echo $this->Form->end(array('label' => 'Login', 'data-inline' => 'true', 'type' => 'button' )); ?>
+<?php echo $this->Form->end(array('label' => 'Login', 'data-inline' => 'true', 'type' => 'submit' )); ?>
 </div>
