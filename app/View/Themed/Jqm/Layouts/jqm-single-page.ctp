@@ -49,19 +49,19 @@
 <body>
     <div data-role="page">
 
-    <div data-role="header">
-        <h1>Page Title</h1>
-    </div><!-- /header -->
+        <div data-role="header">
+            <h1>Page Title: <?php echo $title_for_layout; ?></h1>
+        </div><!-- /header -->
 
-    <div role="main" class="ui-content">
-	    <?php echo $this->Session->flash(); ?>
-		<?php echo $this->fetch('content'); ?>
-	    <?php echo $this->element('sql_dump'); ?>
-    </div><!-- /content -->
+        <div role="main" class="ui-content">
+	        <?php echo $this->Session->flash(); ?>
+		    <?php echo $this->fetch('content'); ?>
+	        <?php echo $this->element('sql_dump'); ?>
+        </div><!-- /content -->
 
-    <div data-role="footer">
-        <h4>Page Footer</h4>
-    </div><!-- /footer -->
+        <div data-role="footer">
+            <h4>Page Footer</h4>
+        </div><!-- /footer -->
     </div><!-- /page -->
 </body>
 </html>
