@@ -4,8 +4,8 @@
 	<thead>
 	<tr>
 			<th><?php echo __('id'); ?></th>
-			<th><?php echo __('user_id'); ?></th>
-			<th><?php echo __('connection_id'); ?></th>
+			<!-- th><?php //echo __('user_id'); ?></th -->
+			<th><?php echo __('User'); ?></th>
 			<th><?php echo __('connection_type'); ?></th>
 			<th><?php echo __('verified'); ?></th>
 			<th><?php echo __('message'); ?></th>
@@ -17,18 +17,19 @@
 	<tbody>
 	<?php foreach ($connections as $connection): ?>
 	<tr>
-		<td><?php echo h($connection['id']); ?>&nbsp;</td>
-		<td><?php echo h($connection['user_id']); ?>&nbsp;</td>
-		<td><?php echo h($connection['connection_id']); ?>&nbsp;</td>
-		<td><?php echo h($connection['connection_type']); ?>&nbsp;</td>
-		<td><?php echo h($connection['verified']); ?>&nbsp;</td>
-		<td><?php echo h($connection['message']); ?>&nbsp;</td>
-		<td><?php echo h($connection['created']); ?>&nbsp;</td>
-		<td><?php echo h($connection['modified']); ?>&nbsp;</td>
+		<td><?php echo h($connection['Connection']['id']); ?>&nbsp;</td>
+		<!-- td><?php //echo h($connection['Connection']['user_id']); ?>&nbsp;</td -->
+		<!-- td><?php //echo h($connection['Connection']['connection_id']); ?>&nbsp;</td -->
+		<td><?php echo h($connection['MyConnection']['username']); ?>&nbsp;</td>
+		<td><?php echo h($connection['Connection']['connection_type']); ?>&nbsp;</td>
+		<td><?php echo h($connection['Connection']['verified']); ?>&nbsp;</td>
+		<td><?php echo h($connection['Connection']['message']); ?>&nbsp;</td>
+		<td><?php echo h($connection['Connection']['created']); ?>&nbsp;</td>
+		<td><?php echo h($connection['Connection']['modified']); ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $connection['id'])); ?>
-			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $connection['id'])); ?>
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $connection['id']), array(), __('Are you sure you want to delete # %s?', $connection['id'])); ?>
+			<?php echo $this->Html->link(__('View'), array('action' => 'view', $connection['Connection']['id'])); ?>
+			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $connection['Connection']['id'])); ?>
+			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $connection['Connection']['id']), array(), __('Are you sure you want to delete # %s?', $connection['Connection']['id'])); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>

@@ -240,7 +240,7 @@
     <table cellpadding = "0" cellspacing = "0">
     <tr>
         <th><?php echo __('Id'); ?></th>
-        <th><?php echo __('User Id'); ?></th>
+        <!-- th><?php //echo __('User Id'); ?></th -->
         <th><?php echo __('Connection Id'); ?></th>
         <th><?php echo __('Connection Type'); ?></th>
         <th><?php echo __('Verified'); ?></th>
@@ -252,8 +252,9 @@
     <?php foreach ($connectionsOutgoing as $connection): ?>
         <tr>
             <td><?php echo $connection['Connection']['id']; ?></td>
-            <td><?php echo $connection['Connection']['user_id']; ?></td>
-            <td><?php echo $connection['Connection']['connection_id']; ?></td>
+            <!-- td><?php //echo $connection['MyUser']['username']; ?></td --> 
+            <!-- td><?php //echo $connection['MyConnection']['username']; ?></td -->
+            <td><?php echo $this->Html->link(__($connection['MyConnection']['username']), array('controller' => 'users', 'action' => 'view', $connection['MyConnection']['id'])); ?></td>
             <td><?php echo $connection['Connection']['connection_type']; ?></td>
             <td><?php echo $connection['Connection']['verified']; ?></td>
             <td><?php echo $connection['Connection']['message']; ?></td>
@@ -274,7 +275,7 @@
     <tr>
         <th><?php echo __('Id'); ?></th>
         <th><?php echo __('User Id'); ?></th>
-        <th><?php echo __('Connection Id'); ?></th>
+        <!-- th><?php //echo __('Connection Id'); ?></th -->
         <th><?php echo __('Connection Type'); ?></th>
         <th><?php echo __('Verified'); ?></th>
         <th><?php echo __('Message'); ?></th>
@@ -285,8 +286,8 @@
     <?php foreach ($connectionsIncoming as $connection): ?>
         <tr>
             <td><?php echo $connection['Connection']['id']; ?></td>
-            <td><?php echo $connection['Connection']['user_id']; ?></td>
-            <td><?php echo $connection['Connection']['connection_id']; ?></td>
+            <td><?php echo $this->Html->link(__($connection['MyUser']['username']), array('controller' => 'users', 'action' => 'view', $connection['MyUser']['id'])); ?></td>
+            <!-- td><?php //echo $connection['MyConnection']['username']; ?></td -->
             <td><?php echo $connection['Connection']['connection_type']; ?></td>
             <td><?php echo $connection['Connection']['verified']; ?></td>
             <td><?php echo $connection['Connection']['message']; ?></td>

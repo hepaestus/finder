@@ -15,7 +15,7 @@ class ConnectionsController extends AppController {
  * @var array
  */
     public $components = array('Paginator', 'Session');
-    public $uses = array('Connection','User');
+    public $uses = array('Connection','User', 'Search');
 
 /**
  * index method
@@ -26,8 +26,7 @@ class ConnectionsController extends AppController {
         $loggedInUser = $this->Session->read('Auth.User');
         $user_id = $loggedInUser['id'];
         $this->Connection->recursive = 1;
-        $connections = $this->Connection->findByUserId($user_id);
-        pr($connections);
+        $connections = $this->Connection->findAllByUserId($user_id);
         $this->set('connections', $connections);
     }
 
@@ -65,6 +64,21 @@ class ConnectionsController extends AppController {
         if ($this->request->is('post')) {
             $this->request->data['Connection']['user_id'] = $user_id;
             error_log("CONNECTION REQUEST :". print_r( $this->request, 1));
+
+            $pending_connections = $this->Connection->find('first', array('conditions' => array('Connection.user_id' => $user_id, 'Connection.connection_id' => $this->request->data['Connection']['connection_id'])));
+            if ( $pending_connections ) {
+                $this->Session->setFlash(__('You Already Have a Pending or Existing Connection With That User'));
+                return $this->redirect(array('action' => 'add')); 
+            }
+            if ( ! $this->request->data['Connection']['connection_id'] ) {
+                $this->Session->setFlash(__('Null User'));
+                return $this->redirect(array('action' => 'add')); 
+            }
+
+            // if () { 
+            //    TODO - Some method of stopping a user from spamming connection requests. A limit on the number per time period? 
+            // }
+
             $this->Connection->create();
             $this->request->data['Connection']['verified'] = 0;
             if ($this->Connection->save($this->request->data)) {
@@ -74,9 +88,7 @@ class ConnectionsController extends AppController {
                 $this->Session->setFlash(__('The connection could not be saved. Please, try again.'));
             }
         }
-        $connections = $this->User->find('list', array('fields' => array('User.id', 'User.username'), 'recursive' => 0));
-        $this->Session->setFlash(__('Listing User ids.'));
-        pr($connections);
+        $connections = $this->User->find('list', array('conditions' => array('User.id !=' => $user_id), 'fields' => array('User.id', 'User.username'), 'recursive' => 1));
         $this->set(compact('connections'));
     }
 
@@ -140,13 +152,15 @@ class ConnectionsController extends AppController {
         if (!$this->Connection->exists()) {
             throw new NotFoundException(__('Invalid connection'));
         }
-        if ( ConnectionsController::isOwner($id) || ConnectionsControler::isSubject($id) ) {
+        if ( $this->isOwner($id) || $this->isSubject($id) ) {
             $this->request->allowMethod('post', 'delete');
             if ($this->Connection->delete()) {
                 $this->Session->setFlash(__('The connection has been deleted.'));
             } else {
                 $this->Session->setFlash(__('The connection could not be deleted. Please, try again.'));
             }
+        } else {
+            $this->Session->setFlash(__('You Could Not Delete That Connection.'));
         }
         return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
     }
@@ -203,8 +217,8 @@ class ConnectionsController extends AppController {
         $loggedInUser = $this->Session->read('Auth.User');
         $user_id = $loggedInUser['id'];
         $return = false;
-        if (!$this->Connection->exists($id)) {
-             $connection = $this->Connection->find('first', array('conditions' => array('Connection.id' => $id, 'Connection.user_id' => $user_id)));
+        if ($this->Connection->exists($connection_id)) {
+             $connection = $this->Connection->find('first', array('conditions' => array('Connection.id' => $connection_id, 'Connection.user_id' => $user_id)));
              if ( $connection ) {
                  $return = $connection;
              }
@@ -221,8 +235,8 @@ class ConnectionsController extends AppController {
         $loggedInUser = $this->Session->read('Auth.User');
         $user_id = $loggedInUser['id'];
         $return = false;
-        if (!$this->Connection->exists($id)) {
-             $connection = $this->Connection->find('first', array('conditions' => array('Connection.id' => $id, 'Connection.connection_id' => $user_id)));
+        if ($this->Connection->exists($connection_id)) {
+             $connection = $this->Connection->find('first', array('conditions' => array('Connection.id' => $connection_id, 'Connection.connection_id' => $user_id)));
              if ( $connection ) {
                  $return = $connection;
              }

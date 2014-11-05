@@ -3,7 +3,7 @@
 	<fieldset>
 		<legend><?php echo __('Edit Connection'); ?></legend>
 	<?php
-		echo $this->Form->input('connection_type', array('options' => array('unknown' => 'Unknown', 'aquaintance' => 'Aquaintance', 'friend' => 'Friend', 'relationship' => 'Relationship' )));
+		echo $this->Form->input('connection_type', array('options' => array('unknown' => 'Unknown', 'blocked' => 'Blocked', 'acquaintance' => 'Acquaintance', 'friend' => 'Friend', 'relationship' => 'Relationship' )));
 		echo $this->Form->input('verified');
 	?>
 	</fieldset>

@@ -108,11 +108,11 @@ class UsersController extends AppController {
         $reputationsOutgoing = $this->Reputation->findAllByReviewerId($user_id);
         $this->set('reputationsOutgoing', $reputationsOutgoing);
 
-        $connectionsOutgoing = $this->Connection->findAllByUserId($user_id);
-        $this->set('connectionsOutgoing', $connectionsOutgoing);
-
         $reputationsIncoming = $this->Reputation->findAllByUserId($user_id);
         $this->set('reputationsIncoming', $reputationsIncoming);
+
+        $connectionsOutgoing = $this->Connection->findAllByUserId($user_id); //, null, null, array('created' => 'desc'), null ,null, 2);
+        $this->set('connectionsOutgoing', $connectionsOutgoing);
 
         $connectionsIncoming = $this->Connection->findAllByConnectionId($user_id);
         $this->set('connectionsIncoming', $connectionsIncoming);
