@@ -37,15 +37,23 @@ class Connection extends AppModel {
  *
  * @var array
  */
-	#public $belongsTo = array(
-	#	'User' => array(
-	#		'className' => 'User',
-	#		'foreignKey' => 'user_id',
-	#		'conditions' => '',
-	#		'fields' => '',
-	#		'order' => ''
-	#	)
-	#);
+	public $belongsTo = array(
+		'MyUser' => array(
+			'className' => 'User',
+			'foreignKey' => 'user_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+	    ),
+		'MyConnection' => array(
+			'className' => 'User',
+			'foreignKey' => 'connection_id',            
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+	    )
+	);
+
 
 /**
  * hasMany associations
