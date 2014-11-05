@@ -6,5 +6,5 @@ echo $this->Form->input('password');
 echo $this->Form->input('email', array('label' => "Email Address"));
 ?>
 </fieldset>
-<?php echo $this->Form->end(array('label' => 'Submit', 'data-inline' => 'true', 'type' => 'button' )); ?>
+<?php echo $this->Form->end(array('label' => 'Submit', 'data-inline' => 'true', 'type' => 'submit' )); ?>
 </div>
