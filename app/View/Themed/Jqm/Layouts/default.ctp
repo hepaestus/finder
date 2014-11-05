@@ -70,7 +70,7 @@
         </div> <!-- end role="main" class="ui-content" -->
 
         <div data-role="footer">
-            <h4>Page Footer</h4>
+            <h4>Main Section ONE Footer</h4>
             <a href="#sqldebug">Sql Debug</a>
         </div><!-- /footer -->
     </div><!-- /page -->
@@ -84,7 +84,7 @@
         </div> <!-- end role="main" class="ui-content" -->
 
         <div data-role="footer">
-            <h4>Page Footer</h4>
+            <h4>SQL Debug Footer</h4>
             <a href="#one">Back To Top</a>
         </div><!-- /footer -->
     </div><!-- /page -->

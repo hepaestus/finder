@@ -35,6 +35,7 @@ class UsersController extends AppController {
             //$this->Session->setFlash(__('Your username or password was incorrect.'));
             $this->Session->setFlash(__('Invalid Username or Password, Try Again'));
         }
+        $this->set('title_for_layout','Welcome');
     }
 
     public function logout() {
@@ -61,6 +62,7 @@ class UsersController extends AppController {
                 return $this->render('register');
             }
         } else {
+            $this->set('title_for_layout','Register A New User');
             return $this->render('register');
         }
     }

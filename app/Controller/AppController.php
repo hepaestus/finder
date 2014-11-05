@@ -31,10 +31,7 @@ App::uses('Controller', 'Controller');
  * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
-
-    //public $viewClass = 'Theme';
-    //public $theme = 'Jqm';
-
+    
     public $components = array(
         'Session',
         'Auth' => array(
@@ -51,5 +48,10 @@ class AppController extends Controller {
 
     public function beforeFilter() {
         $this->Auth->allow('index','view','login','logout','display');
+
+        if ( $this->request->is('mobile') ) {
+            $this->viewClass = 'Theme';
+            $this->theme = 'Jqm';
+        }
     }
 }
