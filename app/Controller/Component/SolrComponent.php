@@ -24,11 +24,11 @@ class SolrComponent extends Component {
 
         $url = "http://" . $this->solr_host . ":" . $this->solr_port . "/" . $this->solr_path . "/" .  $this->solr_collection . "/select/?" . $query;
 
-        error_log("Solr Query URL : $url");
+        //error_log("Solr Query URL : $url");
         $result = SolrComponent::solrConnect($url);
-        error_log("Solr Query Component Result : " . $result);
+        //error_log("Solr Query Component Result : " . $result);
         #if ( preg_match("/\"responseHeader\".*\"status\":0,\"QTime\"/", $result) ) {
-            error_log("Solr Query SUCCESS : " . $result);
+            //error_log("Solr Query SUCCESS : " . $result);
             return $result;
         #} else {
         #    error_log("Solr Query FAIL : " . $result);
@@ -92,12 +92,12 @@ class SolrComponent extends Component {
         $url = "http://" . $this->solr_host . ":" . $this->solr_port . "/" . $this->solr_path . "/" .  $this->solr_collection . "/update/json?commit=true";
         error_log("Solr URL : $url");
         $data_string = json_encode($data);
-        error_log("Solr json data : $data_string");
+        //error_log("Solr json data : $data_string");
         //pr($data_string);
         $result = SolrComponent::solrConnect($url,$data_string);
-        error_log("Solr Component Result : " . $result);
+        //error_log("Solr Component Result : " . $result);
         if ( preg_match("/\"responseHeader\".*\"status\":0,\"QTime\"/", $result) ) {
-            error_log("Solr SUCCESS : " . $result);
+            //error_log("Solr SUCCESS : " . $result);
             return true;
         } else {
             error_log("Solr FAIL : " . $result);
@@ -110,17 +110,17 @@ class SolrComponent extends Component {
 
         $url = "http://" . $this->solr_host . ":" . $this->solr_port . "/" . $this->solr_path . "/" .  $this->solr_collection . "/update/json?commit=true";
 
-        error_log("Solr URL : $url");
+        //error_log("Solr URL : $url");
         $data_string = json_encode($data);
-        error_log("Solr json data : $data_string");
+        //error_log("Solr json data : $data_string");
         $result = SolrComponent::solrConnect($url,$data_string);
-        error_log("Solr Component Result : " . $result);
+        //error_log("Solr Component Result : " . $result);
 
         if ( preg_match("/\"responseHeader\".*\"status\":0,\"QTime\"/", $result) ) {
-            error_log("Solr SUCCESS : " . $result);
+            //error_log("Solr SUCCESS : " . $result);
             return true;
         } else {
-            error_log("Solr FAIL : " . $result);
+            //error_log("Solr FAIL : " . $result);
             return false;
         } 
         return false;
@@ -140,7 +140,7 @@ class SolrComponent extends Component {
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data_string);
         } else {
-            error_log("Solr URL Only No Data Stream");
+            //error_log("Solr URL Only No Data Stream");
         }
         curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
         curl_setopt($ch, CURLINFO_HEADER_OUT, 1);
