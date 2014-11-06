@@ -4,8 +4,8 @@
 		<legend><?php echo __('Add Activity'); ?></legend>
 	<?php
 		echo $this->Form->input('name');
-		echo $this->Form->input('sub_category_of');
-		echo $this->Form->input('category');
+		echo $this->Form->input('category', array('label' => 'Main Category', 'options' => $category, 'empty' => ''));
+		echo $this->Form->input('sub_category_of', array('label' => 'Sub Category (if any)', 'options' => $sub_category_of, 'empty' => ''));
 		echo $this->Form->input('reciprocal');
 		echo $this->Form->input('description_url');
 	?>
