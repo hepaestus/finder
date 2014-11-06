@@ -15,6 +15,7 @@ class ExtendedProfilesController extends AppController {
  * @var array
  */
 	public $components = array('Paginator', 'Session', 'Solr');
+    public $uses = array('ExtendedProfile', 'User');
 
 /**
  * index method
@@ -54,12 +55,18 @@ class ExtendedProfilesController extends AppController {
             $this->request->data['ExtendedProfile']['user_id'] = $user_id;
 			if ($this->ExtendedProfile->save($this->request->data)) {
 				$this->Session->setFlash(__('The extended profile has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+
+                #Get the user and update with the extended_profile_id
+                $user = $this->User->find('first', array('conditions' => array('User.id' => $user_id), 'recursive' => -1));
+                $user['User']['extended_profile_id'] = $this->ExtendedProfile->id;
+                $this->User->save($user);
+
+                $solr_result = $this->Solr->pushUserToSolr($user_id);
+				return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
 			} else {
 				$this->Session->setFlash(__('The extended profile could not be saved. Please, try again.'));
 			}
 		}
-        $solr_result = $this->Solr->pushUserToSolr($user_id);
 		$users = $this->ExtendedProfile->User->find('list');
 		$this->set(compact('users'));
 	}

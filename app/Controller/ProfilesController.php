@@ -60,10 +60,16 @@ class ProfilesController extends AppController {
 		if ($this->request->is('post')) {
 			$this->Profile->create();
             $this->request->data['Profile']['user_id'] = $user_id;
-            error_log("PROFILES ADD REQUEST DATA: " . print_r($this->request->data, 1));
 			if ($this->Profile->save($this->request->data)) {
+
+                #Get the user and update with the profile_id
+                $user = $this->User->find('first', array('conditions' => array('User.id' => $user_id), 'recursive' => -1));
+                $user['User']['profile_id'] = $this->Profile->id;
+                $this->User->save($user);
+                $solr_result = $this->Solr->pushUserToSolr($user_id);
+
 				$this->Session->setFlash(__('The profile has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
 			} else {
 				$this->Session->setFlash(__('The profile could not be saved. Please, try again.'));
 			}
