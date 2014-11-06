@@ -26,7 +26,7 @@ class ConnectionsController extends AppController {
         $loggedInUser = $this->Session->read('Auth.User');
         $user_id = $loggedInUser['id'];
         $this->Connection->recursive = 1;
-        $connections = $this->Connection->findAllByUserId($user_id);
+        $connections = $this->Connection->findAllByUserIdAndVerified($user_id, 1);
         $this->set('connections', $connections);
     }
 
