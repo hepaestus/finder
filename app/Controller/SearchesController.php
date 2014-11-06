@@ -9,7 +9,7 @@ class SearchesController extends AppController {
  *
  * @var array
  */
-	public $uses = array('User');
+	public $uses = array('User','Connection');
     public $components = array('Session','Solr','RequestHandler');
 
     public function matches($id = null) {
@@ -23,6 +23,16 @@ class SearchesController extends AppController {
 
         $options = array( 'conditions' => array ('User.id' => $user_id ), 'recursive' => 2);
         $user = $this->User->find('first', $options);
+
+        $my_blocked_connections = $this->Connection->findAllByUserIdAndConnectionType($user_id, 'blocked');
+        $their_blocked_connections = $this->Connection->findAllByConnectionIdAndConnectionType($user_id, 'blocked');
+        $blocked_users = "";
+        foreach( $my_blocked_connections as $blocked_connection ) {
+            $blocked_users .= "NOT%20id:" . $blocked_connection['Connection']['connection_id'];
+        }
+        foreach( $their_blocked_connections as $blocked_connection ) {
+            $blocked_users .= "NOT%20id:" . $blocked_connection['Connection']['user_id'];
+        }
 
         //pr($user);
 
@@ -60,7 +70,10 @@ class SearchesController extends AppController {
            $geo_query = "fq={!geofilt%20pt=$location%20sfield=location%20d=6000}&";
         }
 
-        $query = "q=NOT%20id:$user_id%20$activities&fl=score,id,name,activity,location&" . $geo_query. "wt=json&indent=true&";
+        # http://wiki.apache.org/solr/SpatialSearch#How_to_boost_closest_reults
+        $boost_closest = "{!boost%20f=recip(geodist(),2,200,20}";
+
+        $query = "q=" .$boost_closest . "NOT%20id:$user_id%20$blocked_users%20$activities&fl=score,id,name,activity,location&" . $geo_query. "&sort=score%20desc&wt=json&indent=true&";
 
         $solr_result = $this->Solr->querySolr($query);
         //pr($solr_result);        
