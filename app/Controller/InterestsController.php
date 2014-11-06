@@ -82,14 +82,20 @@ class InterestsController extends AppController {
         $user_id = $loggedInUser['id'];
         if ($this->request->is('post')) {
             $save_count = 0;
-            #pr( $this->request->data());
+            //pr( $this->request->data());
+
             foreach( $this->request->data['Interest'] as $each_interest) {
-                #error_log("EACH INTEREST : " . print_r( $each_interest, 1));
+                error_log("EACH INTEREST : " . print_r( $each_interest, 1));
                 if ( array_key_exists('activity_id', $each_interest) ) {
+                    
                     if ( ! array_key_exists('giving', $each_interest) && ! array_key_exists('receiving', $each_interest) ) {
                        $each_interest['giving'] = null; 
                        $each_interest['receiving'] = null; 
+                    } else if ( is_array( $each_interest['giving'] ) ) {
+                       $each_interest['giving'] = null; 
+                       $each_interest['receiving'] = null; 
                     } 
+                    
                     $new_interest = array( 'Interest' => array(
                             'user_id'     => $this->Session->read('Auth.User.id'),
                             'activity_id' => $each_interest['activity_id'],
@@ -105,7 +111,8 @@ class InterestsController extends AppController {
                         error_log("INTEREST SAVED");
                         ++$save_count;
                     } else {
-                        $this->Session->setFlash(__('The interest could not be saved. Please, try again.'));
+                        error_log("INTEREST NOT SAVED");
+                        error_log("VALIDATION ERRORS: " . print_r($this->Interest->validationErrors,1));
                     }
                 }
             }
