@@ -15,16 +15,17 @@ class ProfilesController extends AppController {
  * @var array
  */
 	public $components = array('Paginator', 'Session');
+    public $uses = array('Profile', 'Connection', 'User');
 
 /**
  * index method
  *
  * @return void
  */
-	public function index() {
-		$this->Profile->recursive = 0;
-		$this->set('profiles', $this->Paginator->paginate());
-	}
+	//public function index() {
+    //	$this->Profile->recursive = 0;
+    //	$this->set('profiles', $this->Paginator->paginate());
+    //}
 
 /**
  * view method
@@ -44,6 +45,7 @@ class ProfilesController extends AppController {
 		//    $options = array('conditions' => array('Profile.' . $this->Profile->primaryKey => $id));
 		//    $this->set('profile', $this->Profile->find('first', $options));
         //}
+
         return $this->redirect($this->Auth->redirect(array('controller' => 'users', 'action' => 'view', $this->Auth->user('id'))));
 	}
 
