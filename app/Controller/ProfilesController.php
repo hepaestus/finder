@@ -14,7 +14,7 @@ class ProfilesController extends AppController {
  *
  * @var array
  */
-	public $components = array('Paginator', 'Session');
+	public $components = array('Paginator', 'Session', 'Solr');
     public $uses = array('Profile', 'Connection', 'User');
 
 /**
@@ -22,10 +22,13 @@ class ProfilesController extends AppController {
  *
  * @return void
  */
-	//public function index() {
-    //	$this->Profile->recursive = 0;
-    //	$this->set('profiles', $this->Paginator->paginate());
-    //}
+	public function index() {
+    	//$this->Profile->recursive = 0;
+    	//$this->set('profiles', $this->Paginator->paginate());
+        $loggedInUser = $this->Session->read('Auth.User');
+        $user_id = $loggedInUser['id'];
+        return $this->redirect($this->Auth->redirect(array('controller' => 'users', 'action' => 'view', $this->Auth->user('id'))));
+    }
 
 /**
  * view method
