@@ -81,8 +81,9 @@ class Activity extends AppModel {
  *
  * @var array
  */
-    public $hasOne = array(
+    public $belongsTo = array(
         'ActivityCategory' => array(
+            'foreignkey' => 'category_id',
             'className' => 'ActivityCategory',            
             // 'order' => array(),
             // 'conditions => array(),

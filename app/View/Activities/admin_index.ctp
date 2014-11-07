@@ -18,7 +18,9 @@
 	<tr>
 		<td><?php echo h($activity['Activity']['id']); ?>&nbsp;</td>
 		<td><?php echo h($activity['Activity']['name']); ?>&nbsp;</td>
-		<td><?php echo h($activity['Activity']['activity_category_id']); ?>&nbsp;</td>
+		<td>
+			<?php echo $this->Html->link($activity['ActivityCategory']['name'], array('controller' => 'activity_categories', 'action' => 'view', $activity['ActivityCategory']['id'])); ?>
+		</td>
 		<td><?php echo h($activity['Activity']['description_url']); ?>&nbsp;</td>
 		<td><?php echo h($activity['Activity']['reciprocal']); ?>&nbsp;</td>
 		<td><?php echo h($activity['Activity']['created']); ?>&nbsp;</td>
