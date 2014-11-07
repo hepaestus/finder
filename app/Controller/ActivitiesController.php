@@ -52,6 +52,12 @@ class ActivitiesController extends AppController {
 	public function add() {
 		if ($this->request->is('post')) {
 			$this->Activity->create();
+            if ( ! $this->request->data['Activity']['category'] ) {
+                $this->request->data['Activity']['category'] = 0;
+            }
+            if ( ! $this->request->data['Activity']['sub_category_of'] ) {
+                $this->request->data['Activity']['sub_category_of'] = 0;
+            }
 			if ($this->Activity->save($this->request->data)) {
 				$this->Session->setFlash(__('The activity has been saved.'));
 				return $this->redirect(array('action' => 'index'));
