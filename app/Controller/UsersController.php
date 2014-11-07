@@ -124,6 +124,54 @@ class UsersController extends AppController {
     }
 
 /**
+ * view_match method
+ *
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+    public function view_match($id = null) {
+        $loggedInUser = $this->Session->read('Auth.User');
+        $user_id = $loggedInUser['id'];
+        
+        if (!$this->User->exists($id)) {
+            throw new NotFoundException(__('Invalid user'));
+        }
+
+        $connections_options = array('conditions' => array('Connection.user_id' => $id, 'Connection.connection_id' => $user_id)); 
+        $connection = $this->User->Connection->find('first', $connections_options);
+
+        $connection_type = "none";
+        if ( $connection ) {
+            $connection_type =  $connection['Connection']['connection_type'];
+            if ( strtolower($connection_type) == 'blocked' ) {
+		        $this->Session->setFlash(__('This user has blocked you.'));
+                return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
+
+            } else if ( strtolower($connection_type) == 'relationship' ) {
+                $options = array('conditions' => array('User.' . $this->User->primaryKey => $id), 'recursive' => 2);
+
+            } else if ( strtolower($connection_type) == 'friend' ) {
+                $options = array('conditions' => array('User.' . $this->User->primaryKey => $id), 'recursive' => 1);
+
+            } else if ( strtolower($connection_type) == 'acquaintance' ) {
+                $options = array('conditions' => array('User.' . $this->User->primaryKey => $id), 'recursive' => 0);
+
+            } else {
+		        $this->Session->setFlash(__('You have a connection with that user. But they have not yet verified it. They must be busy! :)'));
+                return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
+            }
+        } else {
+		    $this->Session->setFlash(__('You do not have a connection with that user. Try Creating one!'));
+            return $this->redirect(array('controller' => 'connections', 'action' => 'add', $id));
+        }        
+        $user = $this->User->find('first', $options);
+        pr($user);
+        $this->set('user', $user);
+        $this->set('connection_type', $connection_type);
+    }
+
+/**
  * add method
  *
  * @return void
