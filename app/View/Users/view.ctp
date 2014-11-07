@@ -113,7 +113,8 @@
     
 <div class="related">
     <h3><?php echo __('Matches'); ?></h3>
-    <?php pr($matches); ?>
+    <span style="float:right;"><?php pr($matches); ?></span>
+    <?php echo $this->element('matches_list'); ?>
 </div>
 
 <div class="related">
