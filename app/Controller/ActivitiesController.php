@@ -23,8 +23,6 @@ class ActivitiesController extends AppController {
  */
 	public function index() {
 		$this->Activity->recursive = 0;
-        //$this->Paginator->settings = array('group' => 'sub_category_of');
-        $this->Paginator->settings = array('order' => array('Activity.name'));
 		$this->set('activities', $this->Paginator->paginate());
 	}
 
@@ -68,15 +66,15 @@ class ActivitiesController extends AppController {
 		$interests = $this->Activity->Interest->find('list');
 		$this->set(compact('interests'));
 
-		$cat_options = array('conditions' => array('Activity.category' => '0'), 'fields' => array('Activity.id', 'Activity.name'), 'order' => array('Activity.category', 'Activity.name ASC'));//, 'group' => array('Activity.category', 'Activity.sub_category_of'));
-        $category = $this->Activity->find('list', $cat_options); 
-        pr($category);
-        $this->set(compact('category'));
+		//$cat_options = array('conditions' => array('Activity.category' => '0'), 'fields' => array('Activity.id', 'Activity.name'), 'order' => array('Activity.category', 'Activity.name ASC'));//, 'group' => array('Activity.category', 'Activity.sub_category_of'));
+        //$category = $this->Activity->find('list', $cat_options); 
+        //pr($category);
+        //$this->set(compact('category'));
         
-		$sub_cat_options = array('conditions' => array('Activity.category !=' => '0'), 'fields' => array('Activity.id', 'Activity.name'), 'order' => array('Activity.sub_category_of','Activity.name ASC'));
-        $sub_category_of = $this->Activity->find('list', $sub_cat_options); 
-        pr($sub_category_of);
-        $this->set(compact('sub_category_of'));
+		//$sub_cat_options = array('conditions' => array('Activity.category !=' => '0'), 'fields' => array('Activity.id', 'Activity.name'), 'order' => array('Activity.sub_category_of','Activity.name ASC'));
+        //$sub_category_of = $this->Activity->find('list', $sub_cat_options); 
+        //pr($sub_category_of);
+        //$this->set(compact('sub_category_of'));
 	}
 
 /**
@@ -103,6 +101,12 @@ class ActivitiesController extends AppController {
 		}
 		$interests = $this->Activity->Interest->find('list');
 		$this->set(compact('interests'));
+
+		//$cat_options = array('conditions' => array('Activity.category' => '0'), 'fields' => array('Activity.id', 'Activity.name'), 'order' => array('Activity.category', 'Activity.name ASC'));//, 'group' => array('Activity.category', 'Activity.sub_category_of'));
+		//$cat_options = array('fields' => array('Activity.id', 'Activity.name'), 'order' => array('Activity.category', 'Activity.name ASC'));//, 'group' => array('Activity.category', 'Activity.sub_category_of'));
+        //$category = $this->Activity->find('list', $cat_options); 
+        //pr($category);
+        //$this->set(compact('category'));
 	}
 
 /**
