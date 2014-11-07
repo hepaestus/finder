@@ -38,7 +38,7 @@ class SearchesController extends AppController {
 
         $activities_array= array();
         foreach( $user['Interest'] as $interest) {
-
+         
             if ( array_key_exists('giving', $interest) && $interest['giving'] ) {
                 array_push($activities_array, $interest['Activity']['name'] . "_R"); // REPLACE WITH THE OPPOSITE TO MATCH WITH THE CORRESPONDING USER
             }
@@ -52,7 +52,7 @@ class SearchesController extends AppController {
 
         $activities = "";
         foreach ( $activities_array as $activity ) {
-            $activities .= "activity:$activity";
+            $activities .= "activity:\"$activity\"";
             if( end($activities_array) != $activity ) {
                 $activities .= "%20OR%20";
             }
@@ -67,13 +67,13 @@ class SearchesController extends AppController {
 
         $geo_query = "";
         if ( $location ) {
-           $geo_query = "fq={!geofilt%20pt=$location%20sfield=location%20d=6000}&";
+           $geo_query = "fq={!geofilt}&pt=$location&sfield=location&d=6000&";
         }
 
         # http://wiki.apache.org/solr/SpatialSearch#How_to_boost_closest_reults
         $boost_closest = "{!boost%20f=recip(geodist(),2,200,20}";
 
-        $query = "q=" .$boost_closest . "NOT%20id:$user_id%20$blocked_users%20$activities&fl=score,id,name,activity,location&" . $geo_query. "&sort=score%20desc&wt=json&indent=true&";
+        $query = "q=" . $boost_closest . "NOT%20id:$user_id%20$blocked_users%20$activities&fl=activity,score,id,name,location,_dist_:geodist()&" . $geo_query. "&sort=score%20desc&wt=json&indent=true&";
 
         $solr_result = $this->Solr->querySolr($query);
         //pr($solr_result);        
