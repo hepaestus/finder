@@ -113,11 +113,28 @@ DROP TABLE IF EXISTS `activities`;
 CREATE TABLE `activities` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
+  `category_id` int(10) unsigned DEFAULT NULL,
+  `description_url` varchar(250) DEFAULT NULL,
+  `reciprocal` tinyint(1) DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  `modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `activity_categories`
+--
+
+DROP TABLE IF EXISTS `activity_categories`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `activity_categories` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
   `parent_id` int(10) unsigned DEFAULT NULL,
   `lft` int(10) unsigned DEFAULT NULL,
   `rght` int(10) unsigned DEFAULT NULL,
-  `description_url` varchar(250) DEFAULT NULL,
-  `reciprocal` tinyint(1) DEFAULT NULL,
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
