@@ -82,7 +82,7 @@ class Activity extends AppModel {
  * @var array
  */
     public $hasOne = array(
-        'ActivityCategory' = array(
+        'ActivityCategory' => array(
             'className' => 'ActivityCategory',            
             // 'order' => array(),
             // 'conditions => array(),
