@@ -1,1 +1,3 @@
-<?php pr($matches); ?>
+<?php 
+echo $this->element('matches_list');
+?>
