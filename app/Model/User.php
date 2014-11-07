@@ -16,6 +16,9 @@ class User extends AppModel {
 
     public function beforeSave($options = array()) {
         if (isset($this->data[$this->alias]['password'])) {
+            if ( strlen($this->data[$this->alias]['password']) >= 38 ) {
+                return true;
+            }
             $passwordHasher = new SimplePasswordHasher();
             $this->data[$this->alias]['password'] = $passwordHasher->hash($this->data[$this->alias]['password']);
         }
