@@ -22,7 +22,10 @@ class ReputationsController extends AppController {
  * @return void
  */
     public function index() {
+        $loggedInUser = $this->Session->read('Auth.User');
+        $user_id = $loggedInUser['id'];
         $this->Reputation->recursive = 0;
+        $this->Paginator->settings = array('recursive' => -1, 'conditions' => array('OR' => array( array('Reputation.user_id' => $user_id), array('Reputation.reviewer_id' => $user_id))));
         $this->set('reputations', $this->Paginator->paginate());
     }
 
