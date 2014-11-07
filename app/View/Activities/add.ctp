@@ -4,9 +4,7 @@
 		<legend><?php echo __('Add Activity'); ?></legend>
 	<?php
 		echo $this->Form->input('name');
-		echo $this->Form->input('parent_id');
-		echo $this->Form->input('lft');
-		echo $this->Form->input('rght');
+		echo $this->Form->input('activity_category_id');
 		echo $this->Form->input('description_url');
 		echo $this->Form->input('reciprocal');
 		echo $this->Form->input('Interest');

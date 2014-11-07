@@ -11,19 +11,9 @@
 			<?php echo h($activity['Activity']['name']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Parent Id'); ?></dt>
+		<dt><?php echo __('Activity Category Id'); ?></dt>
 		<dd>
-			<?php echo h($activity['Activity']['parent_id']); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Lft'); ?></dt>
-		<dd>
-			<?php echo h($activity['Activity']['lft']); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Rght'); ?></dt>
-		<dd>
-			<?php echo h($activity['Activity']['rght']); ?>
+			<?php echo h($activity['Activity']['activity_category_id']); ?>
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Description Url'); ?></dt>
