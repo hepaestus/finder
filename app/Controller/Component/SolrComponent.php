@@ -22,13 +22,14 @@ class SolrComponent extends Component {
 
     public function querySolr($query) {
 
+        $query = preg_replace("/ +/", "%20", $query);
         $url = "http://" . $this->solr_host . ":" . $this->solr_port . "/" . $this->solr_path . "/" .  $this->solr_collection . "/select/?" . $query;
-
-        //error_log("Solr Query URL : $url");
+      
+        error_log("Solr Query URL : $url");
         $result = SolrComponent::solrConnect($url);
         //error_log("Solr Query Component Result : " . $result);
         #if ( preg_match("/\"responseHeader\".*\"status\":0,\"QTime\"/", $result) ) {
-            //error_log("Solr Query SUCCESS : " . $result);
+            error_log("Solr Query Result : " . $result);
             return $result;
         #} else {
         #    error_log("Solr Query FAIL : " . $result);
