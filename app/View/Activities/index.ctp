@@ -5,10 +5,11 @@
 	<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
-			<th><?php echo $this->Paginator->sort('category'); ?></th>
-			<th><?php echo $this->Paginator->sort('sub_category_of'); ?></th>
-			<th><?php echo $this->Paginator->sort('reciprocal'); ?></th>
+			<th><?php echo $this->Paginator->sort('parent_id'); ?></th>
+			<th><?php echo $this->Paginator->sort('lft'); ?></th>
+			<th><?php echo $this->Paginator->sort('rght'); ?></th>
 			<th><?php echo $this->Paginator->sort('description_url'); ?></th>
+			<th><?php echo $this->Paginator->sort('reciprocal'); ?></th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th><?php echo $this->Paginator->sort('modified'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
@@ -19,10 +20,11 @@
 	<tr>
 		<td><?php echo h($activity['Activity']['id']); ?>&nbsp;</td>
 		<td><?php echo h($activity['Activity']['name']); ?>&nbsp;</td>
-		<td><?php echo h($activity['Activity']['category']); ?>&nbsp;</td>
-		<td><?php echo h($activity['Activity']['sub_category_of']); ?>&nbsp;</td>
-		<td><?php echo h($activity['Activity']['reciprocal']); ?>&nbsp;</td>
+		<td><?php echo h($activity['Activity']['parent_id']); ?>&nbsp;</td>
+		<td><?php echo h($activity['Activity']['lft']); ?>&nbsp;</td>
+		<td><?php echo h($activity['Activity']['rght']); ?>&nbsp;</td>
 		<td><?php echo h($activity['Activity']['description_url']); ?>&nbsp;</td>
+		<td><?php echo h($activity['Activity']['reciprocal']); ?>&nbsp;</td>
 		<td><?php echo h($activity['Activity']['created']); ?>&nbsp;</td>
 		<td><?php echo h($activity['Activity']['modified']); ?>&nbsp;</td>
 		<td class="actions">
@@ -52,6 +54,8 @@
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('New Activity'), array('action' => 'add')); ?></li>
+		<li><?php echo $this->Html->link(__('List Activity Categories'), array('controller' => 'activity_categories', 'action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Activity Category'), array('controller' => 'activity_categories', 'action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('List Interests'), array('controller' => 'interests', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Interest'), array('controller' => 'interests', 'action' => 'add')); ?> </li>
 	</ul>
