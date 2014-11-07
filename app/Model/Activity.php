@@ -13,6 +13,7 @@ class Activity extends AppModel {
  * @var string
  */
 	public $displayField = 'name';
+    public $actsAs = array('Tree');
 
 /**
  * Validation rules
@@ -30,17 +31,7 @@ class Activity extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'category' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				'allowEmpty' => true,
-				'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'sub_category_of' => array(
+		'category_id' => array(
 			'numeric' => array(
 				'rule' => array('numeric'),
 				//'message' => 'Your custom message here',
@@ -83,6 +74,21 @@ class Activity extends AppModel {
 	);
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
+
+
+/**
+ * hasOne associations
+ *
+ * @var array
+ */
+    public $hasOne = array(
+        'ActivityCategory' = array(
+            'className' => 'ActivityCategory',            
+            // 'order' => array(),
+            // 'conditions => array(),
+        )
+    );
+
 
 /**
  * hasAndBelongsToMany associations
