@@ -65,11 +65,16 @@ class ConnectionsController extends AppController {
         if ($this->request->is('post')) {
             $this->request->data['Connection']['user_id'] = $user_id;
 
-            error_log("CONNECTION REQUEST :". print_r( $this->request, 1));
+            #error_log("CONNECTION REQUEST :". print_r( $this->request, 1));
 
-            $pending_connections = $this->Connection->find('list', array('conditions' => array( 'OR' => array('Connection.user_id' => $user_id, 'Connection.connection_id' => $this->request->data['Connection']['connection_id']))));
+            $other_user = $this->request->data['Connection']['connection_id'];
+            $pending_out_connections = $this->Connection->find('first', array('conditions' => array( 'Connection.user_id' => $user_id, 'Connection.connection_id' => $other_user )));
+            $pending_inc_connections = $this->Connection->find('first', array('conditions' => array( 'Connection.user_id' => $other_user, 'Connection.connection_id' => $user_id )));
+
+            #error_log("PENDING OUT CONNECTION :". print_r( $pending_out_connections,1));
+            #error_log("PENDING INC CONNECTION :". print_r( $pending_inc_connections,1));
             
-            if ( $pending_connections ) {
+            if ( count($pending_out_connections) > 0 || count($pending_inc_connections) > 0 ) {
                 $this->Session->setFlash(__('You Already Have a Pending or Existing Connection With That User'));
                 return $this->redirect(array('action' => 'add')); 
             }
