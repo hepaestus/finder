@@ -4,9 +4,10 @@
 		<legend><?php echo __('Add Reputation'); ?></legend>
 	<?php
 		echo $this->Form->input('user_id');
-		//echo $this->Form->input('reviewer_id');
+		echo $this->Form->input('reviewer_id');
 		echo $this->Form->input('comment');
-		//echo $this->Form->input('endoresments_id');
+		echo $this->Form->input('rating');
+		echo $this->Form->input('endoresments_id');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

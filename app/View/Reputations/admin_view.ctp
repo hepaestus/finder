@@ -21,6 +21,11 @@
 			<?php echo h($reputation['Reputation']['comment']); ?>
 			&nbsp;
 		</dd>
+		<dt><?php echo __('Rating'); ?></dt>
+		<dd>
+			<?php echo h($reputation['Reputation']['rating']); ?>
+			&nbsp;
+		</dd>
 		<dt><?php echo __('Endoresments Id'); ?></dt>
 		<dd>
 			<?php echo h($reputation['Reputation']['endoresments_id']); ?>

@@ -7,6 +7,7 @@
 		echo $this->Form->input('user_id');
 		echo $this->Form->input('reviewer_id');
 		echo $this->Form->input('comment');
+		echo $this->Form->input('rating');
 		echo $this->Form->input('endoresments_id');
 	?>
 	</fieldset>
