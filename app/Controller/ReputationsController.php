@@ -25,7 +25,8 @@ class ReputationsController extends AppController {
         $loggedInUser = $this->Session->read('Auth.User');
         $user_id = $loggedInUser['id'];
         $this->Reputation->recursive = 0;
-        $this->Paginator->settings = array('recursive' => -1, 'conditions' => array('OR' => array( array('Reputation.user_id' => $user_id), array('Reputation.reviewer_id' => $user_id))));
+        $this->Paginator->settings = array('recursive' => 1, 'conditions' => array('OR' => array( array('Reputation.user_id' => $user_id), array('Reputation.reviewer_id' => $user_id))));
+        pr($this->Paginator->paginate());
         $this->set('reputations', $this->Paginator->paginate());
     }
 
@@ -39,7 +40,7 @@ class ReputationsController extends AppController {
     public function view($id = null) {
         $loggedInUser = $this->Session->read('Auth.User');
         $user_id = $loggedInUser['id'];
-        if ( isReviewer($id) || isSubject($id) ) {
+        if ( $this->isReviewer($id) || $this->isSubject($id) ) {
             if (!$this->Reputation->exists($id)) {
                 throw new NotFoundException(__('Invalid reputation'));
             }
@@ -84,7 +85,7 @@ class ReputationsController extends AppController {
         if (!$this->Reputation->exists($id)) {
             throw new NotFoundException(__('Invalid reputation'));
         }
-        if ( ReputationsController::isReviewer($id) ) {
+        if ( $this->isReviewer($id) ) {
             if ($this->request->is(array('post', 'put'))) {
                 if ($this->Reputation->save($this->request->data)) {
                     $this->Session->setFlash(__('The reputation has been saved.'));
@@ -119,7 +120,7 @@ class ReputationsController extends AppController {
            if (!$this->Reputation->exists()) {
             throw new NotFoundException(__('Invalid reputation'));
         }
-        if ( ReputationsController::isReviewer($id) ) {
+        if ( $this->isReviewer($id) ) {
             $this->request->allowMethod('post', 'delete');
             if ($this->Reputation->delete()) {
                 $this->Session->setFlash(__('The reputation has been deleted.'));
@@ -128,7 +129,7 @@ class ReputationsController extends AppController {
             }
         } else {
             $this->Session->setFlash(__('You Cannot Delete This Reputation'));
-        }
+        }        
         return $this->redirect(array('action' => 'index'));
     }
 
@@ -141,12 +142,13 @@ class ReputationsController extends AppController {
         $loggedInUser = $this->Session->read('Auth.User');
         $user_id = $loggedInUser['id'];
         $return = false;
-        if (!$this->Reputation->exists($reputation_id)) {
+        if ($this->Reputation->exists($reputation_id)) {
              $reputation= $this->Reputation->find('first', array('conditions' => array('Reputation.id' => $reputation_id, 'Reputation.reviewer_id' => $user_id)));
-             if ( $reputation) {
+             if ( $reputation ) {
                  $return = $reputation;
              }
         }
+        error_log(" IS REVIEWER: " . print_r($return,1));
         return $return;
     }
 
@@ -159,12 +161,13 @@ class ReputationsController extends AppController {
         $loggedInUser = $this->Session->read('Auth.User');
         $user_id = $loggedInUser['id'];
         $return = false;
-        if (!$this->Reputation->exists($id)) {
-             $reputation = $this->Reputation->find('first', array('conditions' => array('Reputation.id' => $id, 'Reputation.user_id' => $user_id)));
+        if ($this->Reputation->exists($reputation_id)) {
+             $reputation = $this->Reputation->find('first', array('conditions' => array('Reputation.id' => $reputation_id, 'Reputation.user_id' => $user_id)));
              if ( $reputation ) {
                  $return = $reputation;
              }
         }
+        error_log(" IS SUBJECT: " . print_r($return,1));
         return $return;
     }
 
