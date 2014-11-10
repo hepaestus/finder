@@ -58,14 +58,16 @@ class ConnectionsController extends AppController {
  *
  * @return void
  */
-    public function add() {
+    public function add($id = null) {
         $loggedInUser = $this->Session->read('Auth.User');
         $user_id = $loggedInUser['id'];
         if ($this->request->is('post')) {
             $this->request->data['Connection']['user_id'] = $user_id;
+
             error_log("CONNECTION REQUEST :". print_r( $this->request, 1));
 
             $pending_connections = $this->Connection->find('first', array('conditions' => array('Connection.user_id' => $user_id, 'Connection.connection_id' => $this->request->data['Connection']['connection_id'])));
+            
             if ( $pending_connections ) {
                 $this->Session->setFlash(__('You Already Have a Pending or Existing Connection With That User'));
                 return $this->redirect(array('action' => 'add')); 
@@ -87,8 +89,14 @@ class ConnectionsController extends AppController {
             } else {
                 $this->Session->setFlash(__('The connection could not be saved. Please, try again.'));
             }
+        } 
+        if ( $id ) {
+            $this->data['Connection']['connectioni_id'] = $id;
+            #$user = $this->User->findById($id);
+            #$connections = array($user['User']['id'] => $user['User']['username'] );
+        } else {
+            $connections = $this->User->find('list', array('conditions' => array('User.id !=' => $user_id), 'fields' => array('User.id', 'User.username'), 'recursive' => 1));
         }
-        $connections = $this->User->find('list', array('conditions' => array('User.id !=' => $user_id), 'fields' => array('User.id', 'User.username'), 'recursive' => 1));
         $this->set(compact('connections'));
     }
 
