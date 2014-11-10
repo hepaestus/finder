@@ -1,11 +1,11 @@
+<?php  pr($connections); ?>
 <div class="connections form">
 <?php echo $this->Form->create('Connection'); ?>
 	<fieldset>
 		<legend><?php echo __('Add Connection'); ?></legend>
 	<?php
-        pr($this->data);
-        if ( $this->data['Connections']['connection_id'] ) {
-		    echo $this->Form->hidden('connection_id');
+        if ( count($connections) == 1 ) {
+		    echo $this->Form->select('connection_id', $connections, array('empty' => false, 'selected' => $connections));
         } else {
 		    echo $this->Form->select('connection_id', $connections);
         }
