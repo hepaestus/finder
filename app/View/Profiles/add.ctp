@@ -5,6 +5,7 @@
 	<?php
 		echo $this->Form->input('scene_name');
         echo $this->Form->input('birth_date', array('label' => 'Date of Birth', 'dateFormat' => 'MDY', 'minYear' => date('Y') - 80, 'maxYear' => date('Y') - 16, ));
+		echo $this->Form->textarea('about');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
