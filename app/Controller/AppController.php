@@ -54,4 +54,5 @@ class AppController extends Controller {
             $this->theme = 'Jqm';
         }
     }
+
 }
