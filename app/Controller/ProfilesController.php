@@ -90,19 +90,30 @@ class ProfilesController extends AppController {
  */
     public function edit($id = null) {
         $loggedInUser = $this->Session->read('Auth.User');
+        $user_id = $loggedInUser['id'];
 		if (!$this->Profile->exists($id)) {
 			throw new NotFoundException(__('Invalid profile'));
 		}
+
 		if ($this->request->is(array('post', 'put'))) {
+            
+            $profile = $this->Profile->findByUserId($user_id);
+            if ( $profile['Profile']['id'] != $this->request->data['Profile']['id'] ) {
+	    	    $this->Session->setFlash(__('There was an error.'));
+				return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
+            }
+
+            $this->request->data['Profile']['user_id'] = $user_id;
+    
 			if ($this->Profile->save($this->request->data)) {
 				$this->Session->setFlash(__('The profile has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
 			} else {
-				$this->Session->setFlash(__('The profile could not be saved. Please, try again.'));
+			    $this->Session->setFlash(__('The profile could not be saved. Please, try again.'));
 			}
 		} else {
-			$options = array('conditions' => array('Profile.' . $this->Profile->primaryKey => $id));
-			$this->request->data = $this->Profile->find('first', $options);
+		    $options = array('conditions' => array('Profile.' . $this->Profile->primaryKey => $id));
+		    $this->request->data = $this->Profile->find('first', $options);
 		}
 		$users = $this->Profile->User->find('list');
 		$this->set(compact('users'));
