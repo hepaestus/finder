@@ -8,12 +8,14 @@
 		</dd>
 		<dt><?php echo __('User Id'); ?></dt>
 		<dd>
-			<?php echo h($connection['Connection']['user_id']); ?>
+			<?php //echo h($connection['Connection']['user_id']); ?>
+			<?php echo h($connection['MyUser']['username']); ?>
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Connection Id'); ?></dt>
 		<dd>
-			<?php echo h($connection['Connection']['connection_id']); ?>
+			<?php //echo h($connection['Connection']['connection_id']); ?>
+			<?php echo h($connection['MyConnection']['username']); ?>
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Connection Type'); ?></dt>
