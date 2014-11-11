@@ -40,6 +40,10 @@ class SolrComponent extends Component {
 
     public function pushUserToSolr($user_id) {
 
+		if (!$this->Controller->User->exists($user_id)) {
+			throw new NotFoundException(__('Invalid User'));
+		}
+
         $options = array( 'conditions' => array ('User.id' => $user_id ), 'recursive' => 2);
         $user = $this->Controller->User->find('first', $options);
 
@@ -59,6 +63,20 @@ class SolrComponent extends Component {
                 }
             }
         }
+
+        $reputation_array = array();
+        if ( array_key_exists('Reputation', $user)) {
+            foreach( $user['Reputation'] as $rep ) {
+                if ( $rep['rating'] != 0 ) {
+                    array_push($reputation_array, $rep['rating']);
+                }
+            }
+        }
+        $reputation_stat = "none";
+        if ( count($reputation_array) > 0 ) {
+            $reputation_stat = array_sum($reputation_array) / count($reputation_array) ;
+        } 
+
         $likes_array = array();
         $dislikes_array = array();
         
@@ -83,6 +101,7 @@ class SolrComponent extends Component {
                     "relationship_status" => $user['ExtendedProfile']['relationship_status'], 
                     "location" => $location,
                     "activity" => $activity_array,
+                    "reputation" => $reputation_stat,
 //                    "likes_ss" => $likes_array,
 //                    "dislikes_ss => $dislikes_array,
                 ),
