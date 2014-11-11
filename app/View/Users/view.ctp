@@ -200,6 +200,7 @@
         <th><?php echo __('User Id'); ?></th>
         <th><?php echo __('Reviewer Id'); ?></th>
         <th><?php echo __('Comment'); ?></th>
+        <th><?php echo __('Rating'); ?></th>
         <!-- th><?php //echo __('Endoresments Id'); ?></th -->
         <th><?php echo __('Created'); ?></th>
         <th><?php echo __('Modified'); ?></th>
@@ -211,6 +212,7 @@
             <td><?php echo $reputation['User']['username']; ?></td>
             <td><?php echo $reputation['Reviewer']['username']; ?></td>
             <td><?php echo $reputation['Reputation']['comment']; ?></td>
+            <td><?php echo $reputation['Reputation']['rating']; ?></td>
             <!-- td><?php //echo $reputation['Reputation']['endoresments_id']; ?></td -->
             <td><?php echo $reputation['Reputation']['created']; ?></td>
             <td><?php echo $reputation['Reputation']['modified']; ?></td>
@@ -232,6 +234,7 @@
         <th><?php echo __('User Id'); ?></th>
         <th><?php echo __('Reviewer Id'); ?></th>
         <th><?php echo __('Comment'); ?></th>
+        <th><?php echo __('Rating'); ?></th>
         <!-- th><?php //echo __('Endoresments Id'); ?></th -->
         <th><?php echo __('Created'); ?></th>
         <th><?php echo __('Modified'); ?></th>
@@ -243,6 +246,7 @@
             <td><?php echo $reputation['User']['username']; ?></td>
             <td><?php echo $reputation['Reviewer']['username']; ?></td>
             <td><?php echo $reputation['Reputation']['comment']; ?></td>
+            <td><?php echo $reputation['Reputation']['rating']; ?></td>
             <!-- td><?php //echo $reputation['Reputation']['endoresments_id']; ?></td -->
             <td><?php echo $reputation['Reputation']['created']; ?></td>
             <td><?php echo $reputation['Reputation']['modified']; ?></td>
