@@ -14,7 +14,8 @@ class ReputationsController extends AppController {
  *
  * @var array
  */
-    public $components = array('Paginator', 'Session');
+    public $components = array('Paginator', 'Session', 'Solr');
+    public $uses = array('Reputation', 'User');
 
 /**
  * index method
@@ -26,7 +27,7 @@ class ReputationsController extends AppController {
         $user_id = $loggedInUser['id'];
         $this->Reputation->recursive = 0;
         $this->Paginator->settings = array('recursive' => 1, 'conditions' => array('OR' => array( array('Reputation.user_id' => $user_id), array('Reputation.reviewer_id' => $user_id))));
-        pr($this->Paginator->paginate());
+        //pr($this->Paginator->paginate());
         $this->set('reputations', $this->Paginator->paginate());
     }
 
@@ -64,6 +65,7 @@ class ReputationsController extends AppController {
             $this->Reputation->create();
             $this->request->data['Reputation']['reviewer_id'] = $user_id;
             if ($this->Reputation->save($this->request->data)) {
+                $solr_result = $this->Solr->pushUserToSolr($this->request->data['Reputation']['user_id']);                
                 $this->Session->setFlash(__('The reputation has been saved.'));
                 return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
             } else {
@@ -82,13 +84,21 @@ class ReputationsController extends AppController {
  * @return void
  */
     public function edit($id = null) {
+        $loggedInUser = $this->Session->read('Auth.User');
+        $user_id = $loggedInUser['id'];
+
         if (!$this->Reputation->exists($id)) {
             throw new NotFoundException(__('Invalid reputation'));
         }
-        if ( $this->isReviewer($id) ) {
+        $review = $this->isReviewer($id);
+        if ( $review ) {
             if ($this->request->is(array('post', 'put'))) {
                 if ($this->Reputation->save($this->request->data)) {
                     $this->Session->setFlash(__('The reputation has been saved.'));
+
+                    //pr($review); die();
+                    $solr_result = $this->Solr->pushUserToSolr($review['Reputation']['user_id']);
+
                     return $this->redirect(array('action' => 'index'));
                 } else {
                     $this->Session->setFlash(__('The reputation could not be saved. Please, try again.'));
@@ -99,6 +109,7 @@ class ReputationsController extends AppController {
             }
         } else {
             $this->Session->setFlash(__('You cannot edit this reputation.'));
+            return $this->redirect(array('action' => 'index'));
         }
         $users = $this->Reputation->User->find('list');
         $reviewers = $this->Reputation->Reviewer->find('list');
@@ -117,12 +128,17 @@ class ReputationsController extends AppController {
         $user_id = $loggedInUser['id'];
         $this->Reputation->id = $id;
 
-           if (!$this->Reputation->exists()) {
+        if (!$this->Reputation->exists()) {
             throw new NotFoundException(__('Invalid reputation'));
         }
-        if ( $this->isReviewer($id) ) {
+        
+        $review = $this->isReviewer($id);
+        if ( $review ) {
             $this->request->allowMethod('post', 'delete');
             if ($this->Reputation->delete()) {
+
+                $solr_result = $this->Solr->pushUserToSolr($review['Reputation']['user_id']);
+            
                 $this->Session->setFlash(__('The reputation has been deleted.'));
             } else {
                 $this->Session->setFlash(__('The reputation could not be deleted. Please, try again.'));
