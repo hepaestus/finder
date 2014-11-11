@@ -7,6 +7,9 @@ foreach( $matches_arr['response']['docs'] as $doc ) {
     echo "<li>Location:" . $doc['location'] . "</li>\n";
     echo "<li>Distance:" . $doc['_dist_'] . "km</li>\n";
     echo "<li>Score:" . $doc['score'] . "</li>\n";
+    if ( array_key_exists('reputation', $doc) && $doc['reputation'] != 'none' ) {
+        echo "<li>Reputation:" . $doc['reputation'] . "</li>\n";
+    }
     echo "</ul>\n";
     echo "</li>\n";
 }
