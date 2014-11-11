@@ -70,7 +70,7 @@ class ReputationsController extends AppController {
                 $this->Session->setFlash(__('The reputation could not be saved. Please, try again.'));
             }
         }
-        $users = $this->Reputation->User->find('list', array('fields' => array('User.username')));
+        $users = $this->Reputation->User->find('list', array('fields' => array('User.username'), 'conditions' => array('User.id !=' => $user_id)));
         $this->set(compact('users'));
     }
 
