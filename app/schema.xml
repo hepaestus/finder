@@ -144,6 +144,7 @@
    <field name="activity"     type="text_general" indexed="true" stored="true" multiValued="true" default="none"/>
    <field name="activity_rec" type="text_en_splitting_tight" indexed="true" stored="true" multiValued="true" />
    <field name="activity_giv" type="text_en_splitting_tight" indexed="true" stored="true" multiValued="true" />
+   <field name="reputation"  type="float" indexed="true" stored="true"/>
 
    <!-- Common metadata fields, named specifically to match up with
      SolrCell metadata when parsing rich documents such as Word, PDF.
