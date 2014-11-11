@@ -26,7 +26,7 @@ class ConnectionsController extends AppController {
         $loggedInUser = $this->Session->read('Auth.User');
         $user_id = $loggedInUser['id'];
         $this->Connection->recursive = 1;
-        $connections = $this->Connection->findAllByUserIdAndVerified($user_id, 1);
+        $connections = $this->Connection->findAllByUserId($user_id);
         $this->set('connections', $connections);
     }
 
@@ -45,6 +45,7 @@ class ConnectionsController extends AppController {
         }
         $options = array('conditions' => array('Connection.' . $this->Connection->primaryKey => $id));
         $connection = $this->Connection->find('first', $options);
+        pr($connection);
         if ( $connection['Connection']['user_id'] == $user_id ) {
             $this->set(compact('connection')); 
         } else {
@@ -70,14 +71,15 @@ class ConnectionsController extends AppController {
             $other_user = $this->request->data['Connection']['connection_id'];
             $pending_out_connections = $this->Connection->find('first', array('conditions' => array( 'Connection.user_id' => $user_id, 'Connection.connection_id' => $other_user )));
             $pending_inc_connections = $this->Connection->find('first', array('conditions' => array( 'Connection.user_id' => $other_user, 'Connection.connection_id' => $user_id )));
-
+            
             #error_log("PENDING OUT CONNECTION :". print_r( $pending_out_connections,1));
             #error_log("PENDING INC CONNECTION :". print_r( $pending_inc_connections,1));
             
             if ( count($pending_out_connections) > 0 || count($pending_inc_connections) > 0 ) {
                 $this->Session->setFlash(__('You Already Have a Pending or Existing Connection With That User'));
-                return $this->redirect(array('action' => 'add')); 
+                return $this->redirect(array('action' => 'add', $id)); 
             }
+            
             if ( ! $this->request->data['Connection']['connection_id'] ) {
                 $this->Session->setFlash(__('Null User'));
                 return $this->redirect(array('action' => 'add')); 
@@ -204,12 +206,13 @@ class ConnectionsController extends AppController {
 
         //Get the connection
         // AND Verfify that it is address to this user
-        $connection = $this->Connection->find('first', array('conditions' => array('Connection.id' => $id, 'Connection.connection_id' => $user_id)));
+        $connection = $this->Connection->find('first', array('conditions' => array('Connection.id' => $id, 'Connection.user_id' => $user_id)));
         if ( $connection ) {
             
             $this_connection = $connection['Connection']['id'];
             $owner_user;
             $other_user;
+
             if ( $this->isOwner($id) ) {
                 $owner_user = $user_id;
                 $other_user = $connection['Connection']['connection_id'];
