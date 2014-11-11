@@ -28,11 +28,16 @@ class SearchesController extends AppController {
         $their_blocked_connections = $this->Connection->findAllByConnectionIdAndConnectionType($user_id, 'blocked');
         $blocked_users = "";
         foreach( $my_blocked_connections as $blocked_connection ) {
-            $blocked_users .= "NOT%20id:" . $blocked_connection['Connection']['connection_id'];
+            if ( ! preg_match("/NOT\+id:" . $blocked_connection['Connection']['connection_id']. "/", $blocked_users) ) {
+                $blocked_users .= "NOT+id:" . $blocked_connection['Connection']['connection_id'];
+            }
         }
         foreach( $their_blocked_connections as $blocked_connection ) {
-            $blocked_users .= "NOT%20id:" . $blocked_connection['Connection']['user_id'];
+            if ( ! preg_match("/NOT\+id:" . $blocked_connection['Connection']['user_id'] . "/", $blocked_users) ) {
+                $blocked_users .= "+NOT+id:" . $blocked_connection['Connection']['user_id'];
+            }
         }
+        $blocked_users .= "";
 
         //pr($user);
 
@@ -54,7 +59,7 @@ class SearchesController extends AppController {
         foreach ( $activities_array as $activity ) {
             $activities .= "activity:\"$activity\"";
             if( end($activities_array) != $activity ) {
-                $activities .= "%20OR%20";
+                $activities .= "+OR+";
             }
         }
 
@@ -71,9 +76,9 @@ class SearchesController extends AppController {
         }
 
         # http://wiki.apache.org/solr/SpatialSearch#How_to_boost_closest_reults
-        $boost_closest = "{!boost%20f=recip(geodist(),2,200,20}";
+        $boost_closest = "{!boost+f=recip(geodist(),2,200,20}";
 
-        $query = "q=" . $boost_closest . "NOT%20id:$user_id%20$blocked_users%20$activities&fl=activity,score,id,name,location,_dist_:geodist()&" . $geo_query. "&sort=score%20desc&wt=json&indent=true&";
+        $query = "q=" . $boost_closest . "NOT+id:$user_id%20$blocked_users%20$activities&fl=activity,score,id,name,location,_dist_:geodist()&" . $geo_query. "&sort=score%20desc&wt=json&indent=true&";
 
         $solr_result = $this->Solr->querySolr($query);
         //pr($solr_result);        
