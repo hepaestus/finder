@@ -73,6 +73,8 @@
         <dd> <?php echo $user['Profile']['scene_name']; ?> &nbsp;</dd>
         <dt><?php echo __('Birth Date'); ?></dt>
         <dd> <?php echo $user['Profile']['birth_date']; ?> &nbsp;</dd>
+        <dt><?php echo __('About'); ?></dt>
+        <dd> <?php echo $user['Profile']['about']; ?> &nbsp;</dd>
         <dt><?php echo __('Created'); ?></dt>
         <dd> <?php echo $user['Profile']['created']; ?> &nbsp;</dd>
         <dt><?php echo __('Modified'); ?></dt>
@@ -122,7 +124,7 @@
     <div class="actions">
         <ul>
             <?php if ( empty($user['ExtendedProfile']['id']) ): ?>
-                <li><?php echo $this->Html->link(__('Create Your Extended Profile'), array('controller' => 'profiles', 'action' => 'add')); ?> </li>
+                <li><?php echo $this->Html->link(__('Create Your Extended Profile'), array('controller' => 'extended_profiles', 'action' => 'add')); ?> </li>
             <?php else: ?>
                 <li><?php echo $this->Html->link(__('Edit Extended Profile'), array('controller' => 'extended_profiles', 'action' => 'edit', $user['ExtendedProfile']['id'])); ?></li>
             <?php endif; ?>
