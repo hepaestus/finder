@@ -96,12 +96,18 @@ class UsersController extends AppController {
 
     /* TODO - You should not be able to view other users profiles unless you have a connection with them. */
     /* TODO - Users in freindships or relationships should be able to view another users profile/ext profile/friends etc.*/
+
     public function view($id = null) {
+
         $loggedInUser = $this->Session->read('Auth.User');
         $user_id = $loggedInUser['id'];
-        
+                
         if (!$this->User->exists($id)) {
             throw new NotFoundException(__('Invalid user'));
+        }
+
+        if ( $id != null && $id != $user_id ) {
+            return $this->redirect(array('controller' => 'users', 'action' => 'view_match', $id));
         }
 
         $options = array('conditions' => array('User.' . $this->User->primaryKey => $user_id));
@@ -140,14 +146,14 @@ class UsersController extends AppController {
             throw new NotFoundException(__('Invalid user'));
         }
 
-        //$connections_options = array('recursive' => -1, 'conditions' => array( 'OR' => array( array('Connection.user_id' => $id, 'Connection.connection_id' => $user_id) , array('Connection.user_id' => $user_id, 'Connection.connection_id' => $id )))); 
-        $connections_options = array('recursive' => -1, 'conditions' => array( 'Connection.user_id' => $id, 'Connection.connection_id' => $user_id)); 
+        $connections_options = array('recursive' => -1, 'conditions' => array( 'OR' => array( array('Connection.user_id' => $id, 'Connection.connection_id' => $user_id) , array('Connection.user_id' => $user_id, 'Connection.connection_id' => $id )))); 
+        //$connections_options = array('recursive' => -1, 'conditions' => array( 'Connection.user_id' => $id, 'Connection.connection_id' => $user_id)); 
         $connection_list = $this->User->Connection->find('all', $connections_options);
 
         $connection_type = "none";
         $options = array();
 		$this->Session->setFlash(__('FOO BAR'));
-        if ( $connection_list) { 
+        if ( $connection_list ) { 
 
             foreach( $connection_list as $connection ) {
                 error_log("CONNECTION :".  print_r($connection,1));
