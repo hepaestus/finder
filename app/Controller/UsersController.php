@@ -30,6 +30,7 @@ class UsersController extends AppController {
                 $this->User->id = $this->Auth->user('id');
                 $this->User->saveField('lastlogin', date("Y-m-d H:i:s"));
                 $this->User->saveField('loggedin', 1);
+                $solr_result = $this->Solr->pushUserToSolr($this->Auth->user('id'));
                 return $this->redirect($this->Auth->redirect(array('controller' => 'users', 'action' => 'view', $this->Auth->user('id'))));
             }
             //$this->Session->setFlash(__('Your username or password was incorrect.'));
@@ -43,6 +44,7 @@ class UsersController extends AppController {
         $this->User->id = $loggedInUser['id'];
         //$this->User->id = $this->Auth->user('id');
         $this->User->saveField('loggedin', 0);
+        $solr_result = $this->Solr->pushUserToSolr($this->Auth->user('id'));
         return $this->redirect($this->Auth->logout('/pages/finder'));
     }
 
