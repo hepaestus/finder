@@ -8,7 +8,7 @@
 			<th><?php echo $this->Paginator->sort('reviewer_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('comment'); ?></th>
 			<th><?php echo $this->Paginator->sort('rating'); ?></th>
-			<th><?php echo $this->Paginator->sort('endoresments_id'); ?></th>
+			<!-- th><?php //echo $this->Paginator->sort('endoresments_id'); ?></th -->
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th><?php echo $this->Paginator->sort('modified'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
@@ -19,14 +19,14 @@
 	<tr>
 		<td><?php echo h($reputation['Reputation']['id']); ?>&nbsp;</td>
 		<td>
-			<?php echo $this->Html->link($reputation['User']['id'], array('controller' => 'users', 'action' => 'view', $reputation['User']['id'])); ?>
+			<?php echo $this->Html->link($reputation['User']['username'], array('controller' => 'users', 'action' => 'view', $reputation['User']['id'])); ?>
 		</td>
 		<td>
-			<?php echo $this->Html->link($reputation['Reviewer']['id'], array('controller' => 'users', 'action' => 'view', $reputation['Reviewer']['id'])); ?>
+			<?php echo $this->Html->link($reputation['Reviewer']['username'], array('controller' => 'users', 'action' => 'view', $reputation['Reviewer']['id'])); ?>
 		</td>
 		<td><?php echo h($reputation['Reputation']['comment']); ?>&nbsp;</td>
 		<td><?php echo h($reputation['Reputation']['rating']); ?>&nbsp;</td>
-		<td><?php echo h($reputation['Reputation']['endoresments_id']); ?>&nbsp;</td>
+		<!-- td><?php //echo h($reputation['Reputation']['endoresments_id']); ?>&nbsp;</td -->
 		<td><?php echo h($reputation['Reputation']['created']); ?>&nbsp;</td>
 		<td><?php echo h($reputation['Reputation']['modified']); ?>&nbsp;</td>
 		<td class="actions">

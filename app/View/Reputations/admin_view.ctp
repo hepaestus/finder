@@ -8,12 +8,12 @@
 		</dd>
 		<dt><?php echo __('User'); ?></dt>
 		<dd>
-			<?php echo $this->Html->link($reputation['User']['id'], array('controller' => 'users', 'action' => 'view', $reputation['User']['id'])); ?>
+			<?php echo $this->Html->link($reputation['User']['username'], array('controller' => 'users', 'action' => 'view', $reputation['User']['id'])); ?>
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Reviewer'); ?></dt>
 		<dd>
-			<?php echo $this->Html->link($reputation['Reviewer']['id'], array('controller' => 'users', 'action' => 'view', $reputation['Reviewer']['id'])); ?>
+			<?php echo $this->Html->link($reputation['Reviewer']['username'], array('controller' => 'users', 'action' => 'view', $reputation['Reviewer']['id'])); ?>
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Comment'); ?></dt>
@@ -26,11 +26,11 @@
 			<?php echo h($reputation['Reputation']['rating']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Endoresments Id'); ?></dt>
+		<!-- dt><?php //echo __('Endoresments Id'); ?></dt>
 		<dd>
-			<?php echo h($reputation['Reputation']['endoresments_id']); ?>
+			<?php //echo h($reputation['Reputation']['endoresments_id']); ?>
 			&nbsp;
-		</dd>
+		</dd-->
 		<dt><?php echo __('Created'); ?></dt>
 		<dd>
 			<?php echo h($reputation['Reputation']['created']); ?>

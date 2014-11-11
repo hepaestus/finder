@@ -6,8 +6,8 @@
 		echo $this->Form->input('user_id');
 		echo $this->Form->input('reviewer_id');
 		echo $this->Form->input('comment');
-		echo $this->Form->input('rating');
-		echo $this->Form->input('endoresments_id');
+		echo $this->Form->select('rating', array('3' => 'Awesome', '2' => 'Great', '1' => 'Good', '0' => '', '-1' => 'Needs Improvment', '-2' => 'Poor', '-3' => 'Very Poor'), array('value' => 0, 'empty' => false, 'label' => 'Rating' ));
+		//echo $this->Form->input('endoresments_id');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

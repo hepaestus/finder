@@ -26,11 +26,11 @@
 			<?php echo h($reputation['Reputation']['rating']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Endoresments Id'); ?></dt>
+		<!-- dt><?php //echo __('Endoresments Id'); ?></dt>
 		<dd>
-			<?php echo h($reputation['Reputation']['endoresments_id']); ?>
+			<?php //echo h($reputation['Reputation']['endoresments_id']); ?>
 			&nbsp;
-		</dd>
+		</dd -->
 		<dt><?php echo __('Created'); ?></dt>
 		<dd>
 			<?php echo h($reputation['Reputation']['created']); ?>
