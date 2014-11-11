@@ -62,6 +62,13 @@ class ReputationsController extends AppController {
         $loggedInUser = $this->Session->read('Auth.User');
         $user_id = $loggedInUser['id'];
         if ($this->request->is('post')) {
+
+            $existing_review = $this->Reputation->findByUserIdAndReviewerId($this->request->data['Reputation']['user_id'], $user_id);
+            if ( $existing_review ) {
+                $this->Session->setFlash(__('You Have Already Reviewed That User.'));
+                return $this->redirect(array('controller' => 'reputations', 'action' => 'view', $existing_review['Reputation']['id']));
+            }
+
             $this->Reputation->create();
             $this->request->data['Reputation']['reviewer_id'] = $user_id;
             if ($this->Reputation->save($this->request->data)) {
