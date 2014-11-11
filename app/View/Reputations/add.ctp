@@ -4,10 +4,9 @@
 		<legend><?php echo __('Add Reputation'); ?></legend>
 	<?php
 		echo $this->Form->input('user_id');
-		echo $this->Form->input('reviewer_id');
 		echo $this->Form->input('comment');
-		echo $this->Form->input('rating');
-		echo $this->Form->input('endoresments_id');
+        echo $this->Form->label('Reputation.rating','Rating');
+		echo $this->Form->select('rating', array('-3' => 'Very Poor', '-2' => 'Poor', '-1' => 'Needs Improvement', '0' => '', '1' => 'Good', '2' => 'Great', '3' => 'Awesome'), array('value' => 0, 'empty' => false, 'label' => 'Rating' ));
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
