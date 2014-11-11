@@ -9,7 +9,7 @@ class SearchesController extends AppController {
  *
  * @var array
  */
-	public $uses = array('User','Connection');
+	public $uses = array('User','Connection','Interest');
     public $components = array('Session','Solr','RequestHandler');
 
     public function matches($id = null) {
@@ -91,5 +91,18 @@ class SearchesController extends AppController {
 
     public function connections($string = null) {
 
+    }
+
+/*
+ * admin_reconcile_all_users
+ *
+ */
+    public function admin_reconcile_all_users() {
+       $all_users = $this->User->find('all', array('recursive' => -1));
+       $result;
+       foreach( $all_users as $each_user ) {
+           $result .= $this->Solr->pushUserToSolr($each_user['id']);
+       }
+       return $result;
     }
 }
