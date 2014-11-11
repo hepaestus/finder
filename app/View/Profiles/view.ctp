@@ -21,6 +21,11 @@
 			<?php echo h($profile['Profile']['birth_date']); ?>
 			&nbsp;
 		</dd>
+		<dt><?php echo __('About'); ?></dt>
+		<dd>
+			<?php echo h($profile['Profile']['about']); ?>
+			&nbsp;
+		</dd>
 		<dt><?php echo __('Created'); ?></dt>
 		<dd>
 			<?php echo h($profile['Profile']['created']); ?>
