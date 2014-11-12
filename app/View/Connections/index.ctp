@@ -4,12 +4,12 @@
 	<table cellpadding="0" cellspacing="0">
 	<thead>
 	<tr>
-			<th><?php echo __('id'); ?></th>
+			<!-- th><?php //echo __('id'); ?></th -->
 			<th><?php echo __('Connection From'); ?></th -->
 			<th><?php echo __('Connection To'); ?></th>
-			<!-- th><?php //echo __('connection_type'); ?></th -->
+			<th><?php echo __('Connection Type'); ?></th>
 			<!-- th><?php //echo __('verified'); ?></th -->
-			<th><?php echo __('message'); ?></th>
+			<th><?php echo __('Message'); ?></th>
 			<th><?php echo __('created'); ?></th>
 			<th><?php echo __('modified'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
@@ -18,11 +18,11 @@
 	<tbody>
 	<?php foreach ($connections as $connection): ?>
 	<tr>
-		<td><?php echo h($connection['Connection']['id']); ?>&nbsp;</td>
+		<!-- td><?php //echo h($connection['Connection']['id']); ?>&nbsp;</td -->
 		<td><?php echo h($connection['MyUser']['username']); ?>&nbsp;</td -->
 		<!-- td><?php //echo h($connection['Connection']['connection_id']); ?>&nbsp;</td -->
 		<td><?php echo h($connection['MyConnection']['username']); ?>&nbsp;</td>
-		<!-- td><?php //echo h($connection['Connection']['connection_type']); ?>&nbsp;</td -->
+		<td><?php echo h($connection['Connection']['connection_type']); ?>&nbsp;</td>
 		<!-- td><?php //echo h($connection['Connection']['verified']); ?>&nbsp;</td -->
 		<td><?php echo h($connection['Connection']['message']); ?>&nbsp;</td>
 		<td><?php echo h($connection['Connection']['created']); ?>&nbsp;</td>
