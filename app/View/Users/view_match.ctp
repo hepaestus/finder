@@ -1,3 +1,4 @@
+<?php //pr($user) ?>
 <div>
   <h2>Connection Type</h2>
   <h3><?php echo $connection_type; ?></h3>
