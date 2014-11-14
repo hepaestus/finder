@@ -45,7 +45,7 @@ class ConnectionsController extends AppController {
         }
         $options = array('conditions' => array('Connection.' . $this->Connection->primaryKey => $id));
         $connection = $this->Connection->find('first', $options);
-        pr($connection);
+        //pr($connection);
         if ( $connection['Connection']['user_id'] == $user_id ) {
             $this->set(compact('connection')); 
         } else {
