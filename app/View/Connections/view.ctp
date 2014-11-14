@@ -1,18 +1,18 @@
 <div class="connections view">
 <h2><?php echo __('Connection'); ?></h2>
 	<dl>
-		<dt><?php echo __('Id'); ?></dt>
+		<!-- dt><?php //echo __('Id'); ?></dt>
 		<dd>
-			<?php echo h($connection['Connection']['id']); ?>
+			<?php //echo h($connection['Connection']['id']); ?>
 			&nbsp;
-		</dd>
-		<dt><?php echo __('User Id'); ?></dt>
+		</dd -->
+		<dt><?php echo __('To:'); ?></dt>
 		<dd>
 			<?php //echo h($connection['Connection']['user_id']); ?>
 			<?php echo h($connection['MyUser']['username']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Connection Id'); ?></dt>
+		<dt><?php echo __('From:'); ?></dt>
 		<dd>
 			<?php //echo h($connection['Connection']['connection_id']); ?>
 			<?php echo h($connection['MyConnection']['username']); ?>
@@ -23,11 +23,11 @@
 			<?php echo h($connection['Connection']['connection_type']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Verified'); ?></dt>
+		<!-- dt><?php //echo __('Verified'); ?></dt>
 		<dd>
-			<?php echo h($connection['Connection']['verified']); ?>
+			<?php //echo h($connection['Connection']['verified']); ?>
 			&nbsp;
-		</dd>
+		</dd -->
 		<dt><?php echo __('Message'); ?></dt>
 		<dd>
 			<?php echo h($connection['Connection']['message']); ?>
