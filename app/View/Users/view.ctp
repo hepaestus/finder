@@ -135,8 +135,11 @@
     
 <div class="related">
     <h3><?php echo __('Matches'); ?></h3>
-    <?php if (!empty(json_decode($matches,1)['response'])): ?>
-    <span style="float:right;"><?php pr($matches); ?></span>
+    <?php
+    $matches_array = json_decode($matches,1);
+    if (!empty( $matches_array['response'])):
+    ?>
+    <div style="float:right;width:50%"><?php pr($matches); ?></div>
     <?php echo $this->element('matches_list'); ?>
     <?php else: ?>
         <h4>You Currently have no matches. Try creating your profile and adding some interests.</h4>
