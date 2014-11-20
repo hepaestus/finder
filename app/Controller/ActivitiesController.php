@@ -50,11 +50,8 @@ class ActivitiesController extends AppController {
 	public function add() {
 		if ($this->request->is('post')) {
 			$this->Activity->create();
-            if ( ! $this->request->data['Activity']['category'] ) {
-                $this->request->data['Activity']['category'] = 0;
-            }
-            if ( ! $this->request->data['Activity']['sub_category_of'] ) {
-                $this->request->data['Activity']['sub_category_of'] = 0;
+            if ( ! $this->request->data['Activity']['activity_category_id'] ) {
+                $this->request->data['Activity']['activity_category_id'] = 0;
             }
 			if ($this->Activity->save($this->request->data)) {
 				$this->Session->setFlash(__('The activity has been saved.'));
@@ -116,19 +113,19 @@ class ActivitiesController extends AppController {
  * @param string $id
  * @return void
  */
-	public function delete($id = null) {
-		$this->Activity->id = $id;
-		if (!$this->Activity->exists()) {
-			throw new NotFoundException(__('Invalid activity'));
-		}
-		$this->request->allowMethod('post', 'delete');
-		if ($this->Activity->delete()) {
-			$this->Session->setFlash(__('The activity has been deleted.'));
-		} else {
-			$this->Session->setFlash(__('The activity could not be deleted. Please, try again.'));
-		}
-		return $this->redirect(array('action' => 'index'));
-	}
+	#public function delete($id = null) {
+	#	$this->Activity->id = $id;
+	#	if (!$this->Activity->exists()) {
+	#		throw new NotFoundException(__('Invalid activity'));
+	#	}
+	#	$this->request->allowMethod('post', 'delete');
+	#	if ($this->Activity->delete()) {
+	#		$this->Session->setFlash(__('The activity has been deleted.'));
+	#	} else {
+	#		$this->Session->setFlash(__('The activity could not be deleted. Please, try again.'));
+	#	}
+	#	return $this->redirect(array('action' => 'index'));
+	#}
 
 /**
  * admin_index method
