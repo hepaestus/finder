@@ -114,7 +114,7 @@ DROP TABLE IF EXISTS `activities`;
 CREATE TABLE `activities` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
-  `category_id` int(10) unsigned DEFAULT NULL,
+  `activity_category_id` int(10) unsigned DEFAULT NULL,
   `description_url` varchar(250) DEFAULT NULL,
   `reciprocal` tinyint(1) DEFAULT NULL,
   `created` datetime DEFAULT NULL,
