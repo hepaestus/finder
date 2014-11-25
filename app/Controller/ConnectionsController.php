@@ -72,9 +72,6 @@ class ConnectionsController extends AppController {
             $pending_out_connections = $this->Connection->find('first', array('conditions' => array( 'Connection.user_id' => $user_id, 'Connection.connection_id' => $other_user )));
             $pending_inc_connections = $this->Connection->find('first', array('conditions' => array( 'Connection.user_id' => $other_user, 'Connection.connection_id' => $user_id )));
             
-            #error_log("PENDING OUT CONNECTION :". print_r( $pending_out_connections,1));
-            #error_log("PENDING INC CONNECTION :". print_r( $pending_inc_connections,1));
-            
             if ( count($pending_out_connections) > 0 || count($pending_inc_connections) > 0 ) {
                 $this->Session->setFlash(__('You Already Have a Pending or Existing Connection With That User'));
                 return $this->redirect(array('action' => 'add', $id)); 
@@ -92,17 +89,34 @@ class ConnectionsController extends AppController {
             $this->Connection->create();
             $this->request->data['Connection']['verified'] = 0;
             if ($this->Connection->save($this->request->data)) {
-                $this->Session->setFlash(__('Your connection has been saved but must be verified.'));
+                $this->Session->setFlash(__('Your FOOBAR connection has been saved but must be verified.'));
+
+                // Create a recirpical connection 
+                $r_connection = $this->Connection->findByUserIdAndConnectionId( $other_user, $user_id );
+                error_log("RECIPROCAL CONNECTIONS: ". print_r($r_connection,1));
+                if ( count($r_connection) > 0 ) {
+                    $this->Session->setFlash(__('A reciprocal connection already exists.'));                        
+                } else {
+                    //Create a recipocal connection
+                    if( $this->Connection->create() ) { 
+                        $recip_connection['Connection']['user_id'] = $other_user;
+                        $recip_connection['Connection']['connection_id'] = $user_id;
+                        $recip_connection['Connection']['connection_type'] = "Unknown";
+                        //$recip_connection['Connection']['connection_type'] = $this->request->data['Connection']['connection_type'];
+                        $recip_connection['Connection']['message'] = 'Automatically Created Reciprocal Connection';
+                        if ( $this->Connection->save( $recip_connection) ) {
+                            $this->Session->setFlash(__('The connection has been verified and a reciprocal connection saved.'));
+                            return $this->redirect(array('action' => 'index'));
+                        }
+                    }
+                }
                 return $this->redirect(array('action' => 'index'));
             } else {
                 $this->Session->setFlash(__('The connection could not be saved. Please, try again.'));
             }
         } 
-
         if ( $id ) {
-            #$connections = $this->request->data['Connection']['connection_id'] = $id;
             $connections = $this->User->find('list', array('conditions' => array('User.id' => $id), 'fields' => array('User.id', 'User.username'), 'recursive' => -1));
-            #$connections = array($user['User']['id'] => $user['User']['username'] );
         } else {
             $connections = $this->User->find('list', array('conditions' => array('User.id !=' => $user_id), 'fields' => array('User.id', 'User.username'), 'recursive' => 1));
         }
@@ -123,41 +137,34 @@ class ConnectionsController extends AppController {
         if (!$this->Connection->exists($id)) {
             throw new NotFoundException(__('Invalid connection'));
         }
-        $this->Session->setFlash(__('You can\'t edit connections but you can verify them.'));
-        return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
 
+        // If you are the one being connected to you should be able to verify this connection
+        if ( $this->isSubject($id) ) {
+            $this->Session->setFlash(__('You can\'t edit this connection but you can verify it.'));
+            return $this->redirect(array('controller' => 'connections', 'action' => 'verify', $id));
+        }
+        
         // If you are the one being connected to you should be able to edit this connection
-   #     $connection = $this->Connection->find('first', array('conditions' => array('Connection.id' => $id, 'Connection.connection_id' => $user_id)));
-
-   #     if ( $this->isOwner($id) ) {
-   #         if ($this->request->is(array('post', 'put'))) {
-   #             if ( $connection ) {
-   #                 $this->request->data['Connection']['id']            = $connection['Connection']['id'];
-   #                 $this->request->data['Connection']['user_id']       = $connection['Connection']['user_id'];
-   #                 $this->request->data['Connection']['connection_id'] = $connection['Connection']['connection_id'];
-   #                 if ($this->Connection->save($this->request->data)) {
-   #                     $this->Session->setFlash(__('The connection has been saved.'));
-   #                     return $this->redirect(array('action' => 'index'));
-   #                 } else {
-   #                     $this->Session->setFlash(__('The connection could not be saved. Please, try again.'));
-   #                 }
-   #             } else {
-   #                 $this->Session->setFlash(__('You cannot edit this connection.'));
-   #                 return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
-   #             } 
-   #         } else {
-   #             if ( $connection ) {
-   #                 $options = array('conditions' => array('Connection.' . $this->Connection->primaryKey => $id));
-   #                 $this->request->data = $this->Connection->find('first', $options);
-   #             } else {
-   #                 $this->Session->setFlash(__('You cannot edit this connection.'));
-   #                 return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
-   #             }
-   #         }
-   #     } else {
-   #         $this->Session->setFlash(__('You cannot edit this connection.'));
-   #         return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
-   #     }
+        $connection = $this->isOwner($id);
+        if ( $connection ) {
+            if ($this->request->is(array('post', 'put'))) {
+                $this->request->data['Connection']['id']            = $connection['Connection']['id'];
+                $this->request->data['Connection']['user_id']       = $connection['Connection']['user_id'];
+                $this->request->data['Connection']['connection_id'] = $connection['Connection']['connection_id'];
+                if ($this->Connection->save($this->request->data)) {
+                    $this->Session->setFlash(__('The connection has been saved.'));
+                    return $this->redirect(array('action' => 'index'));
+                } else {
+                    $this->Session->setFlash(__('The connection could not be saved. Please, try again.'));
+                }
+            } else {
+                 $this->Session->setFlash(__('You cannot edit this connection.'));
+                 return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
+            } 
+        } else {
+            $this->Session->setFlash(__('You cannot edit this connection.'));
+            return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
+        }
         $users = $this->Connection->find('list');
         $this->set(compact('users'));
     }
@@ -206,26 +213,12 @@ class ConnectionsController extends AppController {
 
         //Get the connection
         // AND Verfify that it is address to this user
-        $connection = $this->Connection->find('first', array('conditions' => array('Connection.id' => $id, 'Connection.user_id' => $user_id)));
+        $connection = $this->isSubject($id);
         if ( $connection ) {
             
             $this_connection = $connection['Connection']['id'];
-            $owner_user;
-            $other_user;
-
-            if ( $this->isOwner($id) ) {
-                $owner_user = $user_id;
-                $other_user = $connection['Connection']['connection_id'];
-            } else if ( $this->isSubject($id) ) {
-                $owner_user = $connection['Connection']['connection_id'];
-                $other_user = $user_id;
-            }
-
-            if ( $connection['Connection']['connection_id'] == $user_id ) {
-                $other_user = $connection['Connection']['user_id'];
-            } else {
-                $other_user = $connection['Connection']['connection_id'];
-            }
+            $owner_user = $connection['Connection']['connection_id'];
+            $other_user = $connection['Connection']['user_id'];
             $this_user = $user_id;
 
             // If this connection exists then Save settings.
@@ -237,24 +230,6 @@ class ConnectionsController extends AppController {
                 $this->request->data['Connection']['message']       = $connection['Connection']['message'];
                 
                 if ($this->Connection->save($this->request->data)) {
-
-                    $r_connection = $this->Connection->findByUserIdAndConnectionId( $owner_user, $other_user );
-                    error_log("RECIPROCAL CONNECTIONS: ". print_r($r_connection,1));
-                    if ( $r_connection ) {
-                        $this->Session->setFlash(__('A reciprocal connection already exists.'));                        
-                    } else {
-                        //Create a recipocal connection
-                        if( $this->Connection->create() ) { 
-                            $recip_connection['Connection']['user_id'] = $owner_user;
-                            $recip_connection['Connection']['connection_id'] = $other_user;
-                            $recip_connection['Connection']['connection_type'] = $this->request->data['Connection']['connection_type'];
-                            $recip_connection['Connection']['message'] = 'Automatically Created Reciprocal Connection';
-                            if ( $this->Connection->save( $recip_connection) ) {
-                                $this->Session->setFlash(__('The connection has been verified and a reciprocal connection saved.'));
-                                return $this->redirect(array('action' => 'index'));
-                            }
-                        }
-                    }
                     return $this->redirect(array('action' => 'index'));
                 } else {
                     $this->Session->setFlash(__('The connection could not be saved. Please, try again.'));

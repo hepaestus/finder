@@ -5,10 +5,10 @@
 	<?php
 		echo $this->Form->input('id');
 		echo $this->Form->input('name');
-		echo $this->Form->input('activity_category_id');
+		echo $this->Form->input('activity_category_id', array('options' => $activity_category_id));
 		echo $this->Form->input('description_url');
 		echo $this->Form->input('reciprocal');
-		echo $this->Form->input('Interest');
+		//echo $this->Form->input('Interest');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

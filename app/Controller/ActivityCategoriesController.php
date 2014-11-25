@@ -23,7 +23,9 @@ class ActivityCategoriesController extends AppController {
  */
 	public function index() {
 		$this->ActivityCategory->recursive = 0;
+		$this->Paginator->settings = array('order' => array('ActivityCategory.lft' => 'ASC'));
 		$this->set('activityCategories', $this->Paginator->paginate());
+		//pr( $this->Paginator->paginate());
 	}
 
 /**
@@ -55,7 +57,12 @@ class ActivityCategoriesController extends AppController {
 			} else {
 				$this->Session->setFlash(__('The activity category could not be saved. Please, try again.'));
 			}
-		}
+        } else {
+		    $options = array('fields' => array('ActivityCategory.id', 'ActivityCategory.name'), 'order' => array('ActivityCategory.lft' => 'ASC'));
+            $parent_id = $this->ActivityCategory->find('list', $options);
+            $this->set('parent_id', $parent_id);
+            pr($parent_id);
+        }
 	}
 
 /**
@@ -79,6 +86,10 @@ class ActivityCategoriesController extends AppController {
 		} else {
 			$options = array('conditions' => array('ActivityCategory.' . $this->ActivityCategory->primaryKey => $id));
 			$this->request->data = $this->ActivityCategory->find('first', $options);
+
+		    $options = array('fields' => array('ActivityCategory.id', 'ActivityCategory.name'), 'order' => array('ActivityCategory.lft' => 'ASC'));
+            $parent_id = $this->ActivityCategory->find('list', $options);
+            $this->set('parent_id', $parent_id);
 		}
 	}
 

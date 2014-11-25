@@ -45,10 +45,14 @@ class SearchesController extends AppController {
         foreach( $user['Interest'] as $interest) {
          
             if ( array_key_exists('giving', $interest) && $interest['giving'] ) {
-                array_push($activities_array, $interest['Activity']['name'] . "_R"); // REPLACE WITH THE OPPOSITE TO MATCH WITH THE CORRESPONDING USER
+                if ( array_key_exists('name', $interest['Activity'])) {
+                    array_push($activities_array, $interest['Activity']['name'] . "_R"); // REPLACE WITH THE OPPOSITE TO MATCH WITH THE CORRESPONDING USER
+                }
             }
             if ( array_key_exists('receiving', $interest) && $interest['receiving'] ) {
-                array_push($activities_array, $interest['Activity']['name'] . "_G"); // REPLACE WITH THE OPPOSITE TO MATCH WITH THE CORRESPONDING USER
+                if ( array_key_exists('name', $interest['Activity'])) {
+                    array_push($activities_array, $interest['Activity']['name'] . "_G"); // REPLACE WITH THE OPPOSITE TO MATCH WITH THE CORRESPONDING USER
+                }
             }
             if ( ( array_key_exists('receiving', $interest) && ! $interest['receiving'] ) && (  array_key_exists('giving', $interest) && ! $interest['giving'] ) ) {
                 array_push($activities_array, $interest['Activity']['name'] );

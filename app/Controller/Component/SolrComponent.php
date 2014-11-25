@@ -53,10 +53,14 @@ class SolrComponent extends Component {
         if ( array_key_exists('Interest', $user)) {
             foreach ( $user['Interest'] as $interest ) {
                 if ( $interest['giving'] == 1 ) {
-                    array_push($activity_array, $interest['Activity']['name'] . "_G");
+                    if ( array_key_exists('name', $interest['Activity'])) {
+                        array_push($activity_array, $interest['Activity']['name'] . "_G");
+                    }
                 }
                 if ( $interest['receiving'] == 1 ) {
-                    array_push($activity_array, $interest['Activity']['name'] . "_R");
+                    if ( array_key_exists('name', $interest['Activity'])) {
+                        array_push($activity_array, $interest['Activity']['name'] . "_R");
+                    }
                 }
                 if ( $interest['receiving'] == 0 && $interest['giving'] == 0 ) {
                     array_push($activity_array, $interest['Activity']['name']);
@@ -72,7 +76,7 @@ class SolrComponent extends Component {
                 }
             }
         }
-        $reputation_stat = "none";
+        $reputation_stat = 0;
         if ( count($reputation_array) > 0 ) {
             $reputation_stat = array_sum($reputation_array) / count($reputation_array) ;
         } 

@@ -31,7 +31,7 @@ class Activity extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'category_id' => array(
+		'activity_category_id' => array(
 			'numeric' => array(
 				'rule' => array('numeric'),
 				//'message' => 'Your custom message here',
@@ -76,20 +76,13 @@ class Activity extends AppModel {
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 
+
 /**
- * hasOne associations
+ * belongsTo associations
  *
  * @var array
  */
-    public $belongsTo = array(
-        'ActivityCategory' => array(
-            'foreignkey' => 'category_id',
-            'className' => 'ActivityCategory',            
-            // 'order' => array(),
-            // 'conditions => array(),
-        )
-    );
-
+    public $belongsTo = array('ActivityCategory');
 
 /**
  * hasAndBelongsToMany associations

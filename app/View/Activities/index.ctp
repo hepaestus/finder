@@ -1,4 +1,5 @@
 <div class="activities index">
+<?php //pr($activities); ?>
 	<h2><?php echo __('Activities'); ?></h2>
 	<table cellpadding="0" cellspacing="0">
 	<thead>

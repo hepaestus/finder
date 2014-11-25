@@ -82,4 +82,5 @@ class ActivityCategory extends AppModel {
 			),
 		),
 	);
+
 }

@@ -34,7 +34,7 @@
 			      echo $this->Html->link(__('Verify'), array('action' => 'verify', $connection['Connection']['id'])); 
               }
             ?>
-			<?php //echo $this->Html->link(__('Edit'), array('action' => 'edit', $connection['Connection']['id'])); ?>
+			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $connection['Connection']['id'])); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $connection['Connection']['id']), array(), __('Are you sure you want to delete # %s?', $connection['Connection']['id'])); ?>
 		</td>
 	</tr>

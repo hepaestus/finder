@@ -15,6 +15,7 @@ class ActivitiesController extends AppController {
  * @var array
  */
 	public $components = array('Paginator', 'Session');
+    public $uses = array('Activity', 'ActivityCategory');
 
 /**
  * index method
@@ -60,6 +61,11 @@ class ActivitiesController extends AppController {
 				$this->Session->setFlash(__('The activity could not be saved. Please, try again.'));
 			}
 		}
+        
+		$options = array('fields' => array('ActivityCategory.id', 'ActivityCategory.name'), 'order' => array('ActivityCategory.lft' => 'ASC'));
+        $activity_category_id = $this->ActivityCategory->find('list', $options);
+        $this->set('activity_category_id', $activity_category_id);
+        
 		$interests = $this->Activity->Interest->find('list');
 		$this->set(compact('interests'));
 
@@ -96,6 +102,10 @@ class ActivitiesController extends AppController {
 			$options = array('conditions' => array('Activity.' . $this->Activity->primaryKey => $id));
 			$this->request->data = $this->Activity->find('first', $options);
 		}
+		$options = array('fields' => array('ActivityCategory.id', 'ActivityCategory.name'), 'order' => array('ActivityCategory.lft' => 'ASC'));
+        $activity_category_id = $this->ActivityCategory->find('list', $options);
+        $this->set('activity_category_id', $activity_category_id);
+
 		$interests = $this->Activity->Interest->find('list');
 		$this->set(compact('interests'));
 

@@ -9,6 +9,7 @@
         } else {
 		    echo $this->Form->select('connection_id', $connections);
         }
+		echo $this->Form->input('connection_type', array( 'options' => array('blocked' => 'Block', 'acquaintance' => 'Acquaintance', 'friend' => 'Friend', 'relationship' => 'Relationship')));
 		echo $this->Form->input('message');
 	?>
 	</fieldset>

@@ -5,9 +5,9 @@
 	<?php
 		echo $this->Form->input('id');
 		echo $this->Form->input('name');
-		echo $this->Form->input('parent_id');
-		echo $this->Form->input('lft');
-		echo $this->Form->input('rght');
+		echo $this->Form->input('parent_id', array('options' => $parent_id));
+		// echo $this->Form->input('lft');
+	    // echo $this->Form->input('rght');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
