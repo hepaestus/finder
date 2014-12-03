@@ -1,10 +1,11 @@
-$( document ).ready(function() {
-    //console.log( "ready!" );
+$(document).ready(function() {
+    console.log( "ready!" );
     var lat = 0;
     var lng = 0;
     var loc;
+
     $("#ExtendedProfilePostalCode").focusout(function() {
-        $.get("http://maps.googleapis.com/maps/api/geocode/json?components=postal_code:" + $("#postalcode").val() + "&sensor=false", function(response) {
+        $.get("http://maps.googleapis.com/maps/api/geocode/json?components=postal_code:" + $("#ExtendedProfilePostalCode").val() + "&sensor=false", function(response) {
             var results = response['results'][0];
             var address_str = results.formatted_address;
             lat = results.geometry.location.lat;
@@ -18,6 +19,7 @@ $( document ).ready(function() {
     function GetLocation(loc) {
         lat = loc.coords.latitude;
         lng = loc.coords.longitude;
+        $("#geo").text( loc );
         console.log("From Geolocation: " + lat + "," + lng);
         initializeMap();
         //$("#ExtendedProfilePostalCode").val(loc.postalcode);
@@ -26,3 +28,4 @@ $( document ).ready(function() {
     }
     
     navigator.geolocation.getCurrentPosition(GetLocation); 
+}

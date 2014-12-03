@@ -27,8 +27,10 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		<?php echo $cakeDescription ?>:
 		<?php echo $title_for_layout; ?>
 	</title>
+		<script lang="javascript" src="http://code.jquery.com/jquery-1.10.2.js"></script>
 	<?php
 		echo $this->Html->meta('icon');
+		echo $this->Html->script('geolocation');
 		echo $this->Html->css('cake.generic');
 		echo $this->fetch('meta');
 		echo $this->fetch('css');

@@ -1,16 +1,16 @@
 <div class="extendedProfiles form">
-<?php echo $this->Form->create('ExtendedProfile'); ?>
+<?php echo $this->Form->create('ExtendedProfile', array('enctype' => 'multipart/form-data')); ?>
 	<fieldset>
 		<legend><?php echo __('Edit Extended Profile'); ?></legend>
 	<?php
-		echo $this->Form->input('id');
-		echo $this->Form->input('user_id');
+	    echo $this->Form->input('id');
+		// echo $this->Form->input('user_id');
 		echo $this->Form->input('first_name');
 		echo $this->Form->input('last_name');
 		echo $this->Form->input('postal_code');
 		echo $this->Form->input('gender_identity');
 		echo $this->Form->input('relationship_status');
-		echo $this->Form->input('image');
+		echo $this->Form->input('image', array('type' => 'file'));
 		echo $this->Form->input('external_links');
 		echo $this->Form->input('latitude');
 		echo $this->Form->input('longitude');
