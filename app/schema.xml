@@ -165,6 +165,7 @@
    <field name="category" type="text_general" indexed="true" stored="true"/>
    <field name="resourcename" type="text_general" indexed="true" stored="true"/>
    <field name="url" type="text_general" indexed="true" stored="true"/>
+   <field name="image_url" type="text_general" indexed="true" stored="true"/>
    <field name="content_type" type="text_general" indexed="true" stored="true" multiValued="true"/>
    <field name="last_modified" type="date" indexed="true" stored="true" default="1970-01-01T00:00:00Z"/>
    <field name="last_login" type="date" indexed="true" stored="true" default="1970-01-01T00:00:00Z"/>
