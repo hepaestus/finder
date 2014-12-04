@@ -1,5 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
+App::import('Vendor', 'ImageTool');
 /**
  * ExtendedProfiles Controller
  *
@@ -86,7 +87,7 @@ class ExtendedProfilesController extends AppController {
 		}
 		if ($this->request->is(array('post', 'put'))) {
 
-            pr($this->request->data);
+            //pr($this->request->data);
             $error_message = "";
             if ( $this->request->data['ExtendedProfile']['image']['error'] == 0 &&
                  $this->request->data['ExtendedProfile']['image']['size'] > 0 ) {
@@ -106,21 +107,36 @@ class ExtendedProfilesController extends AppController {
                 }
 
                 $new_file_name = md5($file_name);
-                $new_path = $this->_randomPath($file_name);
+                $new_random_path = $this->_randomPath($file_name);
+                $new_full_path = WWW_ROOT . "uploads" . DS . $new_random_path;
+                $new_url_path  = "uploads" . DS . $new_random_path;
                 
-                if ( ! file_exists($new_path)) {
-                    if ( ! mkdir($new_path, '0755', true)) {
+                if ( ! file_exists($new_full_path)) {
+                    if ( ! mkdir($new_full_path, 0777, true)) {
 			            throw new NotFoundException(__('Could not create destination directory.'));
                     }
                 }
-                $new_image = "uploads" . DS . $new_path . $new_file_name . "." . $file_extension;
+                $new_image     = $new_full_path . $new_file_name . "." . $file_extension;
+                $new_image_tmp = $new_full_path . "tmp_" . $new_file_name . "." . $file_extension;
+                $new_image_url = $new_url_path  . $new_file_name . "." . $file_extension;
 
-                if (!move_uploaded_file($file_tmp, $new_image)) {
+                if (!move_uploaded_file($file_tmp, $new_image_tmp)) {
                     $error_message = " File Not Copied. ";
                     $this->request->data['ExtendedProfile']['image'] = "";
                 }
-                $this->request->data['ExtendedProfile']['image'] = $new_image;
-                pr($this->request->data);
+                
+                $status = ImageTool::resize(array(
+                    'input' => $new_image_tmp,
+                    'output' => $new_image,
+                    'width' => 100,
+                    'height' => 100,
+                    'keepRatio' => true,
+                    'paddings' => false,
+                ));
+                debug($status);
+
+                $this->request->data['ExtendedProfile']['image'] = $new_image_url;
+                //pr($this->request->data);
             } else {
                 $error_message = " File Not Uploaded. ";
                 $this->request->data['ExtendedProfile']['image'] = "";

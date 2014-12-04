@@ -38,7 +38,11 @@
 		</dd>
 		<dt><?php echo __('Image'); ?></dt>
 		<dd>
-			<?php echo h($extendedProfile['ExtendedProfile']['image']); ?>
+            <?php 
+                if ( $extendedProfile['ExtendedProfile']['image']) {
+                    echo("<img src=\"/" . $extendedProfile['ExtendedProfile']['image'] . "\" alt=\"Profile Image\" />");
+                }
+            ?>
 			&nbsp;
 		</dd>
 		<dt><?php echo __('External Links'); ?></dt>
