@@ -106,6 +106,7 @@ class SolrComponent extends Component {
                     "location" => $location,
                     "activity" => $activity_array,
                     "reputation" => $reputation_stat,
+                    "image_url" => $user['ExtendedProfile']['image'],
 //                    "likes_ss" => $likes_array,
 //                    "dislikes_ss => $dislikes_array,
                 ),
