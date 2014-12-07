@@ -10,7 +10,12 @@
 		echo $this->Form->input('postal_code');
 		echo $this->Form->input('gender_identity');
 		echo $this->Form->input('relationship_status');
-		echo $this->Form->input('image', array('type' => 'file'));
+        if ( $this->Form->value('image') ) {
+		    echo "<img src=\"/" . $this->Form->value('image') . "\" alt=\"profile image\">";
+		    echo $this->Form->input('image_new', array('type' => 'file'));
+        } else {
+		    echo $this->Form->input('image', array('type' => 'file'));
+        }
 		echo $this->Form->input('external_links');
 		echo $this->Form->input('latitude');
 		echo $this->Form->input('longitude');
