@@ -89,7 +89,8 @@ class ExtendedProfilesController extends AppController {
 
             //pr($this->request->data);
             $error_message = "";
-            if ( $this->request->data['ExtendedProfile']['image']['error'] == 0 &&
+            if ( $this->request->data['ExtendedProfile']['image'] && 
+                 $this->request->data['ExtendedProfile']['image']['error'] == 0 &&
                  $this->request->data['ExtendedProfile']['image']['size'] > 0 ) {
 
                 $file_name = $this->request->data['ExtendedProfile']['image']['name'];
@@ -134,6 +135,7 @@ class ExtendedProfilesController extends AppController {
                     'paddings' => false,
                 ));
                 debug($status);
+                unlink($new_image_tmp);
 
                 $this->request->data['ExtendedProfile']['image'] = $new_image_url;
                 //pr($this->request->data);
