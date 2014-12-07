@@ -110,7 +110,13 @@
         <dt><?php echo __('Relationship Status'); ?></dt>
         <dd> <?php echo $user['ExtendedProfile']['relationship_status']; ?> &nbsp;</dd>
         <dt><?php echo __('Image'); ?></dt>
-        <dd> <?php echo $user['ExtendedProfile']['image']; ?> &nbsp;</dd>
+        <dd> <?php if ( $user['ExtendedProfile']['image'] ) { 
+                       echo "<img src=\"/" . $user['ExtendedProfile']['image'] . "\" alt=\"Profile Image\">";
+                   } else {
+                       echo "none"; 
+                   }
+             ?>&nbsp;
+        </dd>
         <dt><?php echo __('External Links'); ?></dt>
         <dd> <?php echo $user['ExtendedProfile']['external_links']; ?> &nbsp;</dd>
         <dt><?php echo __('Location'); ?></dt>
@@ -150,7 +156,7 @@
 <div class="related">
     <h3><?php echo __('Your Interests'); ?></h3>
     <?php if (!empty($user['Interest'])): ?>
-<?php pr($user['Interest']); ?>
+    <?php //pr($user['Interest']); ?>
     <table cellpadding = "0" cellspacing = "0">
     <tr>
         <!-- th><?php //echo __('Id'); ?></th -->
