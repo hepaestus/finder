@@ -302,8 +302,8 @@
             <?php 
                 if (!empty($user['Interest'])){
                     foreach ($user['Interest'] as $interest) {
-                        echo "                <li data-activity-id='" + $interest['id'] + "' data-category-id='" + $interest['id'] + "'>\n";
-                        echo "                    <a href='activities/view/" . $interest['activity_id'] . "><strong>" . $interest['Activity']['name'] . "</strong> ";
+                        echo "               <li data-activity-id='" . $interest['activity_id'] . "' data-category-id='" . $interest['Activity']['activity_category_id'] . "'>";
+                        echo "                    <a href='/activities/view/" . $interest['activity_id'] . "'><strong>" . $interest['Activity']['name'] . "</strong> ";
                         echo "<span class='activities_metadata'>(importance: " . $interest['importance'] . ", exerience: " . $interest['experience'] . ")</span></a>\n";
                         echo "                    <a href='#configure'   data-rel='popup' data-position-to='window' data-icon='edit' data-transition='pop'>Configure</a>\n";
                         echo "                </li>\n";
