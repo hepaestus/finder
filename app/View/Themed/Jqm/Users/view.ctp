@@ -139,6 +139,13 @@
             echo "<h4>You Currently have no matches. Try creating your profile and adding some interests.</h4>";
         }
         ?>
+        <div data-role="popup" id="user" data-theme="a" data-overlay-theme="b" class="ui-content" style="max-width=340px; padding-bottom:2em;">
+            <h3>User Info</h3>
+            <div id="popup_match_content"></div>
+            <a href="#create_connection" data-rel="popup" class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-check ui-btn-icon-left ui-btn-inline ui-mini create_connection">Create a connection</a>
+            <a href="#send_note"         data-rel="popup" class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-mail  ui-btn-icon-left ui-btn-inline ui-mini note_match">Send Note</a>
+            <a href="#cancel"            data-rel="back"  class="ui-shadow ui-btn ui-corner-all ui-btn-a ui-icon-back  ui-btn-icon-left ui-btn-inline ui-mini cancel">Cancel</a>
+        </div>
 
     
         <div data-role="footer">
