@@ -54,6 +54,14 @@ class ExtendedProfilesController extends AppController {
 		if ($this->request->is('post')) {
 			$this->ExtendedProfile->create();
             $this->request->data['ExtendedProfile']['user_id'] = $user_id;
+
+            error_log("EXTENDED PROFILE REQUEST DATA: " . print_r($this->request->data,1));
+            if ( $this->request->data['ExtendedProfile']['image']['name'] != null ) {
+              $this->request->data['ExtendedProfile']['image'] = $this->request->data['ExtendedProfile']['image']['name'];
+            } else {
+              $this->request->data['ExtendedProfile']['image'] = null;
+            }
+
 			if ($this->ExtendedProfile->save($this->request->data)) {
 				$this->Session->setFlash(__('The extended profile has been saved.'));
 
