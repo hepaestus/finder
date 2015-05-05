@@ -28,3 +28,4 @@ app/tmp/*
 app/[Cc]onfig/core.php
 app/[Cc]onfig/database.php
 !empty
+app/webroot/php_errors.log
