@@ -3,11 +3,9 @@
 	<fieldset>
 		<legend><?php echo __('Add Note'); ?></legend>
 	<?php
-		echo $this->Form->input('user_id');
-		echo $this->Form->input('to_user_id');
-		echo $this->Form->input('message');
-		echo $this->Form->input('read');
+		echo $this->Form->input('username');
 		echo $this->Form->input('subject');
+		echo $this->Form->input('message');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

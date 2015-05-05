@@ -4,13 +4,9 @@
 	<thead>
 	<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
-			<th><?php echo $this->Paginator->sort('user_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('to_user_id'); ?></th>
-			<th><?php echo $this->Paginator->sort('message'); ?></th>
-			<th><?php echo $this->Paginator->sort('read'); ?></th>
-			<th><?php echo $this->Paginator->sort('created'); ?></th>
-			<th><?php echo $this->Paginator->sort('modified'); ?></th>
 			<th><?php echo $this->Paginator->sort('subject'); ?></th>
+			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
 	</thead>
@@ -20,17 +16,13 @@
 		<td>
 			<?php echo $this->Html->link($note['User']['id'], array('controller' => 'users', 'action' => 'view', $note['User']['id'])); ?>
 		</td>
-		<td><?php echo h($note['Note']['user_id']); ?>&nbsp;</td>
-		<td><?php echo h($note['Note']['to_user_id']); ?>&nbsp;</td>
-		<td><?php echo h($note['Note']['message']); ?>&nbsp;</td>
-		<td><?php echo h($note['Note']['read']); ?>&nbsp;</td>
-		<td><?php echo h($note['Note']['created']); ?>&nbsp;</td>
-		<td><?php echo h($note['Note']['modified']); ?>&nbsp;</td>
+		<td><?php echo h($note['ToUser']['username']); ?>&nbsp;</td>
 		<td><?php echo h($note['Note']['subject']); ?>&nbsp;</td>
+		<td><?php echo h($note['Note']['created']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $note['Note']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $note['Note']['id'])); ?>
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $note['Note']['id']), array(), __('Are you sure you want to delete # %s?', $note['Note']['id'])); ?>
+			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $note['Note']['id']), array(), __('Are you sure you want to delete \'%s\'?', $note['Note']['subject'])); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>
