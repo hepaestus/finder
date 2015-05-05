@@ -33,7 +33,7 @@ class Note extends AppModel {
 		),
 		'ToUser' => array(
 			'className' => 'User',
-			'foreignKey' => 'id',
+			'foreignKey' => 'to_user_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
