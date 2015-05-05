@@ -15,7 +15,7 @@ class UsersController extends AppController {
  * @var array
  */
 	public $components = array('Paginator', 'Session','Solr');
-    public $uses = array('User','Activity','Profile','ExtendedProfile','Connection','Reputation');
+    public $uses = array('User','Activity','Profile','ExtendedProfile','Connection','Reputation','Note');
     public $findMethods = array('available' => true);
 
 
@@ -114,6 +114,12 @@ class UsersController extends AppController {
         $this->User->recursive = 2;
         $this->set('user', $this->User->find('first', $options));
         //pr($this->User->find('first', $options));
+
+        $notesIncoming = $this->Note->findAllByToUserId($user_id);
+        $this->set('notesIncoming', $notesIncoming);
+        
+        $notesOutgoing = $this->Note->findAllByUserId($user_id);
+        $this->set('notesOutgoing', $notesOutgoing);
         
         $reputationsOutgoing = $this->Reputation->findAllByReviewerId($user_id);
         $this->set('reputationsOutgoing', $reputationsOutgoing);
