@@ -39,6 +39,17 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,null,null,'hepaestus','08cbca0f9b5310a2ef4c7f6e84d1a962db560119','','admin','hepaestus@gmail.com',0,null,null,null),
+                           (2,null,null,'tori',     '08cbca0f9b5310a2ef4c7f6e84d1a962db560119','','admin','torizoph@gmail.com' ,0,null,null,null);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+
+
 --
 -- Table structure for table `profiles`
 --
