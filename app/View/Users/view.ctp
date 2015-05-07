@@ -371,7 +371,7 @@
     <?php foreach ($notesOutgoing as $note): ?>
         <tr>
             <td><?php echo $note['Note']['id']; ?></td>
-            <td><?php echo $note['ToUser']['username']; ?></td> 
+            <td><?php echo $this->Html->link(__($note['ToUser']['username']), array('controller' => 'users', 'action' => 'view', $note['ToUser']['id'])); ?></td>
             <td><?php echo $this->Html->link(__($note['Note']['subject']), array('controller' => 'notes', 'action' => 'view', $note['Note']['id'])); ?></td>
             <td><?php echo $note['Note']['created']; ?></td>
             <td class="actions">
@@ -382,8 +382,8 @@
     <?php endforeach; ?>
     </table>
     <?php endif; ?>
-    <?php if (!empty($notessIncoming)): ?>
-    <h4><?php echo __('Incomming Notes For You'); ?></h4>
+    <?php if (!empty($notesIncoming)): ?>
+    <h4><?php echo __('Incoming Notes For You'); ?></h4>
     <table cellpadding = "0" cellspacing = "0">
     <tr>
         <th><?php echo __('Id'); ?></th>
@@ -395,11 +395,12 @@
     <?php foreach ($notesIncoming as $note): ?>
         <tr>
             <td><?php echo $note['Note']['id']; ?></td>
-            <td><?php echo $this->Html->link(__($note['User']['username']), array('controller' => 'users', 'action' => 'view', $note['Note']['user_id'])); ?></td>
-            <td><?php echo $note['Note']['subject']; ?></td>
+            <td><?php echo $this->Html->link(__($note['User']['username']), array('controller' => 'users', 'action' => 'view', $note['User']['id'])); ?></td>
+            <td><?php echo $this->Html->link(__($note['Note']['subject']), array('controller' => 'notes', 'action' => 'view', $note['Note']['id'])); ?></td>
             <td><?php echo $note['Note']['created']; ?></td>
             <td class="actions">
                 <?php echo $this->Html->link(__('View'), array('controller' => 'notes', 'action' => 'view', $note['Note']['id'])); ?>
+                <?php echo $this->Html->link(__('Reply'), array('controller' => 'notes', 'action' => 'reply', $note['Note']['id'])); ?>
                 <?php echo $this->Html->link(__('Mark Read'), array('controller' => 'notes', 'action' => 'mark_read', $note['Note']['id'])); ?>
                 <?php echo $this->Form->postLink(__('Delete'), array('controller' => 'notes', 'action' => 'delete', $note['Note']['id']), array(), __('Are you sure you want to delete note \'%s\'?', $note['Note']['subject'])); ?>
             </td>

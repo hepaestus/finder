@@ -115,11 +115,15 @@ class UsersController extends AppController {
         $this->set('user', $this->User->find('first', $options));
         //pr($this->User->find('first', $options));
 
-        $notesIncoming = $this->Note->findAllByToUserId($user_id);
-        $this->set('notesIncoming', $notesIncoming);
+        // Outbox
+        $conditions = array("Note.user_id" => $user_id, "Note.sender_delete" => 0);
+        $notesOutgoing = $this->Note->find('all', array('conditions' => $conditions));
+		$this->set('notesOutgoing', $notesOutgoing);
         
-        $notesOutgoing = $this->Note->findAllByUserId($user_id);
-        $this->set('notesOutgoing', $notesOutgoing);
+        // Inbox
+        $conditions = array("Note.to_user_id" => $user_id, "Note.receiver_delete" => 0);
+        $notesIncoming = $this->Note->find('all', array('conditions' => $conditions));
+		$this->set('notesIncoming', $notesIncoming);
         
         $reputationsOutgoing = $this->Reputation->findAllByReviewerId($user_id);
         $this->set('reputationsOutgoing', $reputationsOutgoing);
