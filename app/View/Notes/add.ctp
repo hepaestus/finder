@@ -5,7 +5,8 @@
 	<?php
 		echo $this->Form->input('username');
 		echo $this->Form->input('subject');
-		echo $this->Form->input('message');
+        echo $this->Form->label('Message');
+		echo $this->Form->textarea('message');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

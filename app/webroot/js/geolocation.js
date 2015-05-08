@@ -1,5 +1,5 @@
-$(document).ready(function() {
-    console.log( "ready!" );
+$( document ).ready(function() {
+
     var lat = 0;
     var lng = 0;
     var loc;
@@ -19,13 +19,16 @@ $(document).ready(function() {
     function GetLocation(loc) {
         lat = loc.coords.latitude;
         lng = loc.coords.longitude;
+        zip = loc.postal_code;
         $("#geo").text( loc );
-        console.log("From Geolocation: " + lat + "," + lng);
-        initializeMap();
-        //$("#ExtendedProfilePostalCode").val(loc.postalcode);
+        console.log( loc);
+        console.log("From Geolocation: " + lat + "," + lng + " " + zip);
+        //initializeMap();
+        $("#ExtendedProfilePostalCode").val(loc.postalcode);
         $("#ExtendedProfileLatitude").val(loc.coords.latitude);
         $("#ExtendedProfileLongitude").val(loc.coords.longitude);
     }
     
     navigator.geolocation.getCurrentPosition(GetLocation); 
-}
+     
+});     

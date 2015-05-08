@@ -124,7 +124,7 @@ class NotesController extends AppController {
 		if (!$this->Note->exists()) {
 			throw new NotFoundException(__('Invalid note'));
 		}
-		$this->request->allowMethod('post', 'delete');
+		$this->request->allowMethod('post', 'delete', 'ajax');
 
         $note = $this->Note->find('first', array('conditions' => array('Note.id' => $id)));
         if ( $note['Note']['user_id'] == $loggedInUser['id'] ) {
@@ -147,12 +147,19 @@ class NotesController extends AppController {
             }
         }
 
-        if ( $delete_flag ) {
-			$this->Session->setFlash(__('The note has been deleted.'));
-		} else {
-			$this->Session->setFlash(__('The note could not be deleted. Please, try again.'));
-		}
-		return $this->redirect(array('action' => 'index'));
+        if ( $this->request->is('ajax') ) {
+            $this->autoRender = false;
+            $this->layout = 'ajax';
+            return json_encode($delete_flag);
+        } else {
+            if ( $delete_flag ) {
+			    $this->Session->setFlash(__('The note has been deleted.'));
+		        return $this->redirect(array('action' => 'index'));
+		    } else {
+			    $this->Session->setFlash(__('The note could not be deleted. Please, try again.'));
+		        return $this->redirect(array('action' => 'index'));
+		    }
+        }
 	}
 
 
@@ -198,6 +205,40 @@ class NotesController extends AppController {
 		//$this->set(compact('user', 'toUser'));
     }
 
+
+/**
+ * mark_read method
+ *
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+	public function mark_read($id = null) {
+        $this->autoRender = false;
+        $this->layout = 'ajax';
+
+        error_log("User Agent? : " . $this->request->header('User-Agent') );
+
+        $result = 0;
+        
+		if (!$this->Note->exists($id)) {
+			throw new NotFoundException(__('Invalid note'));
+			$result = 0;
+        }
+        $loggedInUser = $this->Session->read('Auth.User');
+        $user_id = $loggedInUser['id'];
+
+        $options = array('conditions' => array('Note.' . $this->Note->primaryKey => $id));
+        $note = $this->Note->find('first', $options); 
+
+        if ( $note['Note']['to_user_id'] == $user_id) { 
+            $note['Note']['read'] = 1;
+            if ( $this->Note->save($note) ) {
+				$result = 1;
+            }
+        }
+        return json_encode($result);
+	}
 
 /**
  * admin_index method
