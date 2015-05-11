@@ -216,9 +216,6 @@ class NotesController extends AppController {
 	public function mark_read($id = null) {
         $this->autoRender = false;
         $this->layout = 'ajax';
-
-        error_log("User Agent? : " . $this->request->header('User-Agent') );
-
         $result = 0;
         
 		if (!$this->Note->exists($id)) {
@@ -233,6 +230,37 @@ class NotesController extends AppController {
 
         if ( $note['Note']['to_user_id'] == $user_id) { 
             $note['Note']['read'] = 1;
+            if ( $this->Note->save($note) ) {
+				$result = 1;
+            }
+        }
+        return json_encode($result);
+	}
+
+/**
+ * mark_unread method
+ *
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+	public function mark_unread($id = null) {
+        $this->autoRender = false;
+        $this->layout = 'ajax';
+        $result = 0;
+        
+		if (!$this->Note->exists($id)) {
+			throw new NotFoundException(__('Invalid note'));
+			$result = 0;
+        }
+        $loggedInUser = $this->Session->read('Auth.User');
+        $user_id = $loggedInUser['id'];
+
+        $options = array('conditions' => array('Note.' . $this->Note->primaryKey => $id));
+        $note = $this->Note->find('first', $options); 
+
+        if ( $note['Note']['to_user_id'] == $user_id) { 
+            $note['Note']['read'] = 0;
             if ( $this->Note->save($note) ) {
 				$result = 1;
             }

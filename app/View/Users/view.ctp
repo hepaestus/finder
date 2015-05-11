@@ -145,7 +145,7 @@
     $matches_array = json_decode($matches,1);
     if (!empty( $matches_array['response'])):
     ?>
-    <div style="float:right;width:50%"><?php pr($matches); ?></div>
+    <div style="float:right;width:50%" class="hide"><?php pr($matches); ?></div>
     <?php echo $this->element('matches_list'); ?>
     <?php else: ?>
         <h4>You Currently have no matches. Try creating your profile and adding some interests.</h4>
@@ -279,8 +279,8 @@
 
 <div class="related">
     <h2><?php echo __('Connections'); ?></h2>
-    <?php if (!empty($connectionsOutgoing)): ?>
     <h4><?php echo __('Outgoing Connection Requests You Have Made'); ?></h4>
+    <?php if (!empty($connectionsOutgoing)): ?>
     <table cellpadding = "0" cellspacing = "0">
     <tr>
         <th><?php echo __('Id'); ?></th>
@@ -313,9 +313,17 @@
         </tr>
     <?php endforeach; ?>
     </table>
+    <?php else: ?>
+      <h5>You don't have any.</h5>
+      <div class="actions">
+        <ul>
+            <li><?php echo $this->Html->link(__('Make a New Connection'), array('controller' => 'connections', 'action' => 'add')); ?> </li>
+        </ul>
+      </div>
+      <br style="clear:both"/>
     <?php endif; ?>
-    <?php if (!empty($connectionsIncoming)): ?>
     <h4><?php echo __('Incomming Connection Requests For You'); ?></h4>
+    <?php if (!empty($connectionsIncoming)): ?>
     <table cellpadding = "0" cellspacing = "0">
     <tr>
         <th><?php echo __('Id'); ?></th>
@@ -347,6 +355,14 @@
         </tr>
     <?php endforeach; ?>
     </table>
+    <?php else: ?>
+      <h5>You don't have any.</h5>
+      <div class="actions">
+        <ul>
+            <li><?php echo $this->Html->link(__('Make a New Connection'), array('controller' => 'connections', 'action' => 'add')); ?> </li>
+        </ul>
+      </div>
+      <br style="clear:both"/>
     <?php endif; ?>
 
     <div class="actions">
@@ -366,6 +382,7 @@
         <th><?php echo __('From'); ?></th>
         <th><?php echo __('Subject'); ?></th>
         <th><?php echo __('Created'); ?></th>
+        <th><?php echo __('Read'); ?></th>
         <th class="actions"><?php echo __('Actions'); ?></th>
     </tr>
     <?php foreach ($notesIncoming as $note): ?>
@@ -376,24 +393,36 @@
             echo "<tr class=\"read\">";
         }
         ?>
-            <td><?php echo $note['Note']['id']; ?></td>
-            <td><?php echo $this->Html->link(__($note['User']['username']), array('controller' => 'users', 'action' => 'view', $note['User']['id'])); ?></td>
+            <!-- td><?php //echo $note['Note']['id']; ?></td -->
+            <td><?php
+                if ( $note['Note']['read'] ) {
+                    echo $this->Html->link(__($note['User']['username']), array('controller' => 'users', 'action' => 'view', $note['User']['id']), array('class' => 'read user')); 
+                } else {
+                    echo $this->Html->link(__($note['User']['username']), array('controller' => 'users', 'action' => 'view', $note['User']['id']), array('class' => 'unread user')); 
+                }
+                ?>
+            </td>
             <td>
                 <?php
-                if ( !$note['Note']['read'] ) {
-                    echo $this->Html->link(__($note['Note']['subject']), array('controller' => 'notes', 'action' => 'view', $note['Note']['id']), array('class' => 'unread')); 
+                if ( $note['Note']['read'] ) {
+                    echo $this->Html->link(__($note['Note']['subject']), array('controller' => 'notes', 'action' => 'view', $note['Note']['id']), array('class' => 'read subject')); 
                 } else {
-                    echo $this->Html->link(__($note['Note']['subject']), array('controller' => 'notes', 'action' => 'view', $note['Note']['id']), array('class' => 'read')); 
+                    echo $this->Html->link(__($note['Note']['subject']), array('controller' => 'notes', 'action' => 'view', $note['Note']['id']), array('class' => 'unread subject')); 
                 }
                 ?>
             </td>
             <td><?php echo $note['Note']['created']; ?></td>
+            <!-- td><?php //echo $note['Note']['read']; ?></td -->
             <td class="actions">
                 <?php echo $this->Html->link(__('View'), array('controller' => 'notes', 'action' => 'view', $note['Note']['id'])); ?>
                 <?php echo $this->Html->link(__('Reply'), array('controller' => 'notes', 'action' => 'reply', $note['Note']['id'])); ?>
                 <?php 
-                if ( !$note['Note']['read'] ) {
-                    echo $this->Html->link(__('Mark Read'), array('controller' => 'notes', 'action' => 'mark_read', $note['Note']['id']), array('class' => 'mark_read')); 
+                if ( $note['Note']['read'] ) {
+                    echo $this->Html->link(__('Mark Read'), array('controller' => 'notes', 'action' => 'mark_read', $note['Note']['id']), array('class' => 'mark_read hide')); 
+                    echo $this->Html->link(__('Mark Unread'), array('controller' => 'notes', 'action' => 'mark_unread', $note['Note']['id']), array('class' => 'mark_unread ')); 
+                } else {
+                    echo $this->Html->link(__('Mark Read'), array('controller' => 'notes', 'action' => 'mark_read', $note['Note']['id']), array('class' => 'mark_read ')); 
+                    echo $this->Html->link(__('Mark Unread'), array('controller' => 'notes', 'action' => 'mark_unread', $note['Note']['id']), array('class' => 'mark_unread hide')); 
                 }
                 ?>
                 <?php //echo $this->Form->postLink(__('Delete'), array('controller' => 'notes', 'action' => 'delete', $note['Note']['id']), array('class' => 'delete'), __('Are you sure you want to delete note \'%s\'?', $note['Note']['subject'])); ?>
