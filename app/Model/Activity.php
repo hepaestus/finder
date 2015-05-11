@@ -13,7 +13,7 @@ class Activity extends AppModel {
  * @var string
  */
 	public $displayField = 'name';
-    public $actsAs = array('Tree');
+    //public $actsAs = array('Tree');
 
 /**
  * Validation rules
