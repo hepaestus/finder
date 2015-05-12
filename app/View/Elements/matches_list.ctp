@@ -5,11 +5,12 @@
       echo "    <li data-user-id='/" . $doc['id'] . "'>\n";
       echo "        <a href='/finder/users/view/" . $doc['id'] . "' data-user-id='" . $doc['id'] . "' class='match_user_profile' data-rel='popup' data-position-to='window' data-transition='pop'>\n";
       if ( array_key_exists('image_url', $doc) ) { 
-        echo "                <img src='/" . $doc['image_url'] . "' class='profile_image' alt='profile image'>\n";
+        echo "                <img src='/finder/" . $doc['image_url'] . "' class='profile_image' alt='profile image'>\n";
       }
       echo "                <h2 class='user'>" . $doc['name']  . "</h2>\n";
       echo "                <p>Affinity Score: <span class='affinity'>" . $doc['score'] . "</span></p>\n";
-      echo "                <p>Location:<span class='location'>" . $doc['location'] . "</span>, Distance: <span class='distance'>" . $doc['_dist_'] . " km</span></p>\n";
+      //echo "                <p>Location:<span class='location'>" . $doc['location'] . "</span>, Distance: <span class='distance'>" . $doc['_dist_'] . " km</span></p>\n";
+      echo "                <p>Distance: <span class='distance'>" . $doc['_dist_'] . " km</span></p>\n";
       echo "        </a>\n";
       echo "    </li>\n";
   }

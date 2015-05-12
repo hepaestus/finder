@@ -111,7 +111,7 @@
         <dd> <?php echo $user['ExtendedProfile']['relationship_status']; ?> &nbsp;</dd>
         <dt><?php echo __('Image'); ?></dt>
         <dd> <?php if ( $user['ExtendedProfile']['image'] ) { 
-                       echo "<img src=\"/" . $user['ExtendedProfile']['image'] . "\" alt=\"Profile Image\">";
+                       echo "<img src=\"/finder/" . $user['ExtendedProfile']['image'] . "\" alt=\"Profile Image\">";
                    } else {
                        echo "none"; 
                    }
