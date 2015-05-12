@@ -68,14 +68,13 @@
         <th><?php echo __('Importance'); ?></th>
         <th><?php echo __('Experience'); ?></th>
     </tr>
-    <?php pr($interests);
-          foreach ($interests as $interest): ?>
+    <?php foreach ($interests as $interest): ?>
         <tr>
-            <td><?php echo $this->Html->link($interest['name'], array('controller' => 'activities', 'action' => 'view', $interest['activity_id'])); ?>
-            <td><?php echo $interest['giving']; ?></td>
-            <td><?php echo $interest['receiving']; ?></td>
-            <td><?php echo $interest['importance']; ?></td>
-            <td><?php echo $interest['experience']; ?></td>
+            <td><?php echo $this->Html->link($interest['activities']['name'], array('controller' => 'activities', 'action' => 'view', $interest['interests']['activity_id'])); ?>
+            <td><?php echo $interest['interests']['giving']; ?></td>
+            <td><?php echo $interest['interests']['receiving']; ?></td>
+            <td><?php echo $interest['interests']['importance']; ?></td>
+            <td><?php echo $interest['interests']['experience']; ?></td>
         </tr>
     <?php endforeach; ?>
     </table>

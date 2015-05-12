@@ -15,7 +15,7 @@ class UsersController extends AppController {
  * @var array
  */
 	public $components = array('Paginator', 'Session','Solr');
-    public $uses = array('User','Activity','Profile','ExtendedProfile','Connection','Reputation','Note');
+    public $uses = array('User','Activity','Interest','Profile','ExtendedProfile','Connection','Reputation','Note');
     public $findMethods = array('available' => true);
 
 
@@ -216,8 +216,22 @@ class UsersController extends AppController {
             return $this->redirect(array('controller' => 'connections', 'action' => 'add', $id));
         }        
 
+        // Interests Query        
+        // SELECT 
+        //   *
+        // FROM
+        //   interests
+        //       LEFT JOIN
+        //   (activities) ON (interests.activity_id = activities.id)
+        // WHERE
+        //   interests.user_id in ( $id,$user_id )
+        // group by interests.activity_id
+        // having count(*) > 1;
+
+        $interests = $this->Interest->query('SELECT * FROM interests LEFT JOIN (activities) ON (interests.activity_id = activities.id) WHERE interests.user_id in ( ' . $id . ',' . $user_id . ') group by interests.activity_id having count(*) > 1 order by activities.name asc;');
         $user = $this->User->find('first', $options);
         $this->set('user', $user);
+        $this->set('interests', $interests);
         $this->set('connection_type', $connection_type);
     }
 
@@ -226,21 +240,6 @@ class UsersController extends AppController {
  *
  * @return void
  */
-	#public function add() {
-	#	if ($this->request->is('post')) {
-	#		$this->User->create();
-	#		if ($this->User->save($this->request->data)) {
-	#			$this->Session->setFlash(__('The user has been saved.'));
-	#			return $this->redirect(array('action' => 'index'));
-	#		} else {
-	#			$this->Session->setFlash(__('The user could not be saved. Please, try again.'));
-	#		}
-	#	}
-	#	$profiles = $this->User->Profile->find('list');
-	#	$extendedProfiles = $this->User->ExtendedProfile->find('list');
-	#	$this->set(compact('profiles', 'extendedProfiles'));
-	#}
-    
     public function add() {
         $loggedInUser = $this->Session->read('Auth.User');
         $user_id = $loggedInUser['id'];
