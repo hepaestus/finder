@@ -76,13 +76,14 @@ class SearchesController extends AppController {
 
         $geo_query = "";
         if ( $location ) {
-           $geo_query = "fq={!geofilt}&pt=$location&sfield=location&d=6000&";
+           $geo_query = "fq={!geofilt}&pt=$location&sfield=location&d=500&";
         }
 
         # http://wiki.apache.org/solr/SpatialSearch#How_to_boost_closest_reults
         $boost_closest = "{!boost+f=recip(geodist(),2,200,20}";
 
-        $query = "q=" . $boost_closest . "NOT+id:$user_id%20$blocked_users%20$activities&fl=activity,score,id,name,location,reputation,image_url,_dist_:geodist()&" . $geo_query. "&sort=score%20desc&wt=json&indent=true&";
+        //$query = "q=" . $boost_closest . "NOT+id:$user_id%20$blocked_users%20$activities&fl=activity,score,id,name,location,reputation,image_url,_dist_:geodist()&" . $geo_query. "&sort=score%20desc&wt=json&indent=true&";
+        $query = "q=" . $boost_closest . "NOT+id:$user_id%20$blocked_users%20$activities&fl=activity,score,id,name,reputation,image_url,_dist_:geodist()&" . $geo_query. "&sort=score%20desc&wt=json&indent=true&";
 
         $solr_result = $this->Solr->querySolr($query);
         //pr($solr_result);        
