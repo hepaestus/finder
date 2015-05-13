@@ -62,7 +62,7 @@ class ActivitiesController extends AppController {
 			}
 		}
         
-		$options = array('fields' => array('ActivityCategory.id', 'ActivityCategory.name'), 'order' => array('ActivityCategory.lft' => 'ASC'));
+		$options = array('fields' => array('ActivityCategory.id', 'ActivityCategory.name'), 'order' => array('ActivityCategory.name' => 'ASC'));
         $activity_category_id = $this->ActivityCategory->find('list', $options);
         $this->set('activity_category_id', $activity_category_id);
         
