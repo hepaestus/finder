@@ -24,8 +24,10 @@ class ExtendedProfilesController extends AppController {
  * @return void
  */
 	public function index() {
-		$this->ExtendedProfile->recursive = 0;
-		$this->set('extendedProfiles', $this->Paginator->paginate());
+		//$this->ExtendedProfile->recursive = 0;
+		//$this->set('extendedProfiles', $this->Paginator->paginate());
+        /* Regular Users should not see the index of all extended profile. Only admins should see this */
+        return $this->redirect(array('controller' => 'users', 'action' => 'view', $this->Auth->user('id')));
 	}
 
 /**
@@ -50,32 +52,38 @@ class ExtendedProfilesController extends AppController {
  */
 	public function add() {
         $loggedInUser = $this->Session->read('Auth.User');
-        $user_id = $loggedInUser['id'];
-		if ($this->request->is('post')) {
-			$this->ExtendedProfile->create();
-            $this->request->data['ExtendedProfile']['user_id'] = $user_id;
+        $extended_profile_id = $loggedInUser['extended_profile_id'];
+        
+        if (!$this->ExtendedProfile->exists($extended_profile_id)) {
 
-            error_log("EXTENDED PROFILE REQUEST DATA: " . print_r($this->request->data,1));
-            if ( $this->request->data['ExtendedProfile']['image']['name'] != null ) {
-              $this->request->data['ExtendedProfile']['image'] = $this->request->data['ExtendedProfile']['image']['name'];
-            } else {
-              $this->request->data['ExtendedProfile']['image'] = null;
-            }
-
-			if ($this->ExtendedProfile->save($this->request->data)) {
-				$this->Session->setFlash(__('The extended profile has been saved.'));
-
-                #Get the user and update with the extended_profile_id
-                $user = $this->User->find('first', array('conditions' => array('User.id' => $user_id), 'recursive' => -1));
-                $user['User']['extended_profile_id'] = $this->ExtendedProfile->id;
-                $this->User->save($user);
-
-                $solr_result = $this->Solr->pushUserToSolr($user_id);
-				return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
-			} else {
-				$this->Session->setFlash(__('The extended profile could not be saved. Please, try again.'));
-			}
-		}
+		    if ($this->request->is('post')) {
+			    $this->ExtendedProfile->create();
+                $this->request->data['ExtendedProfile']['user_id'] = $user_id;
+    
+                error_log("EXTENDED PROFILE REQUEST DATA: " . print_r($this->request->data,1));
+                if ( $this->request->data['ExtendedProfile']['image']['name'] != null ) {
+                  $this->request->data['ExtendedProfile']['image'] = $this->request->data['ExtendedProfile']['image']['name'];
+                } else {
+                  $this->request->data['ExtendedProfile']['image'] = null;
+                }
+    
+			    if ($this->ExtendedProfile->save($this->request->data)) {
+				    $this->Session->setFlash(__('The extended profile has been saved.'));
+    
+                    #Get the user and update with the extended_profile_id
+                    $user = $this->User->find('first', array('conditions' => array('User.id' => $user_id), 'recursive' => -1));
+                    $user['User']['extended_profile_id'] = $this->ExtendedProfile->id;
+                    $this->User->save($user);
+    
+                    $solr_result = $this->Solr->pushUserToSolr($user_id);
+				    return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
+			    } else {
+				    $this->Session->setFlash(__('The extended profile could not be saved. Please, try again.'));
+			    }
+		    }
+        } else {
+            return $this->redirect(array('controller' => 'extended_profiles', 'action' => 'view', $extended_profile_id));
+        }
 		$users = $this->ExtendedProfile->User->find('list');
 		$this->set(compact('users'));
 	}
@@ -97,7 +105,7 @@ class ExtendedProfilesController extends AppController {
 
             //pr($this->request->data);
             $error_message = "";
-            if ( $this->request->data['ExtendedProfile']['image'] && 
+            if ( array_key_exists('image', $this->request->data['ExtendedProfile']) && 
                  $this->request->data['ExtendedProfile']['image']['error'] == 0 &&
                  $this->request->data['ExtendedProfile']['image']['size'] > 0 ) {
 
