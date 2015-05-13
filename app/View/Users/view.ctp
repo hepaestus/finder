@@ -289,8 +289,8 @@
         <th><?php echo __('Connection Type'); ?></th>
         <!-- th><?php //echo __('Verified'); ?></th -->
         <th><?php echo __('Message'); ?></th>
-        <th><?php echo __('Created'); ?></th>
-        <th><?php echo __('Modified'); ?></th>
+        <!-- th><?php // echo __('Created'); ?></th -->
+        <!-- th><?php // echo __('Modified'); ?></th -->
         <th class="actions"><?php echo __('Actions'); ?></th>
     </tr>
     <?php foreach ($connectionsOutgoing as $connection): ?>
@@ -302,10 +302,10 @@
             <td><?php echo $connection['Connection']['connection_type']; ?></td>
             <!-- td><?php //echo $connection['Connection']['verified']; ?></td -->
             <td><?php echo $connection['Connection']['message']; ?></td>
-            <td><?php echo $connection['Connection']['created']; ?></td>
-            <td><?php echo $connection['Connection']['modified']; ?></td>
+            <!-- td><?php // echo $connection['Connection']['created']; ?></td -->
+            <!-- td><?php // echo $connection['Connection']['modified']; ?></td -->
             <td class="actions">
-                <?php echo $this->Html->link(__('Verify'), array('controller' => 'connections', 'action' => 'verify', $connection['Connection']['id'])); ?>
+                <?php // echo $this->Html->link(__('Verify'), array('controller' => 'connections', 'action' => 'verify', $connection['Connection']['id'])); ?>
                 <?php echo $this->Html->link(__('View'), array('controller' => 'connections', 'action' => 'view', $connection['Connection']['id'])); ?>
                 <?php echo $this->Html->link(__('Edit'), array('controller' => 'connections', 'action' => 'edit', $connection['Connection']['id'])); ?>
                 <?php echo $this->Form->postLink(__('Delete'), array('controller' => 'connections', 'action' => 'delete', $connection['Connection']['id']), array(), __('Are you sure you want to delete # %s?', $connection['Connection']['id'])); ?>
@@ -332,8 +332,8 @@
         <th><?php echo __('Connection Type'); ?></th>
         <!-- th><?php //echo __('Verified'); ?></th -->
         <th><?php echo __('Message'); ?></th>
-        <th><?php echo __('Created'); ?></th>
-        <th><?php echo __('Modified'); ?></th>
+        <!-- th><?php // echo __('Created'); ?></th -->
+        <!-- th><?php // echo __('Modified'); ?></th -->
         <th class="actions"><?php echo __('Actions'); ?></th>
     </tr>
     <?php foreach ($connectionsIncoming as $connection): ?>
@@ -344,12 +344,18 @@
             <td><?php echo $connection['Connection']['connection_type']; ?></td>
             <!--td><?php //echo $connection['Connection']['verified']; ?></td-->
             <td><?php echo $connection['Connection']['message']; ?></td>
-            <td><?php echo $connection['Connection']['created']; ?></td>
-            <td><?php echo $connection['Connection']['modified']; ?></td>
+            <!-- td><?php // echo $connection['Connection']['created']; ?></td -->
+            <!-- td><?php //echo $connection['Connection']['modified']; ?></td -->
             <td class="actions">
-                <?php echo $this->Html->link(__('Verify'), array('controller' => 'connections', 'action' => 'verify', $connection['Connection']['id'])); ?>
+            <?php 
+                if ( $connection['Connection']['verified'] ) {
+                    echo $this->Html->link(__('Re-Verify'), array('controller' => 'connections', 'action' => 'verify', $connection['Connection']['id']));
+                } else {
+                    echo $this->Html->link(__('Verify'), array('controller' => 'connections', 'action' => 'verify', $connection['Connection']['id']));
+                }
+                ?>
                 <?php echo $this->Html->link(__('View'), array('controller' => 'connections', 'action' => 'view', $connection['Connection']['id'])); ?>
-                <?php echo $this->Html->link(__('Edit'), array('controller' => 'connections', 'action' => 'edit', $connection['Connection']['id'])); ?>
+                <?php //echo $this->Html->link(__('Edit'), array('controller' => 'connections', 'action' => 'edit', $connection['Connection']['id'])); ?>
                 <?php echo $this->Form->postLink(__('Delete'), array('controller' => 'connections', 'action' => 'delete', $connection['Connection']['id']), array(), __('Are you sure you want to delete # %s?', $connection['Connection']['id'])); ?>
             </td>
         </tr>
@@ -378,11 +384,11 @@
     <h4><?php echo __('Incoming Notes For You'); ?></h4>
     <table cellpadding = "0" cellspacing = "0">
     <tr>
-        <th><?php echo __('Id'); ?></th>
+        <!-- th><?php // echo __('Id'); ?></th -->
         <th><?php echo __('From'); ?></th>
         <th><?php echo __('Subject'); ?></th>
         <th><?php echo __('Created'); ?></th>
-        <th><?php echo __('Read'); ?></th>
+        <!-- th><?php // echo __('Read'); ?></th -->
         <th class="actions"><?php echo __('Actions'); ?></th>
     </tr>
     <?php foreach ($notesIncoming as $note): ?>
@@ -438,7 +444,7 @@
     <h4><?php echo __('Notes you have sent'); ?></h4>
     <table cellpadding = "0" cellspacing = "0">
     <tr>
-        <th><?php echo __('Id'); ?></th>
+        <!-- th><?php // echo __('Id'); ?></th -->
         <th><?php echo __('To'); ?></th>
         <th><?php echo __('Subject'); ?></th>
         <th><?php echo __('Sent'); ?></th>
@@ -446,7 +452,7 @@
     </tr>
     <?php foreach ($notesOutgoing as $note): ?>
         <tr>
-            <td><?php echo $note['Note']['id']; ?></td>
+            <!-- td><?php // echo $note['Note']['id']; ?></td -->
             <td><?php echo $this->Html->link(__($note['ToUser']['username']), array('controller' => 'users', 'action' => 'view', $note['ToUser']['id'])); ?></td>
             <td><?php echo $this->Html->link(__($note['Note']['subject']), array('controller' => 'notes', 'action' => 'view', $note['Note']['id'])); ?></td>
             <td><?php echo $note['Note']['created']; ?></td>

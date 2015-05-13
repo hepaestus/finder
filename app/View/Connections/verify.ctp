@@ -1,9 +1,13 @@
 <div class="connections form">
+<?php // echo pr($connection); ?>
 <?php echo $this->Form->create('Connection'); ?>
 	<fieldset>
-		<legend><?php echo __('Edit Connection'); ?></legend>
+		<legend><?php echo __('Verify Connection with ' . $connection['MyUser']['username']); ?></legend>
 	<?php
-		echo $this->Form->input('connection_type', array('options' => array('blocked' => 'Blocked', 'acquaintance' => 'Acquaintance', 'friend' => 'Friend', 'relationship' => 'Relationship' )));
+        echo $this->Form->label('Message' );
+        echo $this->Html->para('connection_date', $connection['Connection']['created'],array());
+        echo $this->Html->para('connection_message', $connection['Connection']['message'],array());
+        echo $this->Form->input('connection_type', array('default' => $connection['Connection']['connection_type'], 'options' => array('blocked' => 'Blocked', 'acquaintance' => 'Acquaintance', 'friend' => 'Friend', 'relationship' => 'Relationship' )));
 		//echo $this->Form->input('verified');
 	?>
 	</fieldset>

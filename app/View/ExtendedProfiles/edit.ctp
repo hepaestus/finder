@@ -28,8 +28,8 @@
 	<ul>
 
 		<li><?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $this->Form->value('ExtendedProfile.id')), array(), __('Are you sure you want to delete # %s?', $this->Form->value('ExtendedProfile.id'))); ?></li>
-		<li><?php echo $this->Html->link(__('List Extended Profiles'), array('action' => 'index')); ?></li>
-		<li><?php echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New User'), array('controller' => 'users', 'action' => 'add')); ?> </li>
+		<!-- li><?php //echo $this->Html->link(__('List Extended Profiles'), array('action' => 'index')); ?></li -->
+		<!-- li><?php //echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li -->
+		<!-- li><?php //echo $this->Html->link(__('New User'), array('controller' => 'users', 'action' => 'add')); ?> </li -->
 	</ul>
 </div>

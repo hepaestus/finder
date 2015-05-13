@@ -40,7 +40,7 @@
 		<dd>
             <?php 
                 if ( $extendedProfile['ExtendedProfile']['image']) {
-                    echo("<img src=\"/" . $extendedProfile['ExtendedProfile']['image'] . "\" alt=\"Profile Image\" />");
+                    echo("<img src=\"/finder/" . $extendedProfile['ExtendedProfile']['image'] . "\" alt=\"Profile Image\" />");
                 }
             ?>
 			&nbsp;
@@ -77,9 +77,9 @@
 	<ul>
 		<li><?php echo $this->Html->link(__('Edit Extended Profile'), array('action' => 'edit', $extendedProfile['ExtendedProfile']['id'])); ?> </li>
 		<li><?php echo $this->Form->postLink(__('Delete Extended Profile'), array('action' => 'delete', $extendedProfile['ExtendedProfile']['id']), array(), __('Are you sure you want to delete # %s?', $extendedProfile['ExtendedProfile']['id'])); ?> </li>
-		<li><?php echo $this->Html->link(__('List Extended Profiles'), array('action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Extended Profile'), array('action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New User'), array('controller' => 'users', 'action' => 'add')); ?> </li>
+		<!-- li><?php // echo $this->Html->link(__('List Extended Profiles'), array('action' => 'index')); ?> </li -->
+		<!-- li><?php // echo $this->Html->link(__('New Extended Profile'), array('action' => 'add')); ?> </li -->
+		<!-- li><?php // echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li -->
+		<!-- li><?php // echo $this->Html->link(__('New User'), array('controller' => 'users', 'action' => 'add')); ?> </li -->
 	</ul>
 </div>

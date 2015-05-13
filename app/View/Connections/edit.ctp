@@ -1,11 +1,11 @@
 <div class="connections form">
+<?php //echo pr($this->data); ?>
 <?php echo $this->Form->create('Connection'); ?>
 	<fieldset>
-		<legend><?php echo __('Edit Connection'); ?></legend>
+		<legend><?php echo __('Edit Connection with ' . $this->data['MyConnection']['username']); ?></legend>
 	<?php
-		echo $this->Form->input('connection_type', array( 'options' => array('blocked' => 'Block', 'acquaintance' => 'Acquaintance', 'friend' => 'Friend', 'relationship' => 'Relationship')));
-		echo $this->Form->input('verified');
 		echo $this->Form->input('message');
+		echo $this->Form->input('connection_type', array('default' => $this->data['Connection']['connection_type'], 'options' => array('blocked' => 'Block', 'acquaintance' => 'Acquaintance', 'friend' => 'Friend', 'relationship' => 'Relationship')));
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
