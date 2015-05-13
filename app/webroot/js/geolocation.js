@@ -21,10 +21,10 @@ $( document ).ready(function() {
         lng = loc.coords.longitude;
         zip = loc.postal_code;
         $("#geo").text( loc );
-        console.log( loc);
+        console.log( JSON.stringify(loc));
         console.log("From Geolocation: " + lat + "," + lng + " " + zip);
         //initializeMap();
-        $("#ExtendedProfilePostalCode").val(loc.postalcode);
+        // $("#ExtendedProfilePostalCode").val(loc.postalcode);
         $("#ExtendedProfileLatitude").val(loc.coords.latitude);
         $("#ExtendedProfileLongitude").val(loc.coords.longitude);
     }
