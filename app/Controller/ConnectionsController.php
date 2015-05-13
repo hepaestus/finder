@@ -158,11 +158,11 @@ class ConnectionsController extends AppController {
                     $this->Session->setFlash(__('The connection could not be saved. Please, try again.'));
                 }
             } else {
-                 $this->Session->setFlash(__('You cannot edit this connection.'));
-                 return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
+			     $options = array('conditions' => array('Connection.' . $this->User->primaryKey => $id));
+			     $this->request->data = $this->Connection->find('first', $options);
             } 
         } else {
-            $this->Session->setFlash(__('You cannot edit this connection.'));
+            $this->Session->setFlash(__('You cannot edit this connection foo.'));
             return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
         }
         $users = $this->Connection->find('list');
@@ -228,6 +228,7 @@ class ConnectionsController extends AppController {
                 $this->request->data['Connection']['user_id']       = $connection['Connection']['user_id'];
                 $this->request->data['Connection']['connection_id'] = $connection['Connection']['connection_id'];
                 $this->request->data['Connection']['message']       = $connection['Connection']['message'];
+                $this->request->data['Connection']['verified']      = 1;
                 
                 if ($this->Connection->save($this->request->data)) {
                     return $this->redirect(array('action' => 'index'));
@@ -237,9 +238,9 @@ class ConnectionsController extends AppController {
             }
         } else {
             $this->Session->setFlash(__('Connection could not be verified.'));
+            return $this->redirect(array('controller' => 'Users', 'action' => 'view', $user_id));
         }
-        $connections = $this->Connection->find('list');
-        $this->set(compact('connections'));
+        $this->set(compact('connection'));
         #return $this->redirect(array('action' => 'index'));
     }
 
