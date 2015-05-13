@@ -158,6 +158,9 @@ class InterestsController extends AppController {
 			throw new NotFoundException(__('Invalid interest'));
 		}
 		if ($this->request->is(array('post', 'put'))) {
+
+            $this->request->data['User'] = $loggedInUser;
+
 			if ($this->Interest->save($this->request->data)) {
 				$this->Session->setFlash(__('The interest has been saved.'));
 				return $this->redirect(array('action' => 'index'));
@@ -168,10 +171,10 @@ class InterestsController extends AppController {
 			$options = array('conditions' => array('Interest.' . $this->Interest->primaryKey => $id));
 			$this->request->data = $this->Interest->find('first', $options);
 		}
+
 		//$users = $this->Interest->User->find('list');
 		//$activities = $this->Interest->Activity->find('list');
-		$activities = $this->Interest->Activity->find('list');
-		$this->set(compact('activities'));
+		//$this->set(compact('activities'));
 	}
 
 /**
