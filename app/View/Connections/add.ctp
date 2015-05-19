@@ -1,14 +1,10 @@
-<?php  pr($connections); ?>
+<?php  //pr($connections); ?>
 <div class="connections form">
 <?php echo $this->Form->create('Connection'); ?>
 	<fieldset>
 		<legend><?php echo __('Add Connection'); ?></legend>
 	<?php
-        if ( count($connections) == 1 ) {
-		    echo $this->Form->select('connection_id', $connections, array('empty' => false, 'selected' => $connections));
-        } else {
-		    echo $this->Form->select('connection_id', $connections);
-        }
+		echo $this->Form->input('username');
 		echo $this->Form->input('connection_type', array( 'options' => array('blocked' => 'Block', 'acquaintance' => 'Acquaintance', 'friend' => 'Friend', 'relationship' => 'Relationship')));
 		echo $this->Form->input('message');
 	?>

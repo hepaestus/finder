@@ -167,7 +167,8 @@ class UsersController extends AppController {
         if ( $connection_list ) { 
 
             foreach( $connection_list as $connection ) {
-                error_log("CONNECTION :".  print_r($connection,1));
+                
+                //error_log("CONNECTION :".  print_r($connection,1));
                 $connection_type =  strtolower($connection['Connection']['connection_type']);
     
                 if ( $connection_type == 'blocked' ) {

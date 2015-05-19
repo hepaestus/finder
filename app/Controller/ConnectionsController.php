@@ -64,13 +64,14 @@ class ConnectionsController extends AppController {
         $user_id = $loggedInUser['id'];
 
         if ($this->request->is('post')) {
+            $username = $this->request->data['Connection']['username'] ;
+            $other_user = $this->User->findByUsername($username);
+                
+
             $this->request->data['Connection']['user_id'] = $user_id;
-
-            #error_log("CONNECTION REQUEST :". print_r( $this->request, 1));
-
-            $other_user = $this->request->data['Connection']['connection_id'];
-            $pending_out_connections = $this->Connection->find('first', array('conditions' => array( 'Connection.user_id' => $user_id, 'Connection.connection_id' => $other_user )));
-            $pending_inc_connections = $this->Connection->find('first', array('conditions' => array( 'Connection.user_id' => $other_user, 'Connection.connection_id' => $user_id )));
+            
+            $pending_out_connections = $this->Connection->find('first', array('conditions' => array( 'Connection.user_id' => $user_id, 'Connection.connection_id' => $other_user['User']['id'] )));
+            $pending_inc_connections = $this->Connection->find('first', array('conditions' => array( 'Connection.user_id' => $other_user['User']['id'], 'Connection.connection_id' => $user_id )));
             
             if ( count($pending_out_connections) > 0 || count($pending_inc_connections) > 0 ) {
                 $this->Session->setFlash(__('You Already Have a Pending or Existing Connection With That User'));
@@ -117,10 +118,8 @@ class ConnectionsController extends AppController {
         } 
         if ( $id ) {
             $connections = $this->User->find('list', array('conditions' => array('User.id' => $id), 'fields' => array('User.id', 'User.username'), 'recursive' => -1));
-        } else {
-            $connections = $this->User->find('list', array('conditions' => array('User.id !=' => $user_id), 'fields' => array('User.id', 'User.username'), 'recursive' => 1));
+            $this->set(compact('connections'));
         }
-        $this->set(compact('connections'));
     }
 
 /**
