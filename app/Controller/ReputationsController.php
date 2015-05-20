@@ -63,24 +63,35 @@ class ReputationsController extends AppController {
         $user_id = $loggedInUser['id'];
         if ($this->request->is('post')) {
 
-            $existing_review = $this->Reputation->findByUserIdAndReviewerId($this->request->data['Reputation']['user_id'], $user_id);
-            if ( $existing_review ) {
-                $this->Session->setFlash(__('You Have Already Reviewed That User.'));
-                return $this->redirect(array('controller' => 'reputations', 'action' => 'view', $existing_review['Reputation']['id']));
-            }
+            $username = $this->request->data['Reputation']['username'] ;
+            $user_to = $this->User->findByUsername($username);
+            if ( $user_to ) {
 
-            $this->Reputation->create();
-            $this->request->data['Reputation']['reviewer_id'] = $user_id;
-            if ($this->Reputation->save($this->request->data)) {
-                $solr_result = $this->Solr->pushUserToSolr($this->request->data['Reputation']['user_id']);                
-                $this->Session->setFlash(__('The reputation has been saved.'));
-                return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
+                $this->request->data['Reputation']['user_id'] = $user_to['User']['id'];
+
+                $existing_review = $this->Reputation->findByUserIdAndReviewerId($user_to['User']['id'], $user_id);            
+                if ( $existing_review ) {
+                    $this->Session->setFlash(__('You Have Already Reviewed That User.'));
+                    return $this->redirect(array('controller' => 'reputations', 'action' => 'view', $existing_review['Reputation']['id']));
+                }
+    
+                $this->Reputation->create();
+                $this->request->data['Reputation']['reviewer_id'] = $user_id;
+                if ($this->Reputation->save($this->request->data)) {
+                    $solr_result = $this->Solr->pushUserToSolr($user_to['User']['id']);                
+                    $this->Session->setFlash(__('The reputation has been saved.'));
+                    return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
+                } else {
+                    $this->Session->setFlash(__('The reputation could not be saved. Please, try again.'));
+                }
             } else {
-                $this->Session->setFlash(__('The reputation could not be saved. Please, try again.'));
+                    $this->Session->setFlash(__('User not found, try again.'));
+                    $this->request->data['Reputation']['username'] = "";
             }
         }
-        $users = $this->Reputation->User->find('list', array('fields' => array('User.username'), 'conditions' => array('User.id !=' => $user_id)));
-        $this->set(compact('users'));
+            
+        //$users = $this->Reputation->User->find('list', array('fields' => array('User.username'), 'conditions' => array('User.id !=' => $user_id)));
+        //$this->set(compact('users'));
     }
 
 /**
