@@ -69,6 +69,7 @@ class ConnectionsController extends AppController {
                 
 
             $this->request->data['Connection']['user_id'] = $user_id;
+            $this->request->data['Connection']['connection_id'] = $other_user['User']['id'];
             
             $pending_out_connections = $this->Connection->find('first', array('conditions' => array( 'Connection.user_id' => $user_id, 'Connection.connection_id' => $other_user['User']['id'] )));
             $pending_inc_connections = $this->Connection->find('first', array('conditions' => array( 'Connection.user_id' => $other_user['User']['id'], 'Connection.connection_id' => $user_id )));
@@ -78,6 +79,8 @@ class ConnectionsController extends AppController {
                 return $this->redirect(array('action' => 'add', $id)); 
             }
             
+            //pr($this->request->data);
+
             if ( ! $this->request->data['Connection']['connection_id'] ) {
                 $this->Session->setFlash(__('Null User'));
                 return $this->redirect(array('action' => 'add')); 
@@ -93,7 +96,7 @@ class ConnectionsController extends AppController {
                 $this->Session->setFlash(__('Your FOOBAR connection has been saved but must be verified.'));
 
                 // Create a recirpical connection 
-                $r_connection = $this->Connection->findByUserIdAndConnectionId( $other_user, $user_id );
+                $r_connection = $this->Connection->findByUserIdAndConnectionId( $other_user['User']['id'], $user_id );
                 error_log("RECIPROCAL CONNECTIONS: ". print_r($r_connection,1));
                 if ( count($r_connection) > 0 ) {
                     $this->Session->setFlash(__('A reciprocal connection already exists.'));                        
