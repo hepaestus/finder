@@ -11,6 +11,7 @@
       echo "                <p>Affinity Score: <span class='affinity'>" . $doc['score'] . "</span></p>\n";
       //echo "                <p>Location:<span class='location'>" . $doc['location'] . "</span>, Distance: <span class='distance'>" . $doc['_dist_'] . " km</span></p>\n";
       echo "                <p>Distance: <span class='distance'>" . $doc['_dist_'] . " km</span></p>\n";
+      echo "                <p>Reputation: <span class='reputation'>" . $doc['reputation'] . "</span></p>\n";
       echo "        </a>\n";
       echo "    </li>\n";
   }
