@@ -202,6 +202,7 @@
 
 <div class="related">
     <h2><?php echo __('Reputations'); ?></h2>
+    <?php echo $this->element('reputation_summary', array('reputationSummary' => $reputationSummary)); ?>
     <?php if (!empty($reputationsOutgoing)): ?>
     <h4><?php echo __('Outgoing Reputations'); ?></h4>
     <table cellpadding = "0" cellspacing = "0">
@@ -262,8 +263,8 @@
             <td><?php echo $reputation['Reputation']['modified']; ?></td>
             <td class="actions">
                 <?php echo $this->Html->link(__('View'), array('controller' => 'reputations', 'action' => 'view', $reputation['Reputation']['id'])); ?>
-                <?php echo $this->Html->link(__('Edit'), array('controller' => 'reputations', 'action' => 'edit', $reputation['Reputation']['id'])); ?>
-                <?php echo $this->Form->postLink(__('Delete'), array('controller' => 'reputations', 'action' => 'delete', $reputation['Reputation']['id']), array(), __('Are you sure you want to delete # %s?', $reputation['Reputation']['id'])); ?>
+                <?php // echo $this->Html->link(__('Edit'), array('controller' => 'reputations', 'action' => 'edit', $reputation['Reputation']['id'])); ?>
+                <?php // echo $this->Form->postLink(__('Delete'), array('controller' => 'reputations', 'action' => 'delete', $reputation['Reputation']['id']), array(), __('Are you sure you want to delete # %s?', $reputation['Reputation']['id'])); ?>
             </td>
         </tr>
     <?php endforeach; ?>

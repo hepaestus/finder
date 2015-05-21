@@ -206,6 +206,38 @@ class ReputationsController extends AppController {
     }
 
 /**
+ * reputationSummary
+ *
+ * @return array
+ */
+    public function reputationSummary($id = null) {
+        if ( $id ) { 
+            $reputationsIncoming = $this->Reputation->findAllByUserId($id);
+            $user = $this->User->findById($id);
+            $reputationSummary['Username'] = $user['User']['username'];
+            $reputationSummary['Total'] = 0;
+            $reputationSummary['Count'] = 0;
+            $reputationSummary['Average'] = 0;
+            if ( $reputationsIncoming ) {            
+                error_log( print_r($reputationsIncoming,1));
+                foreach( $reputationsIncoming as $reputation) {
+                    $reputationSummary['Total'] += $reputation['Reputation']['rating'];
+                    $reputationSummary['Count'] += 1;                
+                }
+                if ( $reputationSummary['Count'] > 0 ) {
+                    $reputationSummary['Average'] =  $reputationSummary['Total'] / $reputationSummary['Count'];
+                } else {
+                    $reputationSummary['Average'] =  null;
+                }
+            }
+            $this->set('reputationsIncoming', $reputationsIncoming);
+            $this->set('reputationSummary', $reputationSummary);
+            return $reputationSummary;
+        }
+    }
+
+
+/**
  * admin_index method
  *
  * @return void

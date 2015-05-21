@@ -31,8 +31,8 @@
 		<td><?php echo h($reputation['Reputation']['modified']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $reputation['Reputation']['id'])); ?>
-			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $reputation['Reputation']['id'])); ?>
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $reputation['Reputation']['id']), array(), __('Are you sure you want to delete # %s?', $reputation['Reputation']['id'])); ?>
+			<?php //echo $this->Html->link(__('Edit'), array('action' => 'edit', $reputation['Reputation']['id'])); ?>
+			<?php //echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $reputation['Reputation']['id']), array(), __('Are you sure you want to delete # %s?', $reputation['Reputation']['id'])); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>

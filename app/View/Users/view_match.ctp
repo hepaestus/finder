@@ -21,6 +21,12 @@
     </dl>
 </div>
 
+<div class="related reputation">
+  <h2>Reputation</h2>
+  <?php $reputationSummary = $this->requestAction(array('controller' => 'reputations', 'action' => 'reputationSummary', $user['User']['id'])); ?>
+  <?php echo $this->element('reputation_summary', array('reputationSummary' => $reputationSummary)); ?>
+</div>
+
 <div class="related">
     <?php if (!empty($user['Profile'])): ?>
     <h3><?php echo __('Profiles'); ?></h3>
@@ -30,7 +36,7 @@
         <dt><?php echo __('Birth Date'); ?></dt>
         <dd> <?php echo $user['Profile']['birth_date']; ?> &nbsp;</dd>
     </dl>
-    <?php endif; ?>
+    <?php endif; ?>    
 </div>
 
 <div class="related">
