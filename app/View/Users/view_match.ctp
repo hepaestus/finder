@@ -54,7 +54,7 @@
         <dt><?php echo __('Relationship Status'); ?></dt>
         <dd> <?php echo $user['ExtendedProfile']['relationship_status']; ?> &nbsp;</dd>
         <dt><?php echo __('Image'); ?></dt>
-        <dd> <?php echo $user['ExtendedProfile']['image']; ?> &nbsp;</dd>
+        <dd> <?php echo $this->Html->image($user['ExtendedProfile']['image'], array('alt' =>  $user['Profile']['scene_name'])); ?> &nbsp;</dd>
         <dt><?php echo __('External Links'); ?></dt>
         <dd> <?php echo $user['ExtendedProfile']['external_links']; ?> &nbsp;</dd>
         <dt><?php echo __('Location'); ?></dt>

@@ -61,7 +61,7 @@ class SearchesController extends AppController {
 
         $activities = "";
         foreach ( $activities_array as $activity ) {
-            $activities .= "activity:\"$activity\"";
+            $activities .= "activity:\"$activity\"^2";
             if( end($activities_array) != $activity ) {
                 $activities .= "+OR+";
             }
@@ -76,7 +76,7 @@ class SearchesController extends AppController {
 
         $geo_query = "";
         if ( $location ) {
-           $geo_query = "fq={!geofilt}&pt=$location&sfield=location&d=500&";
+           $geo_query = "fq={!geofilt}&pt=$location&sfield=location&d=250&";
         }
 
         # http://wiki.apache.org/solr/SpatialSearch#How_to_boost_closest_reults

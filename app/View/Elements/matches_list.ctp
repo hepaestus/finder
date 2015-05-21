@@ -5,7 +5,7 @@
       echo "    <li data-user-id='/" . $doc['id'] . "'>\n";
       echo "        <a href='/finder/users/view/" . $doc['id'] . "' data-user-id='" . $doc['id'] . "' class='match_user_profile' data-rel='popup' data-position-to='window' data-transition='pop'>\n";
       if ( array_key_exists('image_url', $doc) ) { 
-        echo "                <img src='/finder/" . $doc['image_url'] . "' class='profile_image' alt='profile image'>\n";
+        echo $this->Html->image($doc['image_url'], array('class' => 'profile_image', 'alt' => 'profile image'));
       }
       echo "                <h2 class='user'>" . $doc['name']  . "</h2>\n";
       echo "                <p>Affinity Score: <span class='affinity'>" . $doc['score'] . "</span></p>\n";

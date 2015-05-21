@@ -111,7 +111,7 @@
         <dd> <?php echo $user['ExtendedProfile']['relationship_status']; ?> &nbsp;</dd>
         <dt><?php echo __('Image'); ?></dt>
         <dd> <?php if ( $user['ExtendedProfile']['image'] ) { 
-                       echo "<img src=\"/finder/" . $user['ExtendedProfile']['image'] . "\" alt=\"Profile Image\">";
+                       echo $this->Html->image($user['ExtendedProfile']['image'], array( 'alt' => 'Profile Image'));;
                    } else {
                        echo "none"; 
                    }
@@ -145,7 +145,7 @@
     $matches_array = json_decode($matches,1);
     if (!empty( $matches_array['response'])):
     ?>
-    <div style="float:right;width:50%" class="hide"><?php pr($matches); ?></div>
+    <div style="float:right;width:50%" class=""><?php pr($matches); ?></div>
     <?php echo $this->element('matches_list'); ?>
     <?php else: ?>
         <h4>You Currently have no matches. Try creating your profile and adding some interests.</h4>
@@ -166,8 +166,8 @@
         <th><?php echo __('Receiving'); ?></th>
         <th><?php echo __('Importance'); ?></th>
         <th><?php echo __('Experience'); ?></th>
-        <th><?php echo __('Created'); ?></th>
-        <th><?php echo __('Modified'); ?></th>
+        <!-- th><?php // echo __('Created'); ?></th -->
+        <!-- th><?php // echo __('Modified'); ?></th -->
         <th class="actions"><?php echo __('Actions'); ?></th>
     </tr>
     <?php foreach ($user['Interest'] as $interest): ?>
@@ -181,8 +181,8 @@
             <td><?php echo $interest['receiving']; ?></td>
             <td><?php echo $interest['importance']; ?></td>
             <td><?php echo $interest['experience']; ?></td>
-            <td><?php echo $interest['created']; ?></td>
-            <td><?php echo $interest['modified']; ?></td>
+            <!-- td><?php // echo $interest['created']; ?></td -->
+            <!-- td><?php // echo $interest['modified']; ?></td -->
             <td class="actions">
                 <?php echo $this->Html->link(__('View'), array('controller' => 'interests', 'action' => 'view', $interest['id'])); ?>
                 <?php echo $this->Html->link(__('Edit'), array('controller' => 'interests', 'action' => 'edit', $interest['id'])); ?>

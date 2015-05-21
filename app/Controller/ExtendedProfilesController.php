@@ -126,8 +126,8 @@ class ExtendedProfilesController extends AppController {
 
                 $new_file_name = md5($file_name);
                 $new_random_path = $this->_randomPath($file_name);
-                $new_full_path = WWW_ROOT . "uploads" . DS . $new_random_path;
-                $new_url_path  = "uploads" . DS . $new_random_path;
+                $new_full_path = WWW_ROOT . "img". DS . "uploads" . DS . $new_random_path;
+                $new_url_path  = "img" . DS . "uploads" . DS . $new_random_path;
                 
                 if ( ! file_exists($new_full_path)) {
                     if ( ! mkdir($new_full_path, 0777, true)) {
