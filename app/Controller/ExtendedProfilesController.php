@@ -52,6 +52,7 @@ class ExtendedProfilesController extends AppController {
  */
 	public function add() {
         $loggedInUser = $this->Session->read('Auth.User');
+        $user_id = $loggedInUser['id'];
         $extended_profile_id = $loggedInUser['extended_profile_id'];
         
         if (!$this->ExtendedProfile->exists($extended_profile_id)) {
