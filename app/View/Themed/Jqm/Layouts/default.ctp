@@ -66,6 +66,7 @@
         </div><!-- /header -->
 
         <div role="main" class="ui-content">
+        <h1>Content</h1>
         <?php echo $this->fetch('content'); ?>
         </div> <!-- end role="main" class="ui-content" -->
 

@@ -29,7 +29,7 @@ class SolrComponent extends Component {
         $result = SolrComponent::solrConnect($url);
         //error_log("Solr Query Component Result : " . $result);
         #if ( preg_match("/\"responseHeader\".*\"status\":0,\"QTime\"/", $result) ) {
-            error_log("Solr Query Result : " . $result);
+            //error_log("Solr Query Result : " . $result);
             return $result;
         #} else {
         #    error_log("Solr Query FAIL : " . $result);
