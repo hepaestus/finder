@@ -27,7 +27,7 @@ class NotesController extends AppController {
         $loggedInUser = $this->Session->read('Auth.User');
         $user_id = $loggedInUser['id'];
 		$this->Note->recursive = 0;
-
+        
         $conditions = array("Note.user_id" => $user_id, "Note.sender_delete" => 0);
         $notesOutgoing = $this->Note->find('all', array('conditions' => $conditions));
 		$this->set('notesOutgoing', $notesOutgoing);
@@ -60,8 +60,12 @@ class NotesController extends AppController {
 	public function add() {
 		if ($this->request->is('post')) {
 			$this->Note->create();
+
+            // Look up the username the note is being sent to:
             $username = $this->request->data['Note']['username'] ;
             $user_to = $this->User->findByUsername($username);
+
+            // If user exists send them a note!
             if ( $user_to ) {
                 $this->request->data['UserTo'] = $user_to;
                 $this->request->data['Note']['to_user_id'] = $user_to['User']['id'];
@@ -75,13 +79,12 @@ class NotesController extends AppController {
 			    } else {
 				    $this->Session->setFlash(__('The note could not be saved. Please, try again.'));
 			    }
+
+            // If the username doesn't exist notify the user.
             } else {
 			    $this->Session->setFlash(__('Invalid Username. Please, try again.'));
             }
 		}
-		//$users = $this->Note->User->find('list');
-		//$toUsers = $this->Note->ToUser->find('list');
-		//$this->set(compact('users', 'toUsers'));
 	}
 
 /**
@@ -126,20 +129,26 @@ class NotesController extends AppController {
 		}
 		$this->request->allowMethod('post', 'delete', 'ajax');
 
+        // Note is not deleted in the DB until both users mark it as deleted.
+
         $note = $this->Note->find('first', array('conditions' => array('Note.id' => $id)));
+
+        // Determine if the note is created by the logged in user.
+        // If so mark as deleted by that user.
         if ( $note['Note']['user_id'] == $loggedInUser['id'] ) {
           $note['Note']['sender_delete'] = 1;
         } 
+        // Determine if the note was sent to the logged in user.
+        // If so mark as deleted by that user.
         if ( $note['Note']['to_user_id'] == $loggedInUser['id'] ) {
           $note['Note']['receiver_delete'] = 1;
         }
 
-        error_log( print_r($note,1));
-
+        // See if the note has been deleted by both the  sender and the receiver
         $delete_flag = 0;
         if ( $note['Note']['sender_delete'] == 1 && $note['Note']['receiver_delete'] == 1 ) {
             if ($this->Note->delete() ) {
-                $delete_flag = 1;
+                $delete_flag = 1; 
             }
         } else {
             if ($this->Note->save($note) ) {
@@ -147,11 +156,13 @@ class NotesController extends AppController {
             }
         }
 
+        // If this is an ajax call return json boolean value.
         if ( $this->request->is('ajax') ) {
             $this->autoRender = false;
             $this->layout = 'ajax';
             return json_encode($delete_flag);
-        } else {
+
+        } else { // otherwise redirect to the index note page.
             if ( $delete_flag ) {
 			    $this->Session->setFlash(__('The note has been deleted.'));
 		        return $this->redirect(array('action' => 'index'));
@@ -179,8 +190,8 @@ class NotesController extends AppController {
         }
 		if ($this->request->is(array('post', 'put'))) {
 
+            // This is a new note so create a new one.
             $this->Note->create();
-            error_log( print_r($this->request->data['Note'],1));
             
             // Reverse the user_id and to_user_id since this is a reply
             $new_note_user_id = $this->request->data['Note']['to_user_id'];
@@ -188,21 +199,16 @@ class NotesController extends AppController {
             $this->request->data['Note']['user_id'] = $new_note_user_id;
             $this->request->data['Note']['to_user_id'] = $new_note_to_user_id;
 
-            error_log( print_r($this->request->data['Note'],1));
-
 			if ($this->Note->save($this->request->data)) {
 				$this->Session->setFlash(__('Your Reply Has Been Sent.'));
 				return $this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The note could not be saved. Please, try again.'));
-			}
+			}            
 		} else {
 			$options = array('conditions' => array('Note.' . $this->Note->primaryKey => $id));
 			$this->request->data = $this->Note->find('first', $options);
 		}
-		//$toUser = $this->Note->User->find('first');
-		//$user = $this->Note->ToUser->find('first');
-		//$this->set(compact('user', 'toUser'));
     }
 
 
