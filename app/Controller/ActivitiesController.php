@@ -25,6 +25,9 @@ class ActivitiesController extends AppController {
 	public function index() {
 		$this->Activity->recursive = 0;
 		$this->set('activities', $this->Paginator->paginate());
+        $tree = $this->ActivityCategory->generateTreeList();
+
+        $this->set('tree', $tree);
 	}
 
 /**

@@ -25,6 +25,7 @@ class ActivityCategoriesController extends AppController {
 		$this->ActivityCategory->recursive = 0;
 		$this->Paginator->settings = array('order' => array('ActivityCategory.lft' => 'ASC'));
 		$this->set('activityCategories', $this->Paginator->paginate());
+        $this->set('tree', $this->ActivityCategory->generateTreeList());
 		//pr( $this->Paginator->paginate());
 	}
 

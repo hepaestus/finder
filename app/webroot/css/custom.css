@@ -1,9 +1,22 @@
 .read {
   color: grey;
 }
+li.note.read a {
+  background-color: #d1d1d1;
+  color: #666;
+}
+li.note.read img {
+  opacity: 50%;
+}
+
 .unread {
 
 }
 .hide {
   display:none;
 }
+dt {
+  font-weight: bold;
+  margin-top: 5px;
+}
+

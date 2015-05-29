@@ -37,7 +37,7 @@ class AppController extends Controller {
         'Auth' => array(
             'loginRedirect' => array(
                 'controller' => 'users',
-                'action' => 'index'
+                'action' => 'view'
             ),
             'logoutRedirect' => array(
                 'controller' => 'pages',
@@ -49,10 +49,9 @@ class AppController extends Controller {
     public function beforeFilter() {
         $this->Auth->allow('index','view','login','logout','display');
 
-        if ( $this->request->is('mobile') ) {
-            $this->viewClass = 'Theme';
-            $this->theme = 'Jqm';
-        }
+        #if ( $this->request->is('mobile') ) {
+        #    $this->viewClass = 'Theme';
+        #    $this->theme = 'Jqm';
+        #}
     }
-
 }

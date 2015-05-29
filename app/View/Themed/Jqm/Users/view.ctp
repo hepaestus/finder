@@ -25,16 +25,8 @@
     
 
 
-
-
-
-
-
-
-
-
         <div role="main" class="ui-content">
-            <!-- h2>One</h2 -->
+            <h2>One</h2>
             <ul data-role="listview" data-inset="true">
                 <li><a href="#two"><span class="ui-li-count">5</span>
                     <h2 class="circle_icon "><span class="text_icon">M!</span></h2>
