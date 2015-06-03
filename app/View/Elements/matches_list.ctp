@@ -6,6 +6,8 @@
       echo "        <a href='#user' data-user-id='" . $doc['id'] . "' class='match_user_profile' data-rel='popup' data-position-to='window' data-transition='pop'>\n";
       if ( array_key_exists('image_url', $doc) ) { 
         echo $this->Html->image($doc['image_url'], array('class' => 'profile_image', 'alt' => 'profile image'));
+      } else {
+        echo $this->Html->image('/img/profile_75.jpeg', array('class' => 'profile_image', 'alt' => 'generic profile image'));
       }
       echo "                <h2 class='user'>" . $doc['name']  . "</h2>\n";
       echo "                <p>Affinity Score: <span class='affinity'>" . $doc['score'] . "</span></p>\n";
