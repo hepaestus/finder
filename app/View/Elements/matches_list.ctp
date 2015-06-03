@@ -2,8 +2,8 @@
   $matches_arr = json_decode($matches, true);
   echo "<ul data-role='listview' data-split-icon='gear' data-split-theme='a' data-inset='true'>\n";
   foreach( $matches_arr['response']['docs'] as $doc ) {
-      echo "    <li data-user-id='/" . $doc['id'] . "'>\n";
-      echo "        <a href='/finder/users/view/" . $doc['id'] . "' data-user-id='" . $doc['id'] . "' class='match_user_profile' data-rel='popup' data-position-to='window' data-transition='pop'>\n";
+      echo "    <li data-user-id='" . $doc['id'] . "'>\n";
+      echo "        <a href='#user' data-user-id='" . $doc['id'] . "' class='match_user_profile' data-rel='popup' data-position-to='window' data-transition='pop'>\n";
       if ( array_key_exists('image_url', $doc) ) { 
         echo $this->Html->image($doc['image_url'], array('class' => 'profile_image', 'alt' => 'profile image'));
       }

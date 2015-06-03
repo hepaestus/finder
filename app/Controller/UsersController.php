@@ -37,6 +37,7 @@ class UsersController extends AppController {
             $this->Session->setFlash(__('Invalid Username or Password, Try Again'));
         }
         $this->set('title_for_layout','Welcome');
+        //return $this->redirect($this->Auth->redirect(array('controller' => 'users', 'action' => 'view', $this->Auth->user('id'))));
     }
 
     public function logout() {
@@ -103,7 +104,7 @@ class UsersController extends AppController {
         $user_id = $loggedInUser['id'];
                 
         if (!$this->User->exists($id)) {
-            throw new NotFoundException(__('Invalid user'));
+            return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
         }
 
         if ( $id != null && $id != $user_id ) {
@@ -115,13 +116,14 @@ class UsersController extends AppController {
         $this->set('user', $this->User->find('first', $options));
         //pr($this->User->find('first', $options));
 
-        $order = array("Note.created desc", "Note.read");
         // Outbox
+        $order = array("Note.created desc", "Note.read");
         $conditions = array("Note.user_id" => $user_id, "Note.sender_delete" => 0);
         $notesOutgoing = $this->Note->find('all', array('conditions' => $conditions, 'recursive' => 2, 'order' => $order));
 		$this->set('notesOutgoing', $notesOutgoing);
         
         // Inbox
+        $order = array("Note.created desc", "Note.read");
         $conditions = array("Note.to_user_id" => $user_id, "Note.receiver_delete" => 0 );
         $notesIncoming = $this->Note->find('all', array('conditions' => $conditions, 'recursive' => 2, 'order' => $order));
 		$this->set('notesIncoming', $notesIncoming);
@@ -133,12 +135,13 @@ class UsersController extends AppController {
         $this->set('reputationsIncoming', $reputationsIncoming);
         $this->set('reputationSummary', $this->requestAction( array('controller' => 'reputations', 'action' => 'reputationSummary', $user_id)));
 
-        $connectionsOutgoing = $this->Connection->findAllByUserId($user_id); //, null, null, array('created' => 'desc'), null ,null, 2);
+
+        $connectionsOutgoing = $this->Connection->findAllByUserId($user_id,NULL,NULL,NULL,NULL,2); //, null, null, array('created' => 'desc'), null ,null, 2);
         $this->set('connectionsOutgoing', $connectionsOutgoing);
 
-        $connectionsIncoming = $this->Connection->findAllByConnectionId($user_id);
+        $connectionsIncoming = $this->Connection->findAllByConnectionId($user_id,NULL,NULL,NULL,NULL,2);
         $this->set('connectionsIncoming', $connectionsIncoming);
-
+        
         $matches = $this->requestAction('/searches/return_matches/' . $user_id);
         $this->set('matches', $matches);
     }

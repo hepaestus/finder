@@ -89,7 +89,7 @@ class ConnectionsController extends AppController {
             // if () { 
             //    TODO - Some method of stopping a user from spamming connection requests. A limit on the number per time period? 
             // }
-
+            $return = 0;
             $this->Connection->create();
             $this->request->data['Connection']['verified'] = 0;
             if ($this->Connection->save($this->request->data)) {
@@ -110,13 +110,24 @@ class ConnectionsController extends AppController {
                         $recip_connection['Connection']['message'] = 'Automatically Created Reciprocal Connection';
                         if ( $this->Connection->save( $recip_connection) ) {
                             $this->Session->setFlash(__('The connection has been verified and a reciprocal connection saved.'));
-                            return $this->redirect(array('action' => 'index'));
+                            $return = 1;
                         }
                     }
-                }
-                return $this->redirect(array('action' => 'index'));
+                }                
             } else {
-                $this->Session->setFlash(__('The connection could not be saved. Please, try again.'));
+                $return = 0;
+            }
+
+            if ( $this->request->is('ajax') ) {
+                $this->autoRender = false;
+                $this->layout = 'ajax';                    
+                return json_encode($return);
+            } else {    
+                if ( $return ) {
+                    return $this->redirect(array('action' => 'index'));
+                } else {
+                    $this->Session->setFlash(__('There was an erro and your connection could not be saved.'));
+                }
             }
         } 
         if ( $id ) {

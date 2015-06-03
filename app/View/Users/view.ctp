@@ -83,19 +83,23 @@
         <script>
           $(document).ready( function() { 
 
+            var user_id = null;
+            var username = null;
             $(".match_user_profile").on('click', function() {
-                var user_id = $(this).closest("li").data("user-id"); 
+                user_id = $(this).closest("li").data("user-id"); 
                 console.log("User Id: " + user_id);
-                var user = $(this).closest(".match_user_profile").find(".user").text();
+                username = $(this).closest(".match_user_profile").find(".user").text();
                 var affinity = $(this).closest(".match_user_profile").find(".affinity").text();
                 var location = $(this).closest(".match_user_profile").find(".location").text();
                 var distance = $(this).closest(".match_user_profile").find(".distance").text();
+                var image_url = $(this).closest(".match_user_profile").find("img").attr("src");
                 $("#popup_match_content").empty();
                 var match_div = document.createElement('div');
                 $(match_div).addClass('_content');
                 $(match_div).attr("Id", "match_div");
                 $(match_div).data("user-id", user_id);
-                $(match_div).append("<p class='user' data-user-id='" + user_id + "'>" + user + "</p>");
+                $(match_div).append("<img src='" + image_url + "' class='profile_image' alt='" + username + " profile image' style='float:left;'/>");
+                $(match_div).append("<h1 class='user' data-user-id='" + user_id + "'>" + username + "</h1>");
                 $(match_div).append("<p>Affinity: <span class='affinity'>" + affinity + "</span></p>");
                 $(match_div).append("<p>Location: <span class='location'>" + location + "</span></p>");
                 $(match_div).append("<p>Distance: <span class='distance'>" + distance + "</span></p>");
@@ -113,13 +117,56 @@
                     var reply_div = document.createElement('div');
                     $(reply_div).attr("Id", "reply_div");
                     $(reply_div).append("<p>To: <strong>" + user + "</strong></p>");
-                    $(reply_div).append("<form action='/notes/send' method='PUT'><p>Subject: <input type='text' name='subject'/></p>");
-                    $(reply_div).append("<p>Body:<br/><textarea cols='40' rows='5'></textarea></p><br/>");
-                    $(reply_div).append("<p><input type='submit' name='submit'/></p></form>");
+                    $(reply_div).append("<form action='/notes/add' id='Note' method='PUT'>");
+                    $(reply_div).append("<input type='hidden' id='note_username' name=\"Note['username']\" value='" + username + "'/>");
+                    $(reply_div).append("<p>Subject: <input type='text' id='note_subject' name=\"Note['subject']\"/></p>");
+                    $(reply_div).append("<p>Body:<br/><textarea id='note_message' name=\"Note['message']\" cols='40' rows='5'></textarea><br/>");
+                    $(reply_div).append("<button name='submit' id='submit_note_button'>Submit Note</button>");
+                    $(reply_div).append("</p></form>");
                     $("#popup_match_content").append(reply_div);
                     match_reply = user_id;
                 }
             });
+
+            $(document).on('click', '#submit_note_button', function(event) {
+              var Note = {'Note': {"username":$("#note_username").val(), 'subject':$("#note_subject").val(), 'message':$("#note_message").val()}};
+              console.log("Submit Note: " + Note);
+              $.ajax({
+                type: "POST",
+                url: "/finder/notes/add",
+                data: Note,
+                success: function(data) {
+                  $("#reply_div").hide();
+                  console.log("Note Sent: " + data);
+                },
+                error: function() {
+                  console.log("Error Sending Note");
+                  alert("Error Sending Note");
+                }
+              });
+            });
+
+            $(".create_connection").on('click', function() {
+              var user_id = $("#popup_match_content").find(".user").data("user-id");
+              var username = $("#popup_match_content").find(".user").text();
+              var Connection = {'Connection':{'username':username, }};
+              console.log("User Id: " + user_id);              
+              console.log("Username: " + username);              
+              $.ajax({
+                type: 'POST',
+                url: '/finder/connections/add',
+                data: Connection,
+                success: function(data) {
+                  $("a.create_connection").hide();
+                  console.log("Connection Created");
+                },
+                error: function() {
+                  console.log("Connection Creation Failed");
+                  alert("Error Creating Connection");
+                }
+              });
+            });
+
           });
         </script>
 
@@ -161,9 +208,9 @@
           $(document).ready( function() {
               var note_id = null;
               $(".note_contents").on('click', function() {
-                note_id = $(this).closest("li").data("note-id"); 
+                note_id = $(this).data("note-id"); 
                 console.log("Note Contents Id: " + note_id);
-                var user_id = $(this).closest(".note_contents").find(".user").data("user-id");
+                var user_id = $(this).closest("li.note").find(".user").data("user-id");
                 var user = $(this).closest(".note_contents").find(".user").text();
                 var subject = $(this).closest(".note_contents").find(".subject").text();
                 var content = $(this).closest(".note_contents").find(".content").text();
@@ -188,6 +235,19 @@
                   },
                   error: function() {
                     alert("Error: Could not mark note as read. Sorry.");
+                  }
+                });
+              });
+
+              $("a#delete_note").on('click', function() {
+                console.log("Delete Note : " + note_id );
+                $.ajax('/finder/notes/delete/' + note_id, {
+                  success: function(data) {
+                    $('#note-' + note_id).addClass('hidden');
+                    console.log("Deleted Note : " + data);
+                  },
+                  error: function() {
+                    alert("Error: Could not delete your note. Sorry.");
                   }
                 });
               });
@@ -278,7 +338,7 @@
                 <a href="#reply"             id="reply"       data-rel="popup" class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-edit      ui-btn-icon-left ui-btn-inline ui-mini note_reply">Reply</a>
                 <a href="#mark_read"         id="mark_read"   data-rel="back"  class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-check     ui-btn-icon-left ui-btn-inline ui-mini">Mark Read</a>
                 <a href="#mark_unread"       id="mark_unread" data-rel="back"  class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-check     ui-btn-icon-left ui-btn-inline ui-mini">Mark Un-Read</a>
-                <a href="#delete_note"       id="delete"      data-rel="back"  class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-delete    ui-btn-icon-left ui-btn-inline ui-mini">Delete</a>
+                <a href="#delete_note"       id="delete_note"      data-rel="back"  class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-delete    ui-btn-icon-left ui-btn-inline ui-mini">Delete</a>
                 <a href="#create_connection" data-rel="back"  class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-check     ui-btn-icon-left ui-btn-inline ui-mini">Create a connection</a>
                 <a href="#block_user"        data-rel="back"  class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-forbidden ui-btn-icon-left ui-btn-inline ui-mini">BLOCK USER</a>
                 <a href="#cancel"            data-rel="back"  class="ui-shadow ui-btn ui-corner-all ui-btn-a ui-icon-back      ui-btn-icon-left ui-btn-inline ui-mini">Cancel</a>
@@ -408,6 +468,19 @@
                     <h3>New Incoming Connection Requests</h3>
                     <ul data-role="listview" data-split-icon="gear" data-split-theme="a" data-inset="true">
 
+                    <?php
+                        //pr($connectionsIncoming);
+                        foreach($connectionsIncoming as $connection) {
+                            echo "<li class='connection_contents' data-user-id='" . $connection['MyUser']['id'] . "' data-connection-id='" . $connection['Connection']['id'] . "'>";
+                            echo "<a href='#connection' data-user-id='" . $connection['MyUser']['id'] . "' class='connection_user_profile' data-rel='popup' data-position-to='window' data-transition='pop'>";
+                            echo $this->Html->image($connection['MyUser']['ExtendedProfile']['image'], array( 'alt' => $connection['MyUser']['username'] . "'s Profile Image", 'class' => 'profile_image'));
+                            echo "<h2 class='user' data-user-id='" . $connection['MyUser']['id'] . "'>" . $connection['MyUser']['username'] . "</h2>";
+                            echo "<p class='connection_type'>Connection Type: " . $connection['Connection']['connection_type'] . "</p>";
+                            echo "<p class='connection_message'>" . $connection['Connection']['message'] . "</p>";
+                            echo "</a>";
+                            echo "</li>";
+                        }
+                    ?>
                         <!-- TEMPLATE
                         <li class="connection_contents" data-user-id="1234" data-connection-id="3456">
                             <a href="#connection" data-user-id="1234" class="connection_user_profile" data-rel="popup" data-position-to="window" data-transition="pop">
@@ -426,11 +499,16 @@
                     <ul data-role="listview" data-split-icon="gear" data-split-theme="a" data-inset="true">
 
                     <?php 
+                        //pr($connectionsOutgoing);
                         if (!empty($connectionsOutgoing)) {
                             foreach ($connectionsOutgoing as $connection) {
                                 echo "<li class='connection_contents' data-user-id='" . $connection['MyConnection']['id'] . "' data-connection-id='" . $connection['Connection']['id'] . "'>\n";
-                                echo "<a href='#connection' data-user-id='1234' class='connection_user_profile' data-rel='popup' data-position-to='window' data-transition='pop'>\n";
-
+                                echo "<a href='#connection' data-user-id='" . $connection['MyConnection']['id'] . "' class='connection_user_profile' data-rel='popup' data-position-to='window' data-transition='pop'>\n";
+                                echo $this->Html->image($connection['MyConnection']['ExtendedProfile']['image'], array( 'alt' => $connection['MyConnection']['username'] . "'s Profile Image", 'class' => 'profile_image'));
+                                echo "<p class='connection_type'>Connection Type: " . $connection['Connection']['connection_type'] . "</p>";
+                                echo "<p class='connection_message'>" . $connection['Connection']['message'] . "</p>";
+                                echo "</a>";
+                                echo "</li>";
                             }
                         }
                     ?>

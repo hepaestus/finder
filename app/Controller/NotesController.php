@@ -65,6 +65,8 @@ class NotesController extends AppController {
             $username = $this->request->data['Note']['username'] ;
             $user_to = $this->User->findByUsername($username);
 
+            error_log("REQUEST DATA: " .  print_r($this->request->data,1));
+
             // If user exists send them a note!
             if ( $user_to ) {
                 $this->request->data['UserTo'] = $user_to;
@@ -73,16 +75,35 @@ class NotesController extends AppController {
                 $this->request->data['Note']['user_id'] = $loggedInUser['id'];
                 $this->request->data['User'] = $loggedInUser;
                 $this->request->data['User']['id'] = $loggedInUser['id'];
-			    if ($this->Note->save($this->request->data)) {
-				    $this->Session->setFlash(__('The note has been saved.'));
-				    return $this->redirect(array('action' => 'index'));
-			    } else {
-				    $this->Session->setFlash(__('The note could not be saved. Please, try again.'));
+
+                $return = 0;
+                if ($this->Note->save($this->request->data)) {
+                    $return = 1; 
+                }
+
+                // If this is an ajax call return json boolean value.
+                if ( $this->request->is('ajax') ) {
+                    $this->autoRender = false;
+                    $this->layout = 'ajax';                    
+                    return json_encode($return);
+                } else {
+                    if ( $return ) {
+				        $this->Session->setFlash(__('The note has been saved.'));
+				        return $this->redirect(array('action' => 'index'));
+    			    } else {
+    				    $this->Session->setFlash(__('The note could not be saved. Please, try again.'));
+                    }
 			    }
 
             // If the username doesn't exist notify the user.
             } else {
-			    $this->Session->setFlash(__('Invalid Username. Please, try again.'));
+                if ( $this->request->is('ajax') ) {
+                    $this->autoRender = false;
+                    $this->layout = 'ajax';                    
+                    return json_encode($return);
+                } else {                    
+    			    $this->Session->setFlash(__('Invalid Username. Please, try again.'));
+                }
             }
 		}
 	}
