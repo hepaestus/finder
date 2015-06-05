@@ -19,19 +19,24 @@
             </ul>
         </div>
         <div data-role="header">
-            <h1>Home : Dashboard</h1>
+            <h1><?php echo $title_for_layout; ?> : <?php echo $welcome_user; ?></h1>
+            <a href="/finder/users/logout" data-icon="user" class="ui-btn-left">Logout</a>
             <a href="#search" data-icon="search" class="ui-btn-right">Search</a>
         </div><!-- /header -->
     
 
 
-        <div role="main" class="ui-content">
+        <div role="main" class="ui-content"
             <ul data-role="listview" data-inset="true">
-                <li><a href="#two"><span class="ui-li-count">5</span>
+            <?php
+            $matches_array = json_decode($matches, true);
+            //pr($matches_array); 
+            ?>
+            <li><a href="#two"><span class="ui-li-count"><?php echo $matches_array['response']['numFound']; ?></span>
                     <h2 class="circle_icon "><span class="text_icon">M!</span></h2>
                     <h3>Matches</h3></a>
                 </li>
-                <li><a href="#three"><span class="ui-li-count">3</span>
+                <li><a href="#three"><span class="ui-li-count"><?php echo count($notesIncoming); ?></span>
                     <h2 class="circle_icon"><span class="text_icon">N!</span></h2>
                     <h3>Notes</h3></a>
                 </li>
@@ -182,7 +187,7 @@
             <div id="popup_match_content"></div>
             <a href="#create_connection" data-rel="popup" class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-check ui-btn-icon-left ui-btn-inline ui-mini create_connection">Create a connection</a>
             <a href="#send_note"         data-rel="popup" class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-mail  ui-btn-icon-left ui-btn-inline ui-mini note_match">Send Note</a>
-            <a href="#cancel"            data-rel="back"  class="ui-shadow ui-btn ui-corner-all ui-btn-a ui-icon-back  ui-btn-icon-left ui-btn-inline ui-mini cancel">Cancel</a>
+            <a href="#cancel"            data-rel="back"  class="ui-shadow ui-btn ui-corner-all ui-btn-a ui-icon-back  ui-btn-icon-left ui-btn-inline ui-mini cancel">Close</a>
         </div>
 
     
@@ -471,6 +476,7 @@
                     <?php
                         //pr($connectionsIncoming);
                         foreach($connectionsIncoming as $connection) {
+                            pr($connection);
                             echo "<li class='connection_contents' data-user-id='" . $connection['MyUser']['id'] . "' data-connection-id='" . $connection['Connection']['id'] . "'>";
                             echo "<a href='#connection' data-user-id='" . $connection['MyUser']['id'] . "' class='connection_user_profile' data-rel='popup' data-position-to='window' data-transition='pop'>";
                             if ( array_key_exists('image', $connection['MyUser']['ExtendedProfile']) && $connection['MyUser']['ExtendedProfile']['image'] != NULL ) {

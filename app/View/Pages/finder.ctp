@@ -10,9 +10,6 @@ App::uses('Debugger', 'Utility');
 ?>
     <h3><?php echo __d('cake_dev', 'Getting Started'); ?></h3>
 <p>
-Blah blah blah
-</p>
-<p>
 <?php
 echo $this->Html->link(
     __d('cake_dev', 'The 15 min Finder Tutorial'),
@@ -26,6 +23,15 @@ echo $this->Html->link(
 echo $this->Html->link(
     __d('cake_dev', 'Register For Finder'),
     '/users/register',
+    array('target' => '_self', 'escape' => false)
+);
+?>
+</p>
+<p>
+<?php
+echo $this->Html->link(
+    __d('cake_dev', 'Login'),
+    '/users/login',
     array('target' => '_self', 'escape' => false)
 );
 ?>

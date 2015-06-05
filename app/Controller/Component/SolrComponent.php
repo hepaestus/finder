@@ -25,7 +25,7 @@ class SolrComponent extends Component {
         $query = preg_replace("/ +/", "%20", $query);
         $url = "http://" . $this->solr_host . ":" . $this->solr_port . "/" . $this->solr_path . "/" .  $this->solr_collection . "/select/?" . $query;
       
-        error_log("Solr Query URL : $url");
+        //error_log("Solr Query URL : $url");
         $result = SolrComponent::solrConnect($url);
         //error_log("Solr Query Component Result : " . $result);
         #if ( preg_match("/\"responseHeader\".*\"status\":0,\"QTime\"/", $result) ) {
@@ -115,7 +115,7 @@ class SolrComponent extends Component {
         //pr($data);
 
         $url = "http://" . $this->solr_host . ":" . $this->solr_port . "/" . $this->solr_path . "/" .  $this->solr_collection . "/update/json?commit=true";
-        error_log("Solr URL : $url");
+        //error_log("Solr URL : $url");
         $data_string = json_encode($data);
         //error_log("Solr json data : $data_string");
         //pr($data_string);

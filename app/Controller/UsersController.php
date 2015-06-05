@@ -25,19 +25,20 @@ class UsersController extends AppController {
     }
 
     public function login() {
+        $this->set('title_for_layout','Welcome');
         if ($this->request->is('post')) {
             if ($this->Auth->login()) {
                 $this->User->id = $this->Auth->user('id');
+                $this-set('welcome_user', $this->Auth->user('username'));
                 $this->User->saveField('lastlogin', date("Y-m-d H:i:s"));
                 $this->User->saveField('loggedin', 1);
                 $solr_result = $this->Solr->pushUserToSolr($this->Auth->user('id'));
-                return $this->redirect($this->Auth->redirect(array('controller' => 'users', 'action' => 'view', $this->Auth->user('id'))));
+                error_log("Should Redirect!!!!!!");
+                return $this->redirect(array('action' => 'view', $this->Auth->user('id')));
             }
-            //$this->Session->setFlash(__('Your username or password was incorrect.'));
             $this->Session->setFlash(__('Invalid Username or Password, Try Again'));
         }
-        $this->set('title_for_layout','Welcome');
-        //return $this->redirect($this->Auth->redirect(array('controller' => 'users', 'action' => 'view', $this->Auth->user('id'))));
+        //return $this->redirect($this->Auth->redirect(array('controller' => 'users', 'action' => 'login')));
     }
 
     public function logout() {
@@ -52,7 +53,7 @@ class UsersController extends AppController {
     public function register() {
         if ($this->request->is('post') ) {
             $this->User->create();
-            error_log(" REQUEST DATA: " . print_r($this->request->data, 1));
+            //error_log(" REQUEST DATA: " . print_r($this->request->data, 1));
             unset($this->User->Profile->validate['user_id']);
             if ($this->User->saveAssociated($this->request->data)) {
                 $this->Session->setFlash(__('Your User Has Been Created. You can login now!.'));
@@ -100,6 +101,8 @@ class UsersController extends AppController {
 
     public function view($id = null) {
 
+        $this->set('title_for_layout','Welcome');
+        $this->set('welcome_user', $this->Auth->user('username'));
         $loggedInUser = $this->Session->read('Auth.User');
         $user_id = $loggedInUser['id'];
                 

@@ -219,7 +219,7 @@ class ReputationsController extends AppController {
             $reputationSummary['Count'] = 0;
             $reputationSummary['Average'] = 0;
             if ( $reputationsIncoming ) {            
-                error_log( print_r($reputationsIncoming,1));
+                //error_log( print_r($reputationsIncoming,1));
                 foreach( $reputationsIncoming as $reputation) {
                     $reputationSummary['Total'] += $reputation['Reputation']['rating'];
                     $reputationSummary['Count'] += 1;                

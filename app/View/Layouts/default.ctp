@@ -1,4 +1,3 @@
-<?php $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version()) ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,7 +11,7 @@
 		echo $this->Html->meta('icon');
 		echo $this->Html->script('geolocation');
 		echo $this->Html->script('ajax');
-        //echo $this->Html->script('jquery.js');
+        // echo $this->Html->script('jquery.js');
         echo $this->Html->script('index.js');
         echo $this->Html->script('jquery.mobile-1.4.4.js');
         echo $this->Html->css('jquery.mobile-1.4.4.css');
