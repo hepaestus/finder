@@ -1,5 +1,5 @@
     <!-- Start of first page: #one -->
-    <div data-role="page" id="one">
+<div data-role="page" data-url="<?php echo $data_url; ?>" id="one">
 
         <div data-role="panel" data-position="right" data-display="overlay" id="search">
             <form>

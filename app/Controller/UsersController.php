@@ -29,16 +29,16 @@ class UsersController extends AppController {
         if ($this->request->is('post')) {
             if ($this->Auth->login()) {
                 $this->User->id = $this->Auth->user('id');
-                $this-set('welcome_user', $this->Auth->user('username'));
+                $loggedInUser = $this->Session->read('Auth.User');
+                $user_id = $loggedInUser['id'];
                 $this->User->saveField('lastlogin', date("Y-m-d H:i:s"));
                 $this->User->saveField('loggedin', 1);
                 $solr_result = $this->Solr->pushUserToSolr($this->Auth->user('id'));
-                error_log("Should Redirect!!!!!!");
-                return $this->redirect(array('action' => 'view', $this->Auth->user('id')));
+                error_log("Should Redirect!!!!! To User View : " . $user_id );
+                return $this->redirect(array('action' => 'view', $user_id));
             }
             $this->Session->setFlash(__('Invalid Username or Password, Try Again'));
         }
-        //return $this->redirect($this->Auth->redirect(array('controller' => 'users', 'action' => 'login')));
     }
 
     public function logout() {
@@ -101,52 +101,57 @@ class UsersController extends AppController {
 
     public function view($id = null) {
 
+        error_log("This is View 0");
         $this->set('title_for_layout','Welcome');
         $this->set('welcome_user', $this->Auth->user('username'));
         $loggedInUser = $this->Session->read('Auth.User');
         $user_id = $loggedInUser['id'];
                 
-        if (!$this->User->exists($id)) {
-            return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
-        }
-
         if ( $id != null && $id != $user_id ) {
             return $this->redirect(array('controller' => 'users', 'action' => 'view_match', $id));
         }
 
-        $options = array('conditions' => array('User.' . $this->User->primaryKey => $user_id));
-        $this->User->recursive = 2;
-        $this->set('user', $this->User->find('first', $options));
-        //pr($this->User->find('first', $options));
+        if ($this->User->exists($user_id)) {
 
-        // Outbox
-        $order = array("Note.created desc", "Note.read");
-        $conditions = array("Note.user_id" => $user_id, "Note.sender_delete" => 0);
-        $notesOutgoing = $this->Note->find('all', array('conditions' => $conditions, 'recursive' => 2, 'order' => $order));
-		$this->set('notesOutgoing', $notesOutgoing);
+            error_log("This is View 1");
+            $options = array('conditions' => array('User.' . $this->User->primaryKey => $user_id));
+            $this->User->recursive = 2;
+            $this->set('user', $this->User->find('first', $options));
+            //pr($this->User->find('first', $options));
+    
+            // Outbox
+            $order = array("Note.created desc", "Note.read");
+            $conditions = array("Note.user_id" => $user_id, "Note.sender_delete" => 0);
+            $notesOutgoing = $this->Note->find('all', array('conditions' => $conditions, 'recursive' => 2, 'order' => $order));
+		    $this->set('notesOutgoing', $notesOutgoing);
         
-        // Inbox
-        $order = array("Note.created desc", "Note.read");
-        $conditions = array("Note.to_user_id" => $user_id, "Note.receiver_delete" => 0 );
-        $notesIncoming = $this->Note->find('all', array('conditions' => $conditions, 'recursive' => 2, 'order' => $order));
-		$this->set('notesIncoming', $notesIncoming);
+            // Inbox
+            $order = array("Note.created desc", "Note.read");
+            $conditions = array("Note.to_user_id" => $user_id, "Note.receiver_delete" => 0 );
+            $notesIncoming = $this->Note->find('all', array('conditions' => $conditions, 'recursive' => 2, 'order' => $order));
+		    $this->set('notesIncoming', $notesIncoming);
         
-        $reputationsOutgoing = $this->Reputation->findAllByReviewerId($user_id);
-        $this->set('reputationsOutgoing', $reputationsOutgoing);
+            $reputationsOutgoing = $this->Reputation->findAllByReviewerId($user_id);
+            $this->set('reputationsOutgoing', $reputationsOutgoing);
+    
+            $reputationsIncoming = $this->Reputation->findAllByUserId($user_id);
+            $this->set('reputationsIncoming', $reputationsIncoming);
+            $this->set('reputationSummary', $this->requestAction( array('controller' => 'reputations', 'action' => 'reputationSummary', $user_id)));
 
-        $reputationsIncoming = $this->Reputation->findAllByUserId($user_id);
-        $this->set('reputationsIncoming', $reputationsIncoming);
-        $this->set('reputationSummary', $this->requestAction( array('controller' => 'reputations', 'action' => 'reputationSummary', $user_id)));
 
+            $connectionsOutgoing = $this->Connection->findAllByUserId($user_id,NULL,NULL,NULL,NULL,2); //, null, null, array('created' => 'desc'), null ,null, 2);
+            $this->set('connectionsOutgoing', $connectionsOutgoing);
 
-        $connectionsOutgoing = $this->Connection->findAllByUserId($user_id,NULL,NULL,NULL,NULL,2); //, null, null, array('created' => 'desc'), null ,null, 2);
-        $this->set('connectionsOutgoing', $connectionsOutgoing);
-
-        $connectionsIncoming = $this->Connection->findAllByConnectionId($user_id,NULL,NULL,NULL,NULL,2);
-        $this->set('connectionsIncoming', $connectionsIncoming);
+            $connectionsIncoming = $this->Connection->findAllByConnectionId($user_id,NULL,NULL,NULL,NULL,2);
+            $this->set('connectionsIncoming', $connectionsIncoming);
         
-        $matches = $this->requestAction('/searches/return_matches/' . $user_id);
-        $this->set('matches', $matches);
+            $matches = $this->requestAction('/searches/return_matches/' . $user_id);
+            $this->set('matches', $matches);
+            $this->set('data_url', "/finder/users/view/$user_id");
+            error_log("This is View 2");
+        } else  {
+            $this->Session->setFlash(__('There was an error!'));
+        }
     }
 
 /**
