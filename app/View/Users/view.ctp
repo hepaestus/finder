@@ -20,6 +20,7 @@
         </div>
         <div data-role="header">
             <h1><?php echo $title_for_layout; ?> : <?php echo $welcome_user; ?></h1>
+            <div class="flash"><?php echo $this->Session->flash(); ?></div>
             <a href="/finder/users/logout" data-icon="user" class="ui-btn-left">Logout</a>
             <a href="#search" data-icon="search" class="ui-btn-right">Search</a>
         </div><!-- /header -->

@@ -35,7 +35,7 @@ class UsersController extends AppController {
                 $this->User->saveField('loggedin', 1);
                 $solr_result = $this->Solr->pushUserToSolr($this->Auth->user('id'));
                 error_log("Should Redirect!!!!! To User View : " . $user_id );
-                return $this->redirect(array('action' => 'view', $user_id));
+                return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
             }
             $this->Session->setFlash(__('Invalid Username or Password, Try Again'));
         }
@@ -131,6 +131,7 @@ class UsersController extends AppController {
             $notesIncoming = $this->Note->find('all', array('conditions' => $conditions, 'recursive' => 2, 'order' => $order));
 		    $this->set('notesIncoming', $notesIncoming);
         
+            // Reputations
             $reputationsOutgoing = $this->Reputation->findAllByReviewerId($user_id);
             $this->set('reputationsOutgoing', $reputationsOutgoing);
     
@@ -138,17 +139,21 @@ class UsersController extends AppController {
             $this->set('reputationsIncoming', $reputationsIncoming);
             $this->set('reputationSummary', $this->requestAction( array('controller' => 'reputations', 'action' => 'reputationSummary', $user_id)));
 
-
+            // Connections
             $connectionsOutgoing = $this->Connection->findAllByUserId($user_id,NULL,NULL,NULL,NULL,2); //, null, null, array('created' => 'desc'), null ,null, 2);
             $this->set('connectionsOutgoing', $connectionsOutgoing);
 
             $connectionsIncoming = $this->Connection->findAllByConnectionId($user_id,NULL,NULL,NULL,NULL,2);
             $this->set('connectionsIncoming', $connectionsIncoming);
         
+            // Matches
             $matches = $this->requestAction('/searches/return_matches/' . $user_id);
             $this->set('matches', $matches);
+
+            // Other
             $this->set('data_url', "/finder/users/view/$user_id");
-            error_log("This is View 2");
+
+            error_log("This is View 2");            
         } else  {
             $this->Session->setFlash(__('There was an error!'));
         }
