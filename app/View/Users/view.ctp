@@ -10,7 +10,7 @@
                  event.preventDefault();
                  var value = $(this).val();
                  var code = event.keyCode || event.which;
-                 console.log("Changed! " + value.length + " Val:" + value );
+                 //console.log("Changed! " + value.length + " Val:" + value );
                  if ( code == 13 ) {
                    runSearchQuery(value);
                  } else {
@@ -20,7 +20,7 @@
                 
                   
                function runSearchQuery(searchString) {
-                 console.log("Search");
+                 //console.log("Search");
                  if( searchString.length > 2 ) {
                    $.ajax({
                      type: "GET",
@@ -39,24 +39,27 @@
                };
 
                function updateSuggestions(searchString) {
-                  console.log("Update");
+                  //console.log("Update");
                   runSearchQuery(searchString);
                };
-
 
                function updateSearchResults(data) {
                  var data_obj = JSON.parse(data);
                  var docs = data_obj.response.docs;
                  $("#search_results").empty();
                  var results_list = document.createElement('ul');
+                 $(results_list).addClass('search_content');
+                 $(results_list).attr("id", "search_list");
+                 $(results_list).attr("data-role", "listview");
+                 $(results_list).attr("data-inset", "true");
+                 $(results_list).attr("foobar", "true");
                  for(var i = 0; i < docs.length; i++) {
-                   $(results_list).addClass('search_content');
-                   $(results_list).attr("id", "search_list");
-                   $(results_list).data("user-id", docs[i].user_id);
                    $(results_list).append("<li>" +
                        "<a href='/finder/users/view/" + docs[i].id  + "'><img src='/finder/img/" + docs[i].image_url + "' class='profile_image' alt='" + docs[i].name + " profile image' style=''/>" +
                        "<strong class='user' data-user-id='" + docs[i].id + "'>" + docs[i].name + "</strong></a></li>");
                    $("#search_results").append(results_list);
+                   $("#search_list").listview();
+                   $("#search_list").listview("refresh");
                  }
                };
             </script>
@@ -538,7 +541,7 @@
                     <?php
                         //pr($connectionsIncoming);
                         foreach($connectionsIncoming as $connection) {
-                            pr($connection);
+                            //pr($connection);
                             echo "<li class='connection_contents' data-user-id='" . $connection['MyUser']['id'] . "' data-connection-id='" . $connection['Connection']['id'] . "'>";
                             echo "<a href='#connection' data-user-id='" . $connection['MyUser']['id'] . "' class='connection_user_profile' data-rel='popup' data-position-to='window' data-transition='pop'>";
                             if ( array_key_exists('image', $connection['MyUser']['ExtendedProfile']) && $connection['MyUser']['ExtendedProfile']['image'] != NULL ) {
