@@ -12,6 +12,18 @@ class SearchesController extends AppController {
 	public $uses = array('User','Connection','Interest');
     public $components = array('Session','Solr','RequestHandler');
 
+
+    public function search($username) {
+        $query = "q=$username*&wt=json&fl=id,name,image_url,last_login";
+        $solr_result = $this->Solr->querySolr($query);
+        #if ( $this->request->is('ajax') ) {
+            $this->autoRender = false;
+            $this->layout = 'ajax';                    
+            return json_encode($solr_result);
+        #} 
+    }
+
+
     public function matches($id = null) {
         $this->set('matches', $this->return_matches($id)); 
     }

@@ -1,11 +1,72 @@
     <!-- Start of first page: #one -->
-<div data-role="page" data-url="<?php echo $data_url; ?>" id="one">
+    <div data-role="page" data-url="<?php echo $data_url; ?>" id="one">
+    <script>
+      console.log("Load View Page!");
+    </script>
 
         <div data-role="panel" data-position="right" data-display="overlay" id="search">
-            <form>
+            <script>
+               $(document).on('keyup', "#search", function(event) {
+                 event.preventDefault();
+                 var value = $(this).val();
+                 var code = event.keyCode || event.which;
+                 console.log("Changed! " + value.length + " Val:" + value );
+                 if ( code == 13 ) {
+                   runSearchQuery(value);
+                 } else {
+                   updateSuggestions(value);
+                 } 
+               });
+                
+                  
+               function runSearchQuery(searchString) {
+                 console.log("Search");
+                 if( searchString.length > 2 ) {
+                   $.ajax({
+                     type: "GET",
+                     url: "/finder/searches/search/" + searchString,
+                     data: searchString,
+                     success: function(data) {
+                       data = data.replace("\\n","");
+                       updateSearchResults(JSON.parse(data));
+                     },
+                     error: function() {
+                       console.log("Error Performing Search");
+                       alert("Error Performing Search");
+                     }
+                   });
+                 }
+               };
+
+               function updateSuggestions(searchString) {
+                  console.log("Update");
+                  runSearchQuery(searchString);
+               };
+
+
+               function updateSearchResults(data) {
+                 var data_obj = JSON.parse(data);
+                 var docs = data_obj.response.docs;
+                 $("#search_results").empty();
+                 var results_list = document.createElement('ul');
+                 for(var i = 0; i < docs.length; i++) {
+                   $(results_list).addClass('search_content');
+                   $(results_list).attr("id", "search_list");
+                   $(results_list).data("user-id", docs[i].user_id);
+                   $(results_list).append("<li>" +
+                       "<a href='/finder/users/view/" + docs[i].id  + "'><img src='/finder/img/" + docs[i].image_url + "' class='profile_image' alt='" + docs[i].name + " profile image' style=''/>" +
+                       "<strong class='user' data-user-id='" + docs[i].id + "'>" + docs[i].name + "</strong></a></li>");
+                   $("#search_results").append(results_list);
+                 }
+               };
+            </script>
+            <form data-url="<?php echo $data_url; ?>">
                 <label for="search">Search</label>
-                <input name="search" type="text">
+                <input id="search" name="search" type="text">
             </form>
+            <div id="search_results">
+            
+            </div>
             <a href="#close" data-icon="back" data-rel="close" class="ui-btn-right">Close</a>
             <!-- panel content goes here -->
         </div><!-- /panel -->

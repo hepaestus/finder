@@ -34,7 +34,8 @@ class UsersController extends AppController {
                 $this->User->saveField('lastlogin', date("Y-m-d H:i:s"));
                 $this->User->saveField('loggedin', 1);
                 $solr_result = $this->Solr->pushUserToSolr($this->Auth->user('id'));
-                error_log("Should Redirect!!!!! To User View : " . $user_id );
+                //error_log("Should Redirect!!!!! To User View : " . $user_id );                
+                $this->set('new_data_url','/finder/users/view/' . $user_id);
                 return $this->redirect(array('controller' => 'users', 'action' => 'view', $user_id));
             }
             $this->Session->setFlash(__('Invalid Username or Password, Try Again'));
@@ -43,10 +44,11 @@ class UsersController extends AppController {
 
     public function logout() {
         $loggedInUser = $this->Session->read('Auth.User');
-        $this->User->id = $loggedInUser['id'];
-        //$this->User->id = $this->Auth->user('id');
-        $this->User->saveField('loggedin', 0);
-        $solr_result = $this->Solr->pushUserToSolr($this->Auth->user('id'));
+        if ( $loggedInUser ) { 
+            $this->User->id = $loggedInUser['id'];
+            $this->User->saveField('loggedin', 0);
+            $solr_result = $this->Solr->pushUserToSolr($this->Auth->user('id'));
+        }
         return $this->redirect($this->Auth->logout('/pages/finder'));
     }
 
@@ -101,7 +103,7 @@ class UsersController extends AppController {
 
     public function view($id = null) {
 
-        error_log("This is View 0");
+        // error_log("This is View 0");
         $this->set('title_for_layout','Welcome');
         $this->set('welcome_user', $this->Auth->user('username'));
         $loggedInUser = $this->Session->read('Auth.User');
@@ -113,7 +115,7 @@ class UsersController extends AppController {
 
         if ($this->User->exists($user_id)) {
 
-            error_log("This is View 1");
+            // error_log("This is View 1");
             $options = array('conditions' => array('User.' . $this->User->primaryKey => $user_id));
             $this->User->recursive = 2;
             $this->set('user', $this->User->find('first', $options));
@@ -153,7 +155,7 @@ class UsersController extends AppController {
             // Other
             $this->set('data_url', "/finder/users/view/$user_id");
 
-            error_log("This is View 2");            
+            // error_log("This is View 2");            
         } else  {
             $this->Session->setFlash(__('There was an error!'));
         }
