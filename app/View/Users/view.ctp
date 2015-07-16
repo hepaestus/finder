@@ -778,7 +778,7 @@
         <div role="main" class="ui-content">
             <!-- h2>Reputation</h2 -->
             <ul>
-                <li>You have been reviewed <span class="times_rated">2</span> times and your average score is  <span class="your_rating">2.5</span> <strong><span class="rating_flavor">That's Pretty Good!</span></strong> </li>
+            <li>You have been reviewed <span class="times_rated"><?php echo $reputationSummary['Count']; ?></span> times and your average score is <span class="your_rating"><?php echo $reputationSummary['Average']; ?></span><br/><strong><span class="rating_flavor"><?php echo $reputationSummary['Flavor']; ?></span></strong> </li>
             </ul>
             <div data-role="collapsibleset" data-inset="true">
                 <div data-role="collapsible" data-inset="true">
@@ -789,7 +789,7 @@
                             foreach ($reputationsIncoming as $reputation) {
                                 echo "<li data-user-id='" . $reputation['User']['id'] . "' data-reviewer-id='" . $reputation['Reviewer']['id'] . "' data-review-id='" . $reputation['Reputation']['id'] . "' class='review_contents'>";
                                 echo "    <a href='#review_user' data-user-id='" . $reputation['User']['id'] . "' class='review_user_profile' data-rel='popup' data-position-to='window' data-transition='pop'>";
-                                echo "        <img src='" . $reputation['Reviewer']['image'] . "' class='profile_image' alt='profile image'>";
+                                echo "        <img src='/finder/img/" . $reputation['Reviewer']['ExtendedProfile']['image'] . "' class='profile_image' alt='profile image'>";
                                 echo "        <h2 data-user-id='" . $reputation['Reviewer']['id'] . "' class='user'>" . $reputation['Reviewer']['username'] . "</h2>";
                                 echo "        <p class='review_message'>" . $reputation['Reputation']['comment'] . "</p>";
                                 echo "        <p>Rating:<span class='rating'>" . $reputation['Reputation']['rating']  . "</span></p>";
@@ -826,7 +826,7 @@
                             foreach ($reputationsOutgoing as $reputation) {
                                 echo "<li data-user-id='" . $reputation['User']['id'] . "' data-reviewer-id='" . $reputation['Reviewer']['id'] . "' data-review-id='" . $reputation['Reputation']['id'] . "' class='review_contents'>";
                                 echo "    <a href='#review_user' data-user-id='" . $reputation['User']['id'] . "' class='review_user_profile' data-rel='popup' data-position-to='window' data-transition='pop'>";
-                                echo "        <img src='" . $reputation['Reviewer']['image'] . "' class='profile_image' alt='profile image'>";
+                                echo "        <img src='/finder/img/" . $reputation['Reviewer']['ExtendedProfile']['image'] . "' class='profile_image' alt='profile image'>";
                                 echo "        <h2 data-user-id='" . $reputation['Reviewer']['id'] . "' class='user'>" . $reputation['Reviewer']['username'] . "</h2>";
                                 echo "        <p class='review_message'>" . $reputation['Reputation']['comment'] . "</p>";
                                 echo "        <p>Rating:<span class='rating'>" . $reputation['Reputation']['rating']  . "</span></p>";

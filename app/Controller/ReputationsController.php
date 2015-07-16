@@ -218,6 +218,7 @@ class ReputationsController extends AppController {
             $reputationSummary['Total'] = 0;
             $reputationSummary['Count'] = 0;
             $reputationSummary['Average'] = 0;
+            $reputationSummary['Flavor'] = NULL;
             if ( $reputationsIncoming ) {            
                 //error_log( print_r($reputationsIncoming,1));
                 foreach( $reputationsIncoming as $reputation) {
@@ -228,6 +229,24 @@ class ReputationsController extends AppController {
                     $reputationSummary['Average'] =  $reputationSummary['Total'] / $reputationSummary['Count'];
                 } else {
                     $reputationSummary['Average'] =  null;
+                }
+
+                if ( $reputationSummary['Average'] >= 3 ) {
+                    $reputationSummary['Flavor'] = "You must be pretty awesome!";
+                } else if ( $reputationSummary['Average'] >= 2 ) {
+                    $reputationSummary['Flavor'] = "You must be pretty great!";
+                } else if ( $reputationSummary['Average'] >= 1 ) {
+                    $reputationSummary['Flavor'] = "That's not too bad!";
+                } else if ( $reputationSummary['Average'] >= 0 ) {
+                    $reputationSummary['Flavor'] = "You must not have many ratings or some people aren't happy with you.";
+                } else if ( $reputationSummary['Average'] >= -1 ) {
+                    $reputationSummary['Flavor'] = "You must have made someone very unhappy!";
+                } else if ( $reputationSummary['Average'] >= -2 ) {
+                    $reputationSummary['Flavor'] = "People don't seem to like you!";
+                } else if ( $reputationSummary['Average'] >= -3) {
+                    $reputationSummary['Flavor'] = "You must be pretty TERRIBLE! Have you considered some counseling?";
+                } else {
+                    $reputationSummary['Flavor'] = "It doesn't seem like you have any reputation at this time.";
                 }
             }
             $this->set('reputationsIncoming', $reputationsIncoming);

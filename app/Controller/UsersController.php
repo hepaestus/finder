@@ -134,10 +134,10 @@ class UsersController extends AppController {
 		    $this->set('notesIncoming', $notesIncoming);
         
             // Reputations
-            $reputationsOutgoing = $this->Reputation->findAllByReviewerId($user_id);
+            $reputationsOutgoing = $this->Reputation->findAllByReviewerId($user_id,NULL,NULL,NULL,NULL,NULL,NULL,2);
             $this->set('reputationsOutgoing', $reputationsOutgoing);
     
-            $reputationsIncoming = $this->Reputation->findAllByUserId($user_id);
+            $reputationsIncoming = $this->Reputation->findAllByUserId($user_id,NULL,NULL,NULL,NULL,2);
             $this->set('reputationsIncoming', $reputationsIncoming);
             $this->set('reputationSummary', $this->requestAction( array('controller' => 'reputations', 'action' => 'reputationSummary', $user_id)));
 
